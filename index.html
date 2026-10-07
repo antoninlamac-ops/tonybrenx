@@ -25,16 +25,12 @@ body{
 }
 
 .bg-photo-layer{
-  position:fixed;
-  inset:0;
+  position:fixed;inset:0;
   background-image:url('img-web/foto-53.webp');
   background-size:cover;
   background-position:center center;
   filter:brightness(30%) contrast(110%) blur(5px);
-  z-index:-2;
-  transform:scale(1.04);
-  pointer-events:none;
-}
+  z-index:-2;transform:scale(1.04);pointer-events:none;
 }
 body::after{
   content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.12;
@@ -44,8 +40,8 @@ h1,h2,h3,nav .brand,.btn,.contact-link,.beep-text{font-family:"Barlow Condensed"
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--edge);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 
-/* Navigace a funkční HOME logo */
-nav{position:sticky;top:14px;z-index:20;margin:14px auto 0;max-width:820px;padding:8px 10px 8px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:999px;gap:20px}
+/* Navigace */
+nav{position:sticky;top:14px;z-index:200;margin:14px auto 0;max-width:820px;padding:8px 12px 8px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:999px;gap:20px}
 nav .brand{
   font-weight:700;letter-spacing:.14em;font-size:1.05rem;white-space:nowrap;
   color:var(--text);text-decoration:none;cursor:pointer;transition:all .3s ease;
@@ -53,13 +49,38 @@ nav .brand{
 nav .brand:hover{
   color:#ff9500;text-shadow:0 0 12px rgba(255,149,0,0.6);
 }
-nav div{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
-nav div::-webkit-scrollbar{display:none}
+.nav-links{display:flex;gap:4px;align-items:center}
 nav a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 15px;border-radius:999px;transition:.3s ease;white-space:nowrap}
 nav a:hover,nav a.on{color:var(--text);background:rgba(255,255,255,.1)}
 nav a.external-link{color:#d1d1d3}
 nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C,0 0 22px #F56040!important}
 nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2,0 0 22px #0056b3!important}
+
+/* Hamburger tlačítko */
+.menu-toggle{
+  display:none;background:transparent;border:0;color:var(--text);cursor:pointer;
+  padding:8px;border-radius:50%;align-items:center;justify-content:center;transition:all .3s ease;
+}
+.menu-toggle svg{width:24px;height:24px;display:block}
+.menu-toggle:hover{color:#ff9500}
+
+/* Mobilní menu rozložení */
+@media(max-width:820px){
+  nav{padding:10px 16px;border-radius:24px}
+  .menu-toggle{display:inline-flex}
+  .nav-links{
+    position:absolute;top:calc(100% + 10px);left:0;right:0;
+    flex-direction:column;gap:6px;padding:16px;background:rgba(18,20,24,0.92);
+    -webkit-backdrop-filter:blur(24px) saturate(140%);backdrop-filter:blur(24px) saturate(140%);
+    border:1px solid var(--edge);border-radius:20px;box-shadow:0 20px 45px rgba(0,0,0,.7);
+    opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s cubic-bezier(.16,1,.3,1);
+    pointer-events:none;
+  }
+  .nav-links.open{
+    opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto;
+  }
+  nav a{width:100%;text-align:center;padding:12px;font-size:1rem}
+}
 
 .hero{padding:19vh 0 12vh;text-align:center;display:flex;flex-direction:column;align-items:center}
 .hero h1{font-size:clamp(3.4rem,13vw,9rem);line-height:.92;font-weight:700;letter-spacing:.02em}
@@ -112,17 +133,15 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 @keyframes cardPulse{0%,100%{border-color:rgba(255,149,0,.4);box-shadow:0 30px 60px -15px rgba(0,0,0,.9),0 0 40px -5px rgba(255,149,0,.25),inset 0 1px 2px 0 rgba(255,149,0,.4)}50%{border-color:rgba(255,59,48,.7);box-shadow:0 30px 60px -15px rgba(0,0,0,.9),0 0 65px 5px rgba(255,59,48,.4),inset 0 1px 5px 0 rgba(255,59,48,.6)}}
 @keyframes modalPop{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 .lb-content img{display:block;max-width:100%;max-height:calc(85vh - 30px);object-fit:contain;border-radius:.6rem;pointer-events:none;-webkit-user-drag:none;user-select:none}
-.close-lb{position:fixed;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#9a9ba2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;z-index:100;padding:0;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.close-lb{position:fixed;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#9a9ba2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;z-index:300;padding:0;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .close-lb svg{width:22px;height:22px}
 .close-lb:hover{color:#fff;background:rgba(255,149,0,.8);border-color:rgba(255,149,0,1);transform:rotate(90deg) scale(1.1)}
-.nv{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:all .3s ease;padding:0;z-index:100}
+.nv{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:all .3s ease;padding:0;z-index:300}
 .nv svg{width:26px;height:26px}
 .nv:hover{background:rgba(255,149,0,.25);border-color:rgba(255,149,0,.6);color:#ff9500;transform:translateY(-50%) scale(1.1)}
 #prev{left:24px}#next{right:24px}
 
-/* =========================================================
-   TLAČÍTKO ZPĚT NAHORU S ORANŽOVÝM NEONEM
-   ========================================================= */
+/* Scroll-to-top tlačítko */
 #scroll-top{
   position:fixed;bottom:26px;right:26px;width:48px;height:48px;border-radius:50%;
   background:rgba(18,20,24,0.75);border:1px solid rgba(255,149,0,0.5);color:#ff9500;
@@ -131,12 +150,9 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   box-shadow:0 0 18px rgba(255,149,0,0.25), inset 0 1px 2px rgba(255,149,0,0.3);
   opacity:0;visibility:hidden;pointer-events:none;
   transform:translateY(16px) scale(0.9);
-  transition:all .35s cubic-bezier(.16,1,.3,1);z-index:9999;padding:0;
+  transition:all .35s cubic-bezier(.16,1,.3,1);z-index:150;padding:0;
 }
-#scroll-top.visible{
-  opacity:1;visibility:visible;pointer-events:auto;
-  transform:translateY(0) scale(1);
-}
+#scroll-top.visible{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1)}
 #scroll-top:hover{
   background:rgba(255,149,0,0.25);border-color:#ff9500;color:#fff;
   box-shadow:0 0 28px rgba(255,149,0,0.65), inset 0 1px 3px rgba(255,149,0,0.6);
@@ -146,7 +162,6 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 #scroll-top:hover svg{transform:translateY(-2px)}
 
 @media(max-width:768px){
-  nav{padding:8px 10px}nav a{padding:8px 10px}
   .lb-content{max-width:92vw;padding:8px}
   .nv{width:42px;height:42px}.nv svg{width:20px;height:20px}
   #prev{left:10px}#next{right:10px}
@@ -164,9 +179,15 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 <div class="bg-photo-layer"></div>
 
 <nav class="glass">
-  <!-- Spolehlivé HOME tlačítko -->
   <a href="javascript:void(0)" id="home-btn" class="brand">Tony Brenx</a>
-  <div>
+  
+  <button class="menu-toggle" id="menu-toggle" aria-label="Otevřít menu">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+  </button>
+
+  <div class="nav-links" id="nav-links">
     <a href="#o-mne">O mně</a>
     <a href="#tvorba">Tvorba</a>
     <a href="#cenik">Ceník</a>
@@ -271,7 +292,6 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <div class="copyright">© 2026 Tony Brenx</div>
 </footer>
 
-<!-- Tlačítko Zpět nahoru s oranžovým světlem -->
 <button id="scroll-top" title="Zpět nahoru" aria-label="Zpět nahoru">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
 </button>
@@ -300,14 +320,29 @@ const loadMoreBtn = document.getElementById('load-more');
 const hidePhotosBtn = document.getElementById('hide-photos');
 const scrollTopBtn = document.getElementById('scroll-top');
 const homeBtn = document.getElementById('home-btn');
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.getElementById('nav-links');
 
-// HOME tlačítko v menu
+// Obsluha mobilního hamburger menu
+menuToggle.addEventListener('click', () => {
+  navLinks.classList.toggle('open');
+});
+
+// Zavření mobilního menu po kliknutí na libovolný odkaz
+navLinks.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  });
+});
+
+// HOME tlačítko
 homeBtn.addEventListener('click', (e) => {
   e.preventDefault();
+  navLinks.classList.remove('open');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// Pevně nastaveno na 55 fotografií
+// Galerie 55 fotek
 const totalPhotos = 55;
 const photosPerLoad = 30;
 let currentLoadedCount = 0;
@@ -350,7 +385,7 @@ hidePhotosBtn.addEventListener('click', () => {
 loadMorePhotos();
 loadMoreBtn.addEventListener('click', () => loadMorePhotos());
 
-// Obsluha tlačítka Zpět nahoru (zobrazí se po sjetí o 250px)
+// Tlačítko Zpět nahoru
 window.addEventListener('scroll', () => {
   if (window.scrollY > 250) {
     scrollTopBtn.classList.add('visible');
@@ -363,6 +398,7 @@ scrollTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+// 3D tilt efekt
 g.addEventListener('mousemove', e => {
   const a = e.target.closest('a');
   if(!a) return;
@@ -388,6 +424,7 @@ g.addEventListener('mouseout', e => {
   a.style.boxShadow = 'none';
 });
 
+// Lightbox
 const list = () => [...g.querySelectorAll('a')];
 let cur = 0;
 
@@ -416,7 +453,7 @@ lb.addEventListener('keydown', e => {
 });
 
 const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) document.querySelectorAll('nav a:not(.brand)').forEach(a => a.classList.toggle('on', a.hash === '#' + e.target.id));
+  if (e.isIntersecting) document.querySelectorAll('nav .nav-links a:not(.external-link)').forEach(a => a.classList.toggle('on', a.hash === '#' + e.target.id));
 }), { rootMargin: '-45% 0px -50% 0px' });
 document.querySelectorAll('section').forEach(x => io.observe(x));
 </script>
