@@ -363,7 +363,11 @@ homeBtn.addEventListener('click', (e) => {
 
 // Galerie 55 fotek
 const totalPhotos = 55;
-const photosPerLoad = 30;
+
+// Na mobilu (do 768px) načteme 10 fotek, na PC 30 fotek
+const isMobile = window.innerWidth <= 768;
+const initialBatch = isMobile ? 10 : 30;
+const nextBatchStep = isMobile ? 10 : 30;
 let currentLoadedCount = 0;
 
 let photoIds = Array.from({length: totalPhotos}, (_, i) => i + 1);
@@ -371,11 +375,11 @@ photoIds.sort(() => Math.random() - 0.5);
 
 function updateButtons() {
   loadMoreBtn.style.display = currentLoadedCount >= totalPhotos ? 'none' : 'inline-flex';
-  hidePhotosBtn.style.display = currentLoadedCount > photosPerLoad ? 'inline-flex' : 'none';
+  hidePhotosBtn.style.display = currentLoadedCount > initialBatch ? 'inline-flex' : 'none';
 }
 
-function loadMorePhotos() {
-  const nextBatch = photoIds.slice(currentLoadedCount, currentLoadedCount + photosPerLoad);
+function loadPhotos(countToLoad) {
+  const nextBatch = photoIds.slice(currentLoadedCount, currentLoadedCount + countToLoad);
   nextBatch.forEach((id, index) => {
     const a = document.createElement('a');
     a.href = `img-web/foto-${id}.webp`;
@@ -391,18 +395,22 @@ function loadMorePhotos() {
   updateButtons();
 }
 
+// První načtení (10 fotek na mobilu, 30 na PC)
+loadPhotos(initialBatch);
+
+loadMoreBtn.addEventListener('click', () => {
+  loadPhotos(nextBatchStep);
+});
+
 hidePhotosBtn.addEventListener('click', () => {
   const allPhotos = Array.from(g.children);
-  for (let i = photosPerLoad; i < allPhotos.length; i++) {
+  for (let i = initialBatch; i < allPhotos.length; i++) {
     g.removeChild(allPhotos[i]);
   }
-  currentLoadedCount = photosPerLoad;
+  currentLoadedCount = initialBatch;
   updateButtons();
   document.getElementById('tvorba').scrollIntoView({ behavior: 'smooth' });
 });
-
-loadMorePhotos();
-loadMoreBtn.addEventListener('click', () => loadMorePhotos());
 
 // Tlačítko Zpět nahoru
 window.addEventListener('scroll', () => {
@@ -417,7 +425,7 @@ scrollTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
-// 3D tilt efekt
+// 3D tilt efekt (pouze pro myš na nedotykových obrazovkách)
 g.addEventListener('mousemove', e => {
   const a = e.target.closest('a');
   if(!a) return;
