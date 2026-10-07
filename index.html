@@ -37,7 +37,7 @@ body{
 }
 body::after{
   content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.12;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 h1,h2,h3,nav .brand,.btn,.contact-link,.beep-text{font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",sans-serif;text-transform:uppercase}
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--edge);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
@@ -112,11 +112,11 @@ nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-
 .btn:hover{background:rgba(255,149,0,.2);border-color:rgba(255,149,0,.6);color:#fff;box-shadow:0 0 30px rgba(255,149,0,.35),inset 0 1px 2px rgba(255,149,0,.4);transform:translateY(-2px)}
 section{padding:60px 0;scroll-margin-top:80px}
 h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-height:1;margin-bottom:12px}
-.lead{color:var(--muted);margin-bottom:28px;max-width:54ch}
+.lead{color:var(--muted);margin-bottom:28px;max-width:58ch}
 .about{padding:38px;width:100%}
 .about p{color:var(--muted);font-size:1.08rem}
 .about strong{color:#fff;font-weight:700}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:30px}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:30px}
 .price-card{background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid var(--edge);border-radius:16px;padding:35px 25px;text-align:center;transition:all .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
 .price-card h3{font-size:1.6rem;color:#fff;margin-bottom:8px;letter-spacing:.05em}
 .price-card .price{font-size:1.8rem;font-weight:700;color:#ff9500;font-family:"Barlow Condensed",sans-serif;margin-bottom:18px;letter-spacing:.05em}
@@ -252,7 +252,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
   <section id="cenik">
     <h2>Ceník</h2>
-    <p class="lead">Každý projekt je jedinečný, proto jsou ceny orientační. Níže najdeš nejčastější balíčky.</p>
+    <p class="lead">Každý projekt je jedinečný. Pokud v ceníku nenajdeš přesně to, co hledáš, vše se dá individuálně domluvit. Pravidelně spolupracuji s dalšími prověřenými tvůrci, takže jsme schopni kompletně pokrýt i svatbu či větší event ve více lidech (foto i video zároveň).</p>
     <div class="pricing-grid">
       <div class="price-card">
         <h3>Portrétní focení</h3>
@@ -273,11 +273,6 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         <h3>Spolupráce</h3>
         <div class="price">Individuální nacenění</div>
         <p>Hledáš stabilního partnera pro dlouhodobou komerční spolupráci nebo kampaň? Ozvi se a nastavíme model i rozpočet přesně na míru tvému projektu.</p>
-      </div>
-      <div class="price-card">
-        <h3>Event Duo</h3>
-        <div class="price">od 20 000 Kč</div>
-        <p>Kompletní pokrytí akce. Jsme dva – jeden profesionální fotograf a jeden kameraman. Získáš tak sladěný balíček fotek i našlapaného videa bez kompromisů.</p>
       </div>
     </div>
   </section>
@@ -413,76 +408,4 @@ hidePhotosBtn.addEventListener('click', () => {
 });
 
 // Tlačítko Zpět nahoru
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 250) {
-    scrollTopBtn.classList.add('visible');
-  } else {
-    scrollTopBtn.classList.remove('visible');
-  }
-}, { passive: true });
-
-scrollTopBtn.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// 3D tilt efekt (pouze pro myš na nedotykových obrazovkách)
-g.addEventListener('mousemove', e => {
-  const a = e.target.closest('a');
-  if(!a) return;
-  const rect = a.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
-  const centerX = rect.width / 2;
-  const centerY = rect.height / 2;
-  const rotateX = ((y - centerY) / centerY) * -12;
-  const rotateY = ((x - centerX) / centerX) * 12;
-  a.style.transition = 'none';
-  a.style.transform = `perspective(1000px) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-  a.style.zIndex = '10';
-  a.style.boxShadow = '0 20px 40px rgba(0,0,0,0.6)';
-});
-
-g.addEventListener('mouseout', e => {
-  const a = e.target.closest('a');
-  if(!a) return;
-  a.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease';
-  a.style.transform = 'perspective(1000px) scale(1) rotateX(0) rotateY(0)';
-  a.style.zIndex = '1';
-  a.style.boxShadow = 'none';
-});
-
-// Lightbox
-const list = () => [...g.querySelectorAll('a')];
-let cur = 0;
-
-function show(i) {
-  const l = list();
-  if (l.length === 0) return;
-  cur = (i + l.length) % l.length;
-  big.src = l[cur].href;
-}
-
-g.addEventListener('click', e => {
-  const a = e.target.closest('a');
-  if(!a) return;
-  e.preventDefault();
-  show(list().indexOf(a));
-  lb.showModal();
-});
-
-document.getElementById('prev').onclick = e => { e.stopPropagation(); show(cur-1); };
-document.getElementById('next').onclick = e => { e.stopPropagation(); show(cur+1); };
-closeBtn.onclick = e => { e.stopPropagation(); lb.close(); };
-lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
-lb.addEventListener('keydown', e => {
-  if(e.key === 'ArrowLeft') show(cur-1);
-  if(e.key === 'ArrowRight') show(cur+1);
-});
-
-const io = new IntersectionObserver(es => es.forEach(e => {
-  if (e.isIntersecting) document.querySelectorAll('nav .nav-links a:not(.external-link)').forEach(a => a.classList.toggle('on', a.hash === '#' + e.target.id));
-}), { rootMargin: '-45% 0px -50% 0px' });
-document.querySelectorAll('section').forEach(x => io.observe(x));
-</script>
-</body>
-</html>
+window.addEventListener('scroll',
