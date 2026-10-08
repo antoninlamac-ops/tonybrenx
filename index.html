@@ -12,8 +12,8 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Packeta Widget -->
-<script src="https://widget.packeta.com/v6/esm.js" defer></script>
+<!-- Stabilní načtení Packeta Widgetu -->
+<script src="https://widget.packeta.com/v6/javascript/packeta.js"></script>
 
 <style>
 :root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.75);--edge:rgba(255,255,255,.12)}
@@ -174,7 +174,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okno košíku & checkoutu */
+/* Modální okno košíku & checkoutu bez blokace vrstev */
 .custom-modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.85);
   z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;
@@ -952,12 +952,18 @@ function updateCheckoutTotal() {
 }
 updateCartUI();
 
-// Zásilkovna Widget s tvým oficiálním API klíčem
+// Zásilkovna Widget s oficiálním API klíčem
 let selectedPacketaPoint = null;
 const packetaApiKey = 'f277c2daae06a692';
 
 function openPacketaWidget() {
+  if (typeof Packeta === 'undefined' || !Packeta.Widget) {
+    alert('Knihovna Zásilkovny se ještě nenačetla. Zkontrolujte připojení k internetu a zkuste to znovu.');
+    return;
+  }
+
   const packetaOptions = {
+    apiKey: packetaApiKey,
     country: 'cz',
     language: 'cs'
   };
@@ -966,12 +972,12 @@ function openPacketaWidget() {
     if (point) {
       selectedPacketaPoint = point;
       document.getElementById('packeta-point-id').value = point.id;
-      document.getElementById('packeta-point-name').value = `${point.name}, ${point.street}, ${point.city} (${point.zip})`;
+      document.getElementById('packeta-point-name').value = `${point.name}, ${point.street || ''}, ${point.city || ''} (${point.zip || ''})`;
       
       const display = document.getElementById('modal-packeta-display');
       if (display) {
         display.style.display = 'block';
-        document.getElementById('modal-packeta-place-name').textContent = `${point.name} (${point.city})`;
+        document.getElementById('modal-packeta-place-name').textContent = `${point.name} (${point.city || ''})`;
       }
     }
   }, packetaOptions);
