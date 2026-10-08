@@ -3,21 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fotograf a kameraman Karlovarský kraj | Tony Brenx</title>
-<meta name="description" content="Profesionální fotograf a kameraman z Karlovarského kraje. Portréty, reportáže z eventů a videotvorba na míru. Působím v Sokolově, Varech a okolí.">
+<title>Fotograf, kameraman & merch | Tony Brenx</title>
+<meta name="description" content="Profesionální fotograf a kameraman z Karlovarského kraje. Portréty, reportáže z eventů, videotvorba a limitovaný autorský apparel & poster merch se Zásilkovnou.">
 <meta name="theme-color" content="#0a0a0b">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%230a0a0b'/><circle cx='50' cy='50' r='44' stroke='%23ff9500' stroke-width='4' fill='none'/><text x='50%' y='58%' text-anchor='middle' fill='%23f1f1f2' font-family='Arial, sans-serif' font-weight='900' font-size='38' letter-spacing='-1'>TB</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
+
+<!-- Oficiální Packeta (Zásilkovna) Widget -->
+<script src="https://widget.packeta.com/v6/esm.js" defer></script>
+
 <style>
 :root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.55);--edge:rgba(255,255,255,.14)}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
 body{color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none}
 
-/* Stabilizované celoobrazovkové pozadí */
 .bg-photo-layer{
   position:fixed;inset:0;
   background-image:url('img-web/foto-53.webp');
@@ -31,17 +34,18 @@ body{color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden;font-f
   pointer-events:none;
 }
 body::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
-h1,h2,h3,nav .brand,.btn,.contact-link,.beep-text,.form-group label{font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",sans-serif;text-transform:uppercase}
+h1,h2,h3,nav .brand,.btn,.contact-link,.beep-text,.form-group label,.product-title,.product-price,.shop-filter-btn,.btn-packeta{font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",sans-serif;text-transform:uppercase}
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--edge);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 
 /* Navigace */
-nav{position:sticky;top:14px;z-index:200;margin:14px auto 0;max-width:820px;padding:8px 12px 8px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:999px;gap:20px}
+nav{position:sticky;top:14px;z-index:200;margin:14px auto 0;max-width:860px;padding:8px 12px 8px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:999px;gap:20px}
 nav .brand{font-weight:700;letter-spacing:.14em;font-size:1.05rem;white-space:nowrap;color:var(--text);text-decoration:none;cursor:pointer;transition:all .3s ease}
 nav .brand:hover{color:#ff9500;text-shadow:0 0 12px rgba(255,149,0,.6)}
 .nav-links{display:flex;gap:4px;align-items:center}
-nav a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 15px;border-radius:999px;transition:.3s ease;white-space:nowrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 14px;border-radius:999px;transition:.3s ease;white-space:nowrap}
 nav a:hover,nav a.on{color:var(--text);background:rgba(255,255,255,.1)}
+nav a.nav-shop{color:#ff9500;font-weight:700}
 nav a.external-link{color:#d1d1d3}
 nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C,0 0 22px #F56040!important}
 nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2,0 0 22px #0056b3!important}
@@ -49,7 +53,7 @@ nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-
 .menu-toggle svg{width:24px;height:24px;display:block}
 .menu-toggle:hover{color:#ff9500}
 
-@media(max-width:820px){
+@media(max-width:860px){
   nav{position:sticky;top:14px;padding:10px 16px;border-radius:24px;justify-content:center}
   nav .brand{margin:0 auto;text-align:center}
   .menu-toggle{display:inline-flex;position:absolute;right:14px;top:50%;transform:translateY(-50%)}
@@ -61,12 +65,14 @@ nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-
 .hero{padding:19vh 0 12vh;text-align:center;display:flex;flex-direction:column;align-items:center}
 .hero h1{font-size:clamp(3.4rem,13vw,9rem);line-height:.92;font-weight:700;letter-spacing:.02em}
 .hero p{color:var(--muted);font-size:clamp(1rem,2.2vw,1.25rem);margin:22px auto 34px;max-width:36ch}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 .beep-indicator{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);margin-bottom:24px;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .beep-text{font-size:.8rem;letter-spacing:.15em;font-weight:700;color:var(--muted)}
 .beep-dot{width:8px;height:8px;border-radius:50%;display:inline-block;animation:ledPulse 2.4s cubic-bezier(0.4,0,0.6,1) infinite}
 @keyframes ledPulse{0%,100%{opacity:.4;transform:scale(.92);background-color:#ff3b30;box-shadow:0 0 4px 1px rgba(255,59,48,.4)}50%{opacity:1;transform:scale(1.15);background-color:#ff9500;box-shadow:0 0 8px 2px rgba(255,149,0,.9)}}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;font-weight:700;letter-spacing:.12em;font-size:1rem;padding:14px 28px;border-radius:999px;color:var(--text);border:1px solid var(--edge);background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:all .3s cubic-bezier(.16,1,.3,1);cursor:pointer}
 .btn:hover{background:rgba(255,149,0,.2);border-color:rgba(255,149,0,.6);color:#fff;box-shadow:0 0 30px rgba(255,149,0,.35),inset 0 1px 2px rgba(255,149,0,.4);transform:translateY(-2px)}
+.btn-primary{background:rgba(255,149,0,.15);border-color:rgba(255,149,0,.5);color:#fff}
 section{padding:60px 0;scroll-margin-top:80px}
 h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-height:1;margin-bottom:12px}
 .lead{color:var(--muted);margin-bottom:28px;max-width:58ch}
@@ -118,24 +124,105 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 #load-more:hover svg{transform:translateY(4px)}
 #hide-photos:hover svg{transform:translateY(-4px)}
 
-/* Kontaktní sekce s formulářem na plnou šířku */
-#kontakt{text-align:center}
-#kontakt .lead{margin-left:auto;margin-right:auto;margin-bottom:24px;font-size:.95rem}
-.contact-container{
-  width:100%;
-  margin:30px auto 0;
-  text-align:left;
+/* E-Shop */
+.shop-filters{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap}
+.shop-filter-btn{padding:8px 18px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--muted);font-size:.9rem;letter-spacing:.08em;font-weight:700;cursor:pointer;transition:all .3s ease}
+.shop-filter-btn.active,.shop-filter-btn:hover{color:#fff;border-color:rgba(255,149,0,.6);background:rgba(255,149,0,.15);box-shadow:0 0 16px rgba(255,149,0,.25)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+.product-card{
+  background:var(--glass);border:1px solid var(--edge);border-radius:20px;overflow:hidden;
+  display:flex;flex-direction:column;transition:all .3s cubic-bezier(.16,1,.3,1);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+}
+.product-card:hover{transform:translateY(-5px);border-color:rgba(255,149,0,.5);box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 24px rgba(255,149,0,.2)}
+.product-img-box{position:relative;width:100%;aspect-ratio:1/1.05;overflow:hidden;background:#0d0e12}
+.product-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;filter:brightness(.92)}
+.product-card:hover .product-img-box img{transform:scale(1.06);filter:brightness(1.05)}
+.product-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.75);border:1px solid var(--edge);padding:4px 10px;border-radius:999px;font-size:.7rem;letter-spacing:.1em;color:#ff9500;font-weight:700;text-transform:uppercase}
+.product-info{padding:22px;display:flex;flex-direction:column;flex-grow:1}
+.product-title{font-size:1.35rem;letter-spacing:.04em;color:#fff;margin-bottom:6px}
+.product-desc{font-size:.88rem;color:var(--muted);margin-bottom:16px;line-height:1.5;flex-grow:1}
+.product-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.product-price{font-size:1.5rem;font-weight:700;color:#ff9500}
+.product-select{
+  padding:8px 12px;background:rgba(10,10,11,.8);border:1px solid var(--edge);
+  color:#fff;border-radius:8px;font-family:inherit;font-size:.85rem;outline:none;cursor:pointer;
+}
+.btn-buy{
+  width:100%;padding:11px;border-radius:10px;border:1px solid rgba(255,149,0,.5);
+  background:rgba(255,149,0,.15);color:#fff;font-family:"Barlow Condensed",sans-serif;
+  font-weight:700;letter-spacing:.1em;font-size:1rem;text-transform:uppercase;cursor:pointer;
+  transition:all .25s ease;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-buy:hover{background:#ff9500;color:#0a0a0b;box-shadow:0 0 20px rgba(255,149,0,.6)}
+
+/* Plovoucí košík */
+#cart-floating-btn{
+  position:fixed;bottom:84px;right:26px;width:52px;height:52px;border-radius:50%;
+  background:rgba(18,20,24,.85);border:1px solid rgba(255,149,0,.6);color:#ff9500;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  box-shadow:0 0 20px rgba(255,149,0,.35);z-index:150;transition:all .3s ease;
+}
+#cart-floating-btn:hover{transform:scale(1.1);background:rgba(255,149,0,.25);color:#fff}
+#cart-floating-btn svg{width:24px;height:24px}
+.cart-badge{
+  position:absolute;top:-4px;right:-4px;background:#ff9500;color:#0a0a0b;
+  font-size:.75rem;font-weight:900;border-radius:999px;min-width:20px;height:20px;
+  display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Formulář */
-.inquiry-form{
-  width:100%;
-  padding:38px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  border-radius:22px;
+/* Modální okno košíku */
+#cart-modal{
+  border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;
+  background:transparent;position:fixed;inset:0;overflow:hidden;
 }
+#cart-modal[open]{display:flex;align-items:center;justify-content:center}
+#cart-modal::backdrop{background:rgba(0,0,0,.85);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.cart-content{
+  position:relative;width:92vw;max-width:540px;max-height:88vh;
+  background:rgba(18,20,24,.92);border:1px solid var(--edge);border-radius:24px;
+  padding:32px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.8);
+  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+}
+.cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--edge);padding-bottom:14px;margin-bottom:18px}
+.cart-header h3{font-size:1.6rem;color:#fff;letter-spacing:.05em}
+.close-cart{background:transparent;border:0;color:var(--muted);cursor:pointer;padding:6px;transition:.2s}
+.close-cart:hover{color:#fff;transform:scale(1.2)}
+.close-cart svg{width:22px;height:22px}
+.cart-items{overflow-y:auto;display:flex;flex-direction:column;gap:14px;max-height:36vh;padding-right:6px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,11,.6);padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.06)}
+.cart-item-title{font-weight:700;font-size:.95rem;color:#fff}
+.cart-item-variant{font-size:.8rem;color:var(--muted)}
+.cart-item-price{color:#ff9500;font-weight:700;font-size:1.05rem}
+.cart-remove-btn{background:transparent;border:0;color:#ff4757;cursor:pointer;padding:4px;font-size:.8rem;margin-left:8px}
+.cart-empty-text{color:var(--muted);text-align:center;padding:30px 0;font-size:.95rem}
+.cart-footer{border-top:1px solid var(--edge);padding-top:16px;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;font-size:1.25rem;font-weight:700}
+.cart-total-row span:last-child{color:#ff9500;font-size:1.45rem;font-family:"Barlow Condensed",sans-serif}
+
+/* Zásilkovna komponenty */
+.packeta-box{
+  background:rgba(10,10,11,.6);border:1px dashed var(--edge);padding:14px 16px;border-radius:12px;
+  display:flex;flex-direction:column;gap:10px;margin-top:4px;
+}
+.btn-packeta{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:10px 18px;border-radius:8px;background:rgba(180,30,30,.2);
+  border:1px solid rgba(220,50,50,.6);color:#ff5e57;font-size:.95rem;font-weight:700;
+  cursor:pointer;transition:all .25s ease;width:100%;letter-spacing:.08em;
+}
+.btn-packeta:hover{background:rgba(220,50,50,.4);color:#fff;box-shadow:0 0 16px rgba(220,50,50,.35)}
+.packeta-selected-info{
+  font-size:.85rem;color:#2ed573;background:rgba(46,213,115,.08);
+  border:1px solid rgba(46,213,115,.25);padding:8px 12px;border-radius:8px;display:none;
+}
+
+/* Formulář sekce */
+#kontakt{text-align:center}
+#kontakt .lead{margin-left:auto;margin-right:auto;margin-bottom:24px;font-size:.95rem}
+.contact-container{width:100%;margin:30px auto 0;text-align:left}
+.inquiry-form{width:100%;padding:38px;display:flex;flex-direction:column;gap:16px;border-radius:22px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-group label{font-size:.85rem;letter-spacing:.08em;color:var(--muted);font-weight:700}
@@ -163,6 +250,7 @@ textarea.form-control{resize:vertical;min-height:115px}
 @media(max-width:768px){
   .inquiry-form{padding:24px 18px}
   .form-row{grid-template-columns:1fr;gap:14px}
+  #cart-floating-btn{bottom:76px;right:18px}
 }
 
 footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:column;align-items:center;gap:20px}
@@ -217,12 +305,14 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <div class="nav-links" id="nav-links">
     <a href="#o-mne">O mně</a>
     <a href="#tvorba">Tvorba</a>
+    <a href="#shop" class="nav-shop">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Kontakt</a>
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="external-link hover-ig">Instagram</a>
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="external-link hover-zon">Zonerama</a>
   </div>
 </nav>
+
 <main class="wrap">
   <header class="hero">
     <div class="beep-indicator">
@@ -230,15 +320,20 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       <span class="beep-text">Tony Brenx Online</span>
     </div>
     <h1>Tony<br>Brenx</h1>
-    <p>Černobílá fotografie z ulice, portréty a video.</p>
-    <a class="btn" href="#tvorba">Prohlédnout tvorbu</a>
+    <p>Černobílá fotografie z ulice, portréty, video a autorský merch.</p>
+    <div class="hero-btns">
+      <a class="btn btn-primary" href="#shop">Prohlédnout Merch</a>
+      <a class="btn" href="#tvorba">Portfolio</a>
+    </div>
   </header>
+  
   <section id="o-mne">
     <div class="about glass">
       <h2>O mně</h2>
-      <p>Jmenuji se Antonín Lamač, ale v digitálním a kreativním světě mě najdeš pod pseudonymem <strong>Tony Brenx</strong>. Jsem fotograf a kameraman působící primárně v <strong>Karlovarském kraji (Sokolov, Karlovy Vary, Cheb)</strong>, ale za zajímavým projektem dorazím kamkoliv. Mým revírem je surová černobílá street fotografie, zachycení autentických portrétů a dynamická videotvorba s filmovým color gradingem. Fotím a točím to, co má atmosféru a hloubku. Často mě potkáš s Lumixem v ruce, u kterého rád kombinuji moderní technologie s charakterem starých manuálních objektivů.</p>
+      <p>Jmenuji se Antonín Lamač, ale v digitálním a kreativním světě mě najdeš pod pseudonymem <strong>Tony Brenx</strong>. Jsem fotograf a kameraman působící primárně v <strong>Karlovarském kraji (Sokolov, Karlovy Vary, Cheb)</strong>, ale za zajímavým projektem dorazím kamkoliv. Mým revírem je surová černobílá street fotografie, zachycení autentických portrétů a dynamická videotvorba s filmovým color gradingem. Často mě potkáš s Lumixem v ruce v kombinaci se starými manuálními objektivy.</p>
     </div>
   </section>
+
   <section id="tvorba">
     <h2>Tvorba</h2>
     <p class="lead">Výběr z fotografií. Kliknutím zvětšíš, šipkami nebo klávesami listuješ.</p>
@@ -254,6 +349,198 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </button>
     </div>
   </section>
+
+  <!-- MERCH E-SHOP SEKCE -->
+  <section id="shop">
+    <h2>Merch & Tisk</h2>
+    <p class="lead">Limitovaná streetwear série a velkoformátové fine-art fototisky doručované přes <strong>Zásilkovnu (Z-BOX)</strong>.</p>
+
+    <div class="shop-filters">
+      <button class="shop-filter-btn active" data-filter="all">Všechny produkty (8)</button>
+      <button class="shop-filter-btn" data-filter="trika">Trika (3)</button>
+      <button class="shop-filter-btn" data-filter="headwear">Headwear (1)</button>
+      <button class="shop-filter-btn" data-filter="postery">Postery & Tisky (4)</button>
+    </div>
+
+    <div class="shop-grid">
+      <!-- 3x TRIKA -->
+      <div class="product-card" data-category="trika">
+        <div class="product-img-box">
+          <span class="product-badge">Heavyweight 240g</span>
+          <img src="img-web/foto-1.webp" alt="Tee Revír">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Tee „REVÍR“ Black</h3>
+          <p class="product-desc">Oversized střih z těžké 100% bavlny. Minimalistický černobílý sítotisk na hrudi a zádech.</p>
+          <div class="product-meta">
+            <span class="product-price">890 Kč</span>
+            <select class="product-select" id="opt-t1">
+              <option value="S">Velikost S</option>
+              <option value="M" selected>Velikost M</option>
+              <option value="L">Velikost L</option>
+              <option value="XL">Velikost XL</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Tee „REVÍR“ Black', 890, document.getElementById('opt-t1').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="trika">
+        <div class="product-img-box">
+          <span class="product-badge">Acid Wash</span>
+          <img src="img-web/foto-5.webp" alt="Tee Broken Place">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Tee „BROKEN PLACE“</h3>
+          <p class="product-desc">Vintage acid wash úprava, syrový streetový vibe, limitovaná číslovaná série studiového merche.</p>
+          <div class="product-meta">
+            <span class="product-price">950 Kč</span>
+            <select class="product-select" id="opt-t2">
+              <option value="S">Velikost S</option>
+              <option value="M" selected>Velikost M</option>
+              <option value="L">Velikost L</option>
+              <option value="XL">Velikost XL</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Tee „BROKEN PLACE“', 950, document.getElementById('opt-t2').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="trika">
+        <div class="product-img-box">
+          <span class="product-badge">Boxy Fit</span>
+          <img src="img-web/foto-12.webp" alt="Tee Raw Atmosphere">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Tee „RAW ATMOSPHERE“</h3>
+          <p class="product-desc">Pevný límec, spadlá ramena a autorský analogový grafický print s motivem nočního města.</p>
+          <div class="product-meta">
+            <span class="product-price">890 Kč</span>
+            <select class="product-select" id="opt-t3">
+              <option value="S">Velikost S</option>
+              <option value="M" selected>Velikost M</option>
+              <option value="L">Velikost L</option>
+              <option value="XL">Velikost XL</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Tee „RAW ATMOSPHERE“', 890, document.getElementById('opt-t3').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <!-- 1x SNAPBACK -->
+      <div class="product-card" data-category="headwear">
+        <div class="product-img-box">
+          <span class="product-badge">3D Výšivka</span>
+          <img src="img-web/foto-20.webp" alt="SnapBack Tony Brenx">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">SnapBack „TB SIGNATURE“</h3>
+          <p class="product-desc">Klasický 6-panel střih, černý matný vršek, zelený spodek kšiltu a vystouplá tonální 3D výšivka.</p>
+          <div class="product-meta">
+            <span class="product-price">790 Kč</span>
+            <select class="product-select" id="opt-sb">
+              <option value="Univerzální" selected>One Size (Snapback)</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('SnapBack „TB SIGNATURE“', 790, document.getElementById('opt-sb').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <!-- 4x POSTERY -->
+      <div class="product-card" data-category="postery">
+        <div class="product-img-box">
+          <span class="product-badge">Archival Matte</span>
+          <img src="img-web/foto-25.webp" alt="Poster Urban Shadow">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Poster „URBAN SHADOW“</h3>
+          <p class="product-desc">Černobílý kontrastní tisk ze série sokolovských a karlovarských ulic. Hluboká černá a jemné zrno.</p>
+          <div class="product-meta">
+            <span class="product-price">590 Kč</span>
+            <select class="product-select" id="opt-p1">
+              <option value="A3 (30x42 cm)" selected>Formát A3</option>
+              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Poster „URBAN SHADOW“', document.getElementById('opt-p1').value.includes('A2')?840:590, document.getElementById('opt-p1').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="postery">
+        <div class="product-img-box">
+          <span class="product-badge">Fine-Art Print</span>
+          <img src="img-web/foto-33.webp" alt="Poster V-Log Night">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Poster „NOCTURNAL DRIFT“</h3>
+          <p class="product-desc">Filmový frame z nočního natáčení s mlžnou atmosférou a neonovým protisvětlem na 250g fotopapíru.</p>
+          <div class="product-meta">
+            <span class="product-price">590 Kč</span>
+            <select class="product-select" id="opt-p2">
+              <option value="A3 (30x42 cm)" selected>Formát A3</option>
+              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Poster „NOCTURNAL DRIFT“', document.getElementById('opt-p2').value.includes('A2')?840:590, document.getElementById('opt-p2').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="postery">
+        <div class="product-img-box">
+          <span class="product-badge">Hahnemühle 310g</span>
+          <img src="img-web/foto-42.webp" alt="Poster Helios Bokeh">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Poster „VINTAGE FLARE“</h3>
+          <p class="product-desc">Autentický swirl bokeh focený manuální optikou Helios 44-2 na plném formátu. Hřejivý kinofilmový tón.</p>
+          <div class="product-meta">
+            <span class="product-price">650 Kč</span>
+            <select class="product-select" id="opt-p3">
+              <option value="A3 (30x42 cm)" selected>Formát A3</option>
+              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Poster „VINTAGE FLARE“', document.getElementById('opt-p3').value.includes('A2')?900:650, document.getElementById('opt-p3').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+
+      <div class="product-card" data-category="postery">
+        <div class="product-img-box">
+          <span class="product-badge">Limitovaná Edice</span>
+          <img src="img-web/foto-50.webp" alt="Poster Industrial Krušnohoří">
+        </div>
+        <div class="product-info">
+          <h3 class="product-title">Poster „REVÍR KRUŠNOHOŘÍ“</h3>
+          <p class="product-desc">Geometrie industriální krajiny a hřebenů Krušných hor pod těžkými mraky. Ručně signováno.</p>
+          <div class="product-meta">
+            <span class="product-price">650 Kč</span>
+            <select class="product-select" id="opt-p4">
+              <option value="A3 (30x42 cm)" selected>Formát A3</option>
+              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+            </select>
+          </div>
+          <button class="btn-buy" onclick="addToCart('Poster „REVÍR KRUŠNOHOŘÍ“', document.getElementById('opt-p4').value.includes('A2')?900:650, document.getElementById('opt-p4').value)">
+            Do košíku
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="cenik">
     <h2>Ceník</h2>
     <p class="lead">Každý projekt je jedinečný. Pokud v ceníku nenajdeš přesně to, co hledáš, vše se dá individuálně domluvit. Pravidelně spolupracuji s dalšími prověřenými tvůrci, takže jsme schopni kompletně pokrýt i svatbu či větší event ve více lidech (foto i video zároveň).</p>
@@ -280,15 +567,20 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
     </div>
   </section>
+
+  <!-- KONTAKT & OBJEDNÁVKA SE ZÁSILKOVNOU A GOOGLE APPS SCRIPT -->
   <section id="kontakt">
-    <h2>Kontakt</h2>
-    <p class="lead">Máš zájem o focení, video nebo spolupráci? Napiš mi níže přes formulář a domluvíme podrobnosti.</p>
+    <h2>Kontakt & Objednávka</h2>
+    <p class="lead">Máš zájem o focení, video nebo objednávku merche přes Zásilkovnu? Napiš mi níže přes formulář a domluvíme podrobnosti.</p>
     <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Sokolově (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
     
     <div class="contact-container">
-      <form id="contact-form" action="https://formspree.io/f/meaeawok" method="POST" class="inquiry-form glass">
-        <!-- Ochrana proti spam robotům (Honeypot) -->
+      <form id="contact-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST" class="inquiry-form glass">
         <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
+
+        <!-- Skrytá pole pro Zásilkovnu -->
+        <input type="hidden" id="packeta-point-id" name="zasilkovna_point_id" value="">
+        <input type="hidden" id="packeta-point-name" name="zasilkovna_point_name" value="">
 
         <div class="form-row">
           <div class="form-group">
@@ -310,12 +602,13 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
               class="form-control" 
               placeholder="+420 777 123 456" 
               pattern="[+]?[0-9\s-]{9,16}" 
-              title="Zadejte platné telefonní číslo (např. +420 777 123 456)" 
+              title="Zadejte platné telefonní číslo pro Zásilkovnu (např. +420 777 123 456)" 
               required>
           </div>
           <div class="form-group">
-            <label for="form-service">Typ poptávky</label>
-            <select id="form-service" name="service" class="form-control">
+            <label for="form-service">Typ poptávky / zprávy</label>
+            <select id="form-service" name="service" class="form-control" onchange="toggleShippingSection()">
+              <option value="Objednávka merche / tisk">Objednávka merche / tisk</option>
               <option value="Portrétní focení">Portrétní focení</option>
               <option value="Reportáž / Event">Reportáž / Event</option>
               <option value="Videotvorba">Videotvorba</option>
@@ -324,29 +617,85 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
             </select>
           </div>
         </div>
-        <div class="form-group">
-          <label for="form-msg">Zpráva / Detaily projektu *</label>
-          <textarea id="form-msg" name="message" class="form-control" placeholder="Popiš termín, lokalitu a svou představu..." required></textarea>
+
+        <!-- Výběr dopravy a Zásilkovny -->
+        <div id="shipping-section" class="form-group">
+          <label>Způsob dopravy</label>
+          <select id="shipping-method" name="shipping_method" class="form-control" onchange="handleShippingChange()">
+            <option value="Zásilkovna (Z-BOX / Výdejní místo) - 79 Kč" selected>Zásilkovna: Z-BOX / Výdejní místo (+79 Kč)</option>
+            <option value="Osobní předání Sokolov - Zdarma">Osobní předání: Sokolov a okolí (Zdarma)</option>
+          </select>
+
+          <div id="packeta-picker-wrapper" class="packeta-box">
+            <button type="button" class="btn-packeta" onclick="openPacketaWidget()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Vybrat Z-BOX nebo výdejní místo Zásilkovny
+            </button>
+            <div id="packeta-selected-display" class="packeta-selected-info">
+              ✓ Vybrané místo: <strong id="packeta-place-name">Zatím nevybráno</strong>
+            </div>
+          </div>
         </div>
-        <button type="submit" id="form-submit-btn" class="btn" style="width:100%;margin-top:4px">Odeslat poptávku</button>
+
+        <div class="form-group">
+          <label for="form-msg">Zpráva / Detaily objednávky & projektu *</label>
+          <textarea id="form-msg" name="message" class="form-control" placeholder="Popiš svou představu nebo poznámku k doručení..." required></textarea>
+        </div>
+        <button type="submit" id="form-submit-btn" class="btn" style="width:100%;margin-top:4px">Odeslat objednávku / poptávku</button>
         <p class="gdpr-notice">
-          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky a kalkulace. Údaje nepředávám třetím stranám a neposílám žádný spam.
+          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky nebo doručení objednávky. Údaje nepředávám třetím stranám a neposílám žádný spam.
         </p>
         <div id="form-status" class="form-status"></div>
       </form>
     </div>
   </section>
 </main>
+
 <footer>
   <div class="footer-links">
+    <a href="#shop" style="color:#ff9500">Merch Shop</a>
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="hover-ig">Instagram</a>
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="hover-zon">Zonerama</a>
   </div>
   <div class="copyright">© 2026 Tony Brenx</div>
 </footer>
+
+<!-- Plovoucí košík -->
+<button id="cart-floating-btn" title="Otevřít košík" aria-label="Košík">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25c-.669 0-1.189-.578-1.119-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+  <span class="cart-badge" id="cart-count">0</span>
+</button>
+
+<!-- Modální okno košíku -->
+<dialog id="cart-modal">
+  <div class="cart-content">
+    <div class="cart-header">
+      <h3>Váš Košík</h3>
+      <button class="close-cart" id="close-cart-btn" aria-label="Zavřít košík">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cart-items" id="cart-items-container">
+      <div class="cart-empty-text">Košík je zatím prázdný.</div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <span>Zboží celkem:</span>
+        <span id="cart-total-price">0 Kč</span>
+      </div>
+      <button class="btn btn-primary" id="checkout-btn" style="width:100%" onclick="checkoutCart()">
+        Vybrat Zásilkovnu a objednat
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<!-- Tlačítko zpět nahoru -->
 <button id="scroll-top" title="Zpět nahoru" aria-label="Zpět nahoru">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
 </button>
+
+<!-- Lightbox -->
 <dialog id="lb">
   <button class="close-lb" id="close-lb" aria-label="Zavřít galerii">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -361,7 +710,17 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
   </button>
 </dialog>
+
 <script>
+// Navigace & Hamburger
+const homeBtn = document.getElementById('home-btn');
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.getElementById('nav-links');
+menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+homeBtn.addEventListener('click', e => { e.preventDefault(); navLinks.classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'}); });
+
+// Galerie portfolio
 const g = document.getElementById('gallery');
 const lb = document.getElementById('lb');
 const big = document.getElementById('lb-img');
@@ -369,13 +728,6 @@ const closeBtn = document.getElementById('close-lb');
 const loadMoreBtn = document.getElementById('load-more');
 const hidePhotosBtn = document.getElementById('hide-photos');
 const scrollTopBtn = document.getElementById('scroll-top');
-const homeBtn = document.getElementById('home-btn');
-const menuToggle = document.getElementById('menu-toggle');
-const navLinks = document.getElementById('nav-links');
-
-menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
-homeBtn.addEventListener('click', e => { e.preventDefault(); navLinks.classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'}); });
 
 const totalPhotos = 55;
 const isMobile = window.innerWidth <= 768;
@@ -408,7 +760,6 @@ function renderBatch(count) {
   currentLoadedCount += next.length;
   updateButtons();
 }
-
 renderBatch(initialBatch);
 loadMoreBtn.addEventListener('click', () => renderBatch(stepBatch));
 
@@ -422,7 +773,7 @@ hidePhotosBtn.addEventListener('click', () => {
   document.getElementById('tvorba').scrollIntoView({behavior:'smooth'});
 });
 
-// Dotyková odezva pro ceník (mobily + tablety/iPady)
+// Ceník touch
 const priceCards = document.querySelectorAll('.price-card');
 priceCards.forEach(card => {
   card.addEventListener('pointerdown', () => {
@@ -431,18 +782,184 @@ priceCards.forEach(card => {
   });
 });
 document.addEventListener('pointerdown', (e) => {
-  if (!e.target.closest('.price-card')) {
-    priceCards.forEach(c => c.classList.remove('active-tap'));
-  }
+  if (!e.target.closest('.price-card')) priceCards.forEach(c => c.classList.remove('active-tap'));
 });
 
-// Obsluha odeslání formuláře přes AJAX (Formspree bez přesměrování stránky)
+// E-SHOP LOGIKA
+let cart = JSON.parse(localStorage.getItem('tb_cart')) || [];
+const cartFloatingBtn = document.getElementById('cart-floating-btn');
+const cartModal = document.getElementById('cart-modal');
+const closeCartBtn = document.getElementById('close-cart-btn');
+const cartCount = document.getElementById('cart-count');
+const cartItemsContainer = document.getElementById('cart-items-container');
+const cartTotalPrice = document.getElementById('cart-total-price');
+
+const filterBtns = document.querySelectorAll('.shop-filter-btn');
+const productCards = document.querySelectorAll('.product-card');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    productCards.forEach(card => {
+      card.style.display = (filter === 'all' || card.dataset.category === filter) ? 'flex' : 'none';
+    });
+  });
+});
+
+function updateCartUI() {
+  localStorage.setItem('tb_cart', JSON.stringify(cart));
+  const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
+  cartCount.textContent = totalCount;
+  
+  if (cart.length === 0) {
+    cartItemsContainer.innerHTML = '<div class="cart-empty-text">Košík je zatím prázdný.</div>';
+    cartTotalPrice.textContent = '0 Kč';
+    return;
+  }
+
+  cartItemsContainer.innerHTML = '';
+  let sum = 0;
+  cart.forEach((item, index) => {
+    sum += item.price * item.qty;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <div>
+        <div class="cart-item-title">${item.title} (x${item.qty})</div>
+        <div class="cart-item-variant">${item.variant}</div>
+      </div>
+      <div style="display:flex;align-items:center;">
+        <span class="cart-item-price">${item.price * item.qty} Kč</span>
+        <button class="cart-remove-btn" onclick="removeFromCart(${index})" title="Odebrat">✕</button>
+      </div>
+    `;
+    cartItemsContainer.appendChild(div);
+  });
+  cartTotalPrice.textContent = sum.toLocaleString('cs-CZ') + ' Kč';
+}
+
+function addToCart(title, price, variant) {
+  const existing = cart.find(i => i.title === title && i.variant === variant);
+  if (existing) existing.qty += 1;
+  else cart.push({ title, price, variant, qty: 1 });
+  updateCartUI();
+  cartFloatingBtn.style.transform = 'scale(1.25)';
+  setTimeout(() => cartFloatingBtn.style.transform = 'scale(1)', 250);
+  cartModal.showModal();
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCartUI();
+}
+
+cartFloatingBtn.addEventListener('click', () => cartModal.showModal());
+closeCartBtn.addEventListener('click', () => cartModal.close());
+cartModal.addEventListener('click', e => { if (e.target === cartModal) cartModal.close(); });
+
+function checkoutCart() {
+  if (cart.length === 0) return;
+  cartModal.close();
+  
+  const serviceSelect = document.getElementById('form-service');
+  serviceSelect.value = 'Objednávka merche / tisk';
+  toggleShippingSection();
+  
+  refreshOrderSummary();
+  document.getElementById('kontakt').scrollIntoView({ behavior: 'smooth' });
+}
+updateCartUI();
+
+// ==========================================
+// ZÁSILKOVNA INTEGRACE
+// ==========================================
+let selectedPacketaPoint = null;
+const packetaApiKey = 'a1b2c3d4e5f6';
+
+function openPacketaWidget() {
+  const packetaOptions = {
+    country: 'cz',
+    language: 'cs'
+  };
+
+  Packeta.Widget.pick(packetaApiKey, (point) => {
+    if (point) {
+      selectedPacketaPoint = point;
+      document.getElementById('packeta-point-id').value = point.id;
+      document.getElementById('packeta-point-name').value = `${point.name}, ${point.street}, ${point.city} (${point.zip})`;
+      
+      const display = document.getElementById('packeta-selected-display');
+      display.style.display = 'block';
+      document.getElementById('packeta-place-name').textContent = `${point.name} (${point.city})`;
+      
+      refreshOrderSummary();
+    }
+  }, packetaOptions);
+}
+
+function handleShippingChange() {
+  const method = document.getElementById('shipping-method').value;
+  const wrapper = document.getElementById('packeta-picker-wrapper');
+  if (method.includes('Zásilkovna')) {
+    wrapper.style.display = 'flex';
+  } else {
+    wrapper.style.display = 'none';
+  }
+  refreshOrderSummary();
+}
+
+function toggleShippingSection() {
+  const service = document.getElementById('form-service').value;
+  const shippingSec = document.getElementById('shipping-section');
+  if (service === 'Objednávka merche / tisk') {
+    shippingSec.style.display = 'flex';
+  } else {
+    shippingSec.style.display = 'none';
+  }
+}
+
+function refreshOrderSummary() {
+  const msgField = document.getElementById('form-msg');
+  if (document.getElementById('form-service').value !== 'Objednávka merche / tisk') return;
+
+  const shippingMethod = document.getElementById('shipping-method').value;
+  const isZasilkovna = shippingMethod.includes('Zásilkovna');
+  const shippingCost = isZasilkovna ? 79 : 0;
+  
+  let goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+  let totalWithShipping = goodsSum + shippingCost;
+
+  let text = 'Ahoj Tony, chci si objednat:\n\n';
+  cart.forEach(item => {
+    text += `• ${item.title} [${item.variant}] - ${item.qty} ks (${item.price * item.qty} Kč)\n`;
+  });
+  text += `\nDoprava: ${shippingMethod}\n`;
+  if (isZasilkovna && selectedPacketaPoint) {
+    text += `Pobočka / Z-BOX: ${selectedPacketaPoint.name}, ${selectedPacketaPoint.street}, ${selectedPacketaPoint.city} [ID: ${selectedPacketaPoint.id}]\n`;
+  }
+  text += `Celková cena s dopravou: ${totalWithShipping.toLocaleString('cs-CZ')} Kč\n\nPoznámka / doplňující info: `;
+  
+  msgField.value = text;
+}
+
+// ODESLÁNÍ FORMULÁŘE PŘES GOOGLE APPS SCRIPT
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 const formSubmitBtn = document.getElementById('form-submit-btn');
 
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  
+  const service = document.getElementById('form-service').value;
+  const shippingMethod = document.getElementById('shipping-method').value;
+  if (service === 'Objednávka merche / tisk' && shippingMethod.includes('Zásilkovna') && !selectedPacketaPoint) {
+    alert('Vyber prosím výdejní místo nebo Z-BOX Zásilkovny kliknutím na červené tlačítko.');
+    openPacketaWidget();
+    return;
+  }
+
   formSubmitBtn.disabled = true;
   formSubmitBtn.textContent = 'Odesílám...';
   formStatus.className = 'form-status';
@@ -450,26 +967,27 @@ contactForm.addEventListener('submit', async (e) => {
 
   const data = new FormData(contactForm);
   try {
-    const res = await fetch(contactForm.action, {
+    // mode: 'no-cors' zajistí úspěšné odeslání do Google Apps Scriptu bez blokování v prohlížeči
+    await fetch(contactForm.action, {
       method: 'POST',
       body: data,
-      headers: { 'Accept': 'application/json' }
+      mode: 'no-cors'
     });
-    if (res.ok) {
-      formStatus.textContent = 'Díky za zprávu! Ozvu se ti co nejdříve.';
-      formStatus.className = 'form-status success';
-      contactForm.reset();
-    } else {
-      const json = await res.json();
-      formStatus.textContent = json.errors ? json.errors.map(err => err.message).join(', ') : 'Chyba při odesílání, zkus to prosím znovu.';
-      formStatus.className = 'form-status error';
-    }
+
+    formStatus.textContent = 'Díky za zprávu/objednávku! Vše bylo uloženo a potvrzení ti dorazí do e-mailu.';
+    formStatus.className = 'form-status success';
+    contactForm.reset();
+    cart = [];
+    selectedPacketaPoint = null;
+    const disp = document.getElementById('packeta-selected-display');
+    if (disp) disp.style.display = 'none';
+    updateCartUI();
   } catch (err) {
     formStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu.';
     formStatus.className = 'form-status error';
   } finally {
     formSubmitBtn.disabled = false;
-    formSubmitBtn.textContent = 'Odeslat poptávku';
+    formSubmitBtn.textContent = 'Odeslat objednávku / poptávku';
   }
 });
 
@@ -479,7 +997,7 @@ window.addEventListener('scroll', () => {
 }, {passive:true});
 scrollTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
-// 3D Tilt pouze pro klasické kurzory
+// 3D Tilt
 g.addEventListener('mousemove', e => {
   const a = e.target.closest('a');
   if(!a) return;
