@@ -12,8 +12,8 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Stabilní načtení Packeta Widgetu -->
-<script src="https://widget.packeta.com/v6/javascript/packeta.js"></script>
+<!-- Oficiální a plně funkční skript Zásilkovny -->
+<script src="https://widget.packeta.com/www/js/library.js"></script>
 
 <style>
 :root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.75);--edge:rgba(255,255,255,.12)}
@@ -67,7 +67,7 @@ nav a.external-link{color:#d1d1d3}
 nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C}
 nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2}
 .menu-toggle{display:none;background:transparent;border:0;color:var(--text);cursor:pointer;padding:8px;border-radius:50%;align-items:center;justify-content:center;transition:all .3s ease}
-.menu-toggle svg{width:24px;height:24px;display:block}
+.menu-toggle svg{width:24px;height:24px}
 .menu-toggle:hover{color:#ff9500}
 
 @media(max-width:860px){
@@ -221,9 +221,9 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   border:1px solid rgba(46,213,115,.25);padding:8px 12px;border-radius:8px;display:none;
 }
 
-/* Prioritní z-index pro widget Packety */
-.packeta-widget, #packeta-widget, div[id*="packeta"] {
-  z-index: 99999 !important;
+/* Z-index pro Packeta iframe */
+iframe[name="packeta-widget"], div[id*="packeta-widget"] {
+  z-index: 999999 !important;
 }
 
 /* Formuláře */
@@ -963,7 +963,6 @@ function openPacketaWidget() {
   }
 
   const packetaOptions = {
-    apiKey: packetaApiKey,
     country: 'cz',
     language: 'cs'
   };
