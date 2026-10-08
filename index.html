@@ -174,7 +174,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okno košíku & checkoutu bez blokace vrstev */
+/* Modální okno košíku & checkoutu */
 .custom-modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.85);
   z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;
@@ -952,9 +952,9 @@ function updateCheckoutTotal() {
 }
 updateCartUI();
 
-// Zásilkovna Widget (vlož sem svůj API klíč místo testovacího)
+// Zásilkovna Widget s tvým oficiálním API klíčem
 let selectedPacketaPoint = null;
-const packetaApiKey = 'c7e8e50b71aa5a3b';
+const packetaApiKey = 'f277c2daae06a692';
 
 function openPacketaWidget() {
   const packetaOptions = {
