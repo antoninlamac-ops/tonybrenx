@@ -12,7 +12,7 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Oficiální a plně funkční skript Zásilkovny -->
+<!-- Oficiální skript Zásilkovny -->
 <script src="https://widget.packeta.com/www/js/library.js"></script>
 
 <style>
@@ -25,7 +25,7 @@ body{
   -webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none;
 }
 
-/* Fixní pozadí s rozmazáním (BLUR) */
+/* Fixní pozadí s rozmazáním */
 .bg-photo-layer{
   position:fixed;
   inset:-20px;
@@ -67,7 +67,7 @@ nav a.external-link{color:#d1d1d3}
 nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C}
 nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2}
 .menu-toggle{display:none;background:transparent;border:0;color:var(--text);cursor:pointer;padding:8px;border-radius:50%;align-items:center;justify-content:center;transition:all .3s ease}
-.menu-toggle svg{width:24px;height:24px}
+.menu-toggle svg{width:24px;height:24px;display:block}
 .menu-toggle:hover{color:#ff9500}
 
 @media(max-width:860px){
@@ -174,16 +174,16 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okno košíku & checkoutu bez blokace vrstev */
+/* Modální okna (Košík & Podmínky) */
 .custom-modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  position:fixed;inset:0;background:rgba(0,0,0,.88);
   z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;
 }
 .custom-modal-overlay.open{
   display:flex;
 }
 .cart-content{
-  position:relative;width:100%;max-width:560px;max-height:90vh;
+  position:relative;width:100%;max-width:580px;max-height:90vh;
   background:rgba(18,20,24,.98);border:1px solid var(--edge);border-radius:24px;
   padding:28px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.9);
   overflow-y:auto;
@@ -221,7 +221,6 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   border:1px solid rgba(46,213,115,.25);padding:8px 12px;border-radius:8px;display:none;
 }
 
-/* Z-index pro Packeta iframe */
 iframe[name="packeta-widget"], div[id*="packeta-widget"] {
   z-index: 999999 !important;
 }
@@ -260,11 +259,14 @@ textarea.form-control{resize:vertical;min-height:105px}
   #cart-floating-btn{bottom:76px;right:18px}
 }
 
-footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:column;align-items:center;gap:20px}
-.footer-links{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
-.footer-links a{color:var(--text);text-decoration:none;font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:1.05rem;transition:color .3s ease}
+footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.footer-links a{color:var(--text);text-decoration:none;font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:1.02rem;transition:color .3s ease}
 .footer-links a:hover{color:#ff9500}
-.copyright{font-size:.85rem;color:rgba(154,155,162,.5)}
+.footer-withdraw-btn{color:#ff4757 !important;cursor:pointer}
+.footer-withdraw-btn:hover{color:#ff6b81 !important}
+.company-info{font-size:.82rem;color:rgba(154,155,162,.7);line-height:1.5;max-width:700px}
+.copyright{font-size:.82rem;color:rgba(154,155,162,.4)}
 
 /* Lightbox */
 #lb{border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:transparent;position:fixed;inset:0;overflow:hidden}
@@ -569,7 +571,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <section id="kontakt">
     <h2>Poptávka služeb</h2>
     <p class="lead">Máš zájem o focení, video nebo dlouhodobou spolupráci? Napiš mi a probereme termín i realizaci.</p>
-    <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Sokolově (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
+    <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Sokolově a Svatavě (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
     
     <div class="contact-container">
       <form id="contact-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST" class="inquiry-form glass">
@@ -618,7 +620,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
         <button type="submit" id="form-submit-btn" class="btn" style="width:100%;margin-top:4px">Odeslat poptávku</button>
         <p class="gdpr-notice">
-          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky a kalkulace. Údaje nikomu nepředávám a neposílám žádný spam.
+          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky a kalkulace. Více v <a href="#" onclick="openLegalModal('privacy'); return false;" style="color:#ff9500;text-decoration:underline;">Zásadách zpracování osobních údajů</a>.
         </p>
         <div id="form-status" class="form-status"></div>
       </form>
@@ -629,10 +631,17 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 <footer>
   <div class="footer-links">
     <a href="#shop" style="color:#ff9500">Merch Shop</a>
+    <a href="#" onclick="openLegalModal('terms'); return false;">Obchodní podmínky</a>
+    <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
+    <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn">Odstoupení od smlouvy</a>
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="hover-ig">Instagram</a>
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="hover-zon">Zonerama</a>
   </div>
-  <div class="copyright">© 2026 Tony Brenx</div>
+  <div class="company-info">
+    <strong>Provozovatel:</strong> Antonín Lamač, Svatava | <strong>IČO:</strong> 87481235<br>
+    Fyzická osoba zapsaná v živnostenském rejstříku. | <strong>E-mail:</strong> t.brenx@gmail.com
+  </div>
+  <div class="copyright">© 2026 Tony Brenx • Všechna práva vyhrazena</div>
 </footer>
 
 <!-- Plovoucí košík -->
@@ -722,12 +731,22 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
         <div class="form-group" style="margin-top:12px">
           <label for="order-note">Poznámka k objednávce (volitelné)</label>
-          <textarea id="order-note" class="form-control" style="min-height:60px" placeholder="Např. doplňující info k doručení..."></textarea>
+          <textarea id="order-note" class="form-control" style="min-height:55px" placeholder="Např. doplňující info k doručení..."></textarea>
         </div>
 
-        <div class="cart-total-row" style="margin:16px 0 8px">
+        <div class="cart-total-row" style="margin:12px 0 6px">
           <span>Celkem k úhradě:</span>
           <span id="order-final-price">0 Kč</span>
+        </div>
+
+        <!-- ZÁVAZNÝ SOUHLAS S OBCHODNÍMI PODMÍNKAMI A GDPR -->
+        <div style="margin: 12px 0 10px; font-size: 0.8rem; color: var(--muted); line-height: 1.4;">
+          <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer;">
+            <input type="checkbox" id="order-terms-check" required style="margin-top: 3px; accent-color: #ff9500; cursor: pointer;">
+            <span>
+              Souhlasím s <a href="#" onclick="openLegalModal('terms'); return false;" style="color:#ff9500; text-decoration: underline;">obchodními podmínkami</a> a beru na vědomí <a href="#" onclick="openLegalModal('privacy'); return false;" style="color:#ff9500; text-decoration: underline;">zpracování osobních údajů</a>.
+            </span>
+          </label>
         </div>
 
         <div style="display:flex;gap:10px;margin-top:10px">
@@ -738,6 +757,19 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         <div id="order-status" class="form-status"></div>
       </form>
     </div>
+  </div>
+</div>
+
+<!-- MODÁLNÍ OKNO PRO PRÁVNÍ DOKUMENTY A ODSTOUPENÍ OD SMLOUVY -->
+<div class="custom-modal-overlay" id="legal-modal" style="z-index: 100000;">
+  <div class="cart-content" style="max-height: 84vh;">
+    <div class="cart-header">
+      <h3 id="legal-title">Informace</h3>
+      <button class="close-cart" onclick="closeLegalModal()" aria-label="Zavřít">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="legal-body" style="font-size: 0.88rem; color: #ddd; line-height: 1.6; overflow-y: auto; padding-right: 6px;"></div>
   </div>
 </div>
 
@@ -1065,6 +1097,143 @@ contactForm.addEventListener('submit', async (e) => {
     formSubmitBtn.textContent = 'Odeslat poptávku';
   }
 });
+
+// PRÁVNÍ MODÁLNÍ OKNO, GDPR A ODSTOUPENÍ OD SMLOUVY
+function openLegalModal(type) {
+  const modal = document.getElementById('legal-modal');
+  const title = document.getElementById('legal-title');
+  const body = document.getElementById('legal-body');
+
+  if (type === 'terms') {
+    title.textContent = 'Obchodní podmínky';
+    body.innerHTML = `
+      <p style="background: rgba(255,149,0,0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,149,0,0.3); margin-bottom: 16px;">
+        <strong>Provozovatel e-shopu:</strong><br>
+        <strong>Jméno:</strong> Antonín Lamač (Tony Brenx)<br>
+        <strong>IČO:</strong> 87481235<br>
+        <strong>Sídlo:</strong> Svatava, Česká republika<br>
+        <strong>E-mail:</strong> t.brenx@gmail.com<br>
+        <em>Fyzická osoba podnikající dle živnostenského zákona.</em>
+      </p>
+      
+      <h4>1. Všeobecná ustanovení</h4>
+      <p>Tyto obchodní podmínky upravují práva a povinnosti smluvních stran vzniklé v souvislosti nebo na základě kupní smlouvy uzavírané mezi prodávajícím a kupujícím prostřednictvím internetového obchodu Tony Brenx.</p>
+      
+      <h4 style="margin-top:14px;">2. Objednávka a uzavření kupní smlouvy</h4>
+      <p>Odesláním objednávky prostřednictvím nákupního košíku kupující potvrzuje, že se seznámil s těmito obchodními podmínkami a souhlasí s nimi. Kupní smlouva vzniká potvrzením objednávky prodávajícím formou automatického e-mailu.</p>
+      
+      <h4 style="margin-top:14px;">3. Ceny, platba a doprava</h4>
+      <p>Veškeré ceny jsou konečné. Platba probíhá bezhotovostně bankovním převodem nebo okamžitou platbou prostřednictvím vygenerovaného QR kódu. Zboží je doručováno prostřednictvím sítě Zásilkovna (Z-BOX / výdejní místo) nebo formou osobního předání dle zvolené volby.</p>
+      
+      <h4 style="margin-top:14px; color:#ff4757;">4. Právo na odstoupení od smlouvy (14 dní)</h4>
+      <p>Spotřebitel má právo odstoupit od kupní smlouvy bez udání důvodu ve lhůtě 14 dnů ode dne převzetí zboží. Pro odstoupení můžete využít náš 
+      <a href="#" onclick="openLegalModal('withdraw'); return false;" style="color:#ff9500; font-weight:bold; text-decoration:underline;">online formulář pro odstoupení od smlouvy</a>.</p>
+      <p style="font-size:0.8rem; color:var(--muted); margin-top:4px;">Právo na odstoupení se nevztahuje na zboží vyrobené nebo upravené podle přání spotřebitele (např. individuálně podepsané velkoformátové tisky na zakázku dle § 1837 občanského zákoníku).</p>
+      
+      <h4 style="margin-top:14px;">5. Reklamace a záruka</h4>
+      <p>Zákonná záruční doba na spotřební zboží činí 24 měsíců. V případě poškození zásilky či vady zboží kontaktujte prodávajícího na e-mailu: <strong>t.brenx@gmail.com</strong>.</p>
+    `;
+  } else if (type === 'privacy') {
+    title.textContent = 'Zásady ochrany osobních údajů (GDPR)';
+    body.innerHTML = `
+      <p style="background: rgba(255,149,0,0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,149,0,0.3); margin-bottom: 16px;">
+        <strong>Správce osobních údajů:</strong><br>
+        Antonín Lamač, IČO: 87481235, Svatava<br>
+        <strong>E-mail:</strong> t.brenx@gmail.com
+      </p>
+      <h4>1. Rozsah a účel zpracování</h4>
+      <p>Správce zpracovává osobní údaje poskytnuté zákazníkem (jméno, příjmení, e-mail, telefon, zvolené výdejní místo) výhradně za účelem vyřízení objednávky, fakturace, doručení zboží a komunikace ohledně zakázky.</p>
+      
+      <h4 style="margin-top:14px;">2. Předávání třetím stranám</h4>
+      <p>Údaje nezbytné pro doručení jsou předávány přepravci: <strong>Packeta s.r.o. (Zásilkovna)</strong>. Vaše údaje nejsou prodávány ani poskytovány třetím stranám pro marketingové účely.</p>
+      
+      <h4 style="margin-top:14px;">3. Vaše práva</h4>
+      <p>Máte právo na přístup ke svým údajům, jejich opravu, výmaz či omezení zpracování. Kdykoliv se můžete obrátit na správce prostřednictvím e-mailu.</p>
+    `;
+  } else if (type === 'withdraw') {
+    title.textContent = 'Odstoupení od kupní smlouvy';
+    body.innerHTML = `
+      <p style="margin-bottom: 14px; font-size:0.85rem; color:var(--muted);">
+        Jako spotřebitel máte právo odstoupit od smlouvy ve lhůtě 14 dnů od převzetí balíčku. Vyplněním tohoto formuláře odešlete oznámení přímo prodejci.
+      </p>
+      <form id="withdraw-form" onsubmit="handleWithdrawSubmit(event)">
+        <div class="form-group">
+          <label>Číslo objednávky / Variabilní symbol *</label>
+          <input type="text" id="w-vs" class="form-control" placeholder="např. 26100833" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Jméno a příjmení *</label>
+            <input type="text" id="w-name" class="form-control" placeholder="Jan Novák" required>
+          </div>
+          <div class="form-group">
+            <label>Váš e-mail *</label>
+            <input type="email" id="w-email" class="form-control" placeholder="jan.novak@email.cz" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Číslo účtu pro vrácení platby *</label>
+          <input type="text" id="w-account" class="form-control" placeholder="např. 123456789/0100" required>
+        </div>
+        <div class="form-group">
+          <label>Vracené zboží / Důvod (volitelné)</label>
+          <textarea id="w-msg" class="form-control" style="min-height:70px;" placeholder="Uveďte zboží, které odesíláte zpět..."></textarea>
+        </div>
+        <button type="submit" id="w-btn" class="btn btn-primary" style="width:100%; margin-top:8px;">Odeslat oznámení o odstoupení</button>
+        <div id="w-status" class="form-status"></div>
+      </form>
+    `;
+  }
+  modal.classList.add('open');
+}
+
+function closeLegalModal() {
+  document.getElementById('legal-modal').classList.remove('open');
+}
+
+document.getElementById('legal-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('legal-modal')) closeLegalModal();
+});
+
+// Odeslání odstoupení od smlouvy do Apps Scriptu
+async function handleWithdrawSubmit(e) {
+  e.preventDefault();
+  const vs = document.getElementById('w-vs').value;
+  const name = document.getElementById('w-name').value;
+  const email = document.getElementById('w-email').value;
+  const account = document.getElementById('w-account').value;
+  const msg = document.getElementById('w-msg').value;
+  const btn = document.getElementById('w-btn');
+  const status = document.getElementById('w-status');
+
+  btn.disabled = true;
+  btn.textContent = 'Odesílám...';
+
+  const formData = new FormData();
+  formData.append('form_type', 'Odstoupení od kupní smlouvy');
+  formData.append('name', name);
+  formData.append('email', email);
+  formData.append('phone', 'Odstoupení 14 dnů');
+  formData.append('service', 'Odstoupení od smlouvy');
+  formData.append('message', `ODSTOUPENÍ OD SMLOUVY:\nČíslo objednávky (VS): ${vs}\nČíslo účtu pro vrácení: ${account}\nZboží / zpráva: ${msg}`);
+
+  try {
+    await fetch("https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec", {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    });
+    status.textContent = 'Oznámení o odstoupení bylo úspěšně odesláno. Brzy tě budu kontaktovat ohledně převzetí zásilky.';
+    status.className = 'form-status success';
+    setTimeout(() => closeLegalModal(), 4000);
+  } catch (err) {
+    status.textContent = 'Došlo k chybě připojení. Napiš prosím přímo na t.brenx@gmail.com';
+    status.className = 'form-status error';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Odeslat oznámení o odstoupení';
+  }
+}
 
 // Scroll to top
 window.addEventListener('scroll', () => {
