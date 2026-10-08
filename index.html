@@ -12,43 +12,56 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Oficiální Packeta (Zásilkovna) Widget -->
+<!-- Packeta Widget -->
 <script src="https://widget.packeta.com/v6/esm.js" defer></script>
 
 <style>
-:root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.55);--edge:rgba(255,255,255,.14)}
+:root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.75);--edge:rgba(255,255,255,.12)}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
-body{color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none}
+body{
+  color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none;
+}
 
 .bg-photo-layer{
   position:fixed;inset:0;
   background-image:url('img-web/foto-53.webp');
   background-size:cover;background-position:center center;
-  filter:brightness(30%) contrast(110%) blur(5px);
+  filter:brightness(30%) contrast(105%);
   z-index:-2;
-  transform:scale(1.04) translateZ(0);
+  transform:translate3d(0,0,0);
+  -webkit-transform:translate3d(0,0,0);
   -webkit-backface-visibility:hidden;
   backface-visibility:hidden;
-  will-change:transform;
   pointer-events:none;
 }
-body::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
 h1,h2,h3,nav .brand,.btn,.contact-link,.beep-text,.form-group label,.product-title,.product-price,.shop-filter-btn,.btn-packeta{font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",sans-serif;text-transform:uppercase}
-.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--edge);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+.glass{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  border:1px solid var(--edge);border-radius:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);
+  transform:translate3d(0,0,0);
+  -webkit-transform:translate3d(0,0,0);
+  -webkit-backface-visibility:hidden;
+  backface-visibility:hidden;
+}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 
 /* Navigace */
 nav{position:sticky;top:14px;z-index:200;margin:14px auto 0;max-width:860px;padding:8px 12px 8px 22px;display:flex;align-items:center;justify-content:space-between;border-radius:999px;gap:20px}
-nav .brand{font-weight:700;letter-spacing:.14em;font-size:1.05rem;white-space:nowrap;color:var(--text);text-decoration:none;cursor:pointer;transition:all .3s ease}
-nav .brand:hover{color:#ff9500;text-shadow:0 0 12px rgba(255,149,0,.6)}
+nav .brand{font-weight:700;letter-spacing:.14em;font-size:1.05rem;white-space:nowrap;color:var(--text);text-decoration:none;cursor:pointer;transition:color .3s ease}
+nav .brand:hover{color:#ff9500}
 .nav-links{display:flex;gap:4px;align-items:center}
 nav a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 14px;border-radius:999px;transition:.3s ease;white-space:nowrap}
 nav a:hover,nav a.on{color:var(--text);background:rgba(255,255,255,.1)}
 nav a.nav-shop{color:#ff9500;font-weight:700}
 nav a.external-link{color:#d1d1d3}
-nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C,0 0 22px #F56040!important}
-nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2,0 0 22px #0056b3!important}
+nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C}
+nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2}
 .menu-toggle{display:none;background:transparent;border:0;color:var(--text);cursor:pointer;padding:8px;border-radius:50%;align-items:center;justify-content:center;transition:all .3s ease}
 .menu-toggle svg{width:24px;height:24px;display:block}
 .menu-toggle:hover{color:#ff9500}
@@ -57,7 +70,7 @@ nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-
   nav{position:sticky;top:14px;padding:10px 16px;border-radius:24px;justify-content:center}
   nav .brand{margin:0 auto;text-align:center}
   .menu-toggle{display:inline-flex;position:absolute;right:14px;top:50%;transform:translateY(-50%)}
-  .nav-links{position:absolute;top:calc(100% + 10px);left:0;right:0;flex-direction:column;gap:6px;padding:16px;background:rgba(18,20,24,.94);-webkit-backdrop-filter:blur(24px) saturate(140%);backdrop-filter:blur(24px) saturate(140%);border:1px solid var(--edge);border-radius:20px;box-shadow:0 20px 45px rgba(0,0,0,.7);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none}
+  .nav-links{position:absolute;top:calc(100% + 10px);left:0;right:0;flex-direction:column;gap:6px;padding:16px;background:rgba(18,20,24,.96);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:1px solid var(--edge);border-radius:20px;box-shadow:0 20px 45px rgba(0,0,0,.7);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s ease;pointer-events:none}
   .nav-links.open{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
   nav a{width:100%;text-align:center;padding:12px;font-size:1rem}
 }
@@ -66,12 +79,12 @@ nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-
 .hero h1{font-size:clamp(3.4rem,13vw,9rem);line-height:.92;font-weight:700;letter-spacing:.02em}
 .hero p{color:var(--muted);font-size:clamp(1rem,2.2vw,1.25rem);margin:22px auto 34px;max-width:36ch}
 .hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
-.beep-indicator{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);margin-bottom:24px;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.beep-indicator{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--edge);margin-bottom:24px}
 .beep-text{font-size:.8rem;letter-spacing:.15em;font-weight:700;color:var(--muted)}
-.beep-dot{width:8px;height:8px;border-radius:50%;display:inline-block;animation:ledPulse 2.4s cubic-bezier(0.4,0,0.6,1) infinite}
-@keyframes ledPulse{0%,100%{opacity:.4;transform:scale(.92);background-color:#ff3b30;box-shadow:0 0 4px 1px rgba(255,59,48,.4)}50%{opacity:1;transform:scale(1.15);background-color:#ff9500;box-shadow:0 0 8px 2px rgba(255,149,0,.9)}}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;font-weight:700;letter-spacing:.12em;font-size:1rem;padding:14px 28px;border-radius:999px;color:var(--text);border:1px solid var(--edge);background:var(--glass);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:all .3s cubic-bezier(.16,1,.3,1);cursor:pointer}
-.btn:hover{background:rgba(255,149,0,.2);border-color:rgba(255,149,0,.6);color:#fff;box-shadow:0 0 30px rgba(255,149,0,.35),inset 0 1px 2px rgba(255,149,0,.4);transform:translateY(-2px)}
+.beep-dot{width:8px;height:8px;border-radius:50%;display:inline-block;animation:ledPulse 2.4s infinite}
+@keyframes ledPulse{0%,100%{opacity:.4;background-color:#ff3b30}50%{opacity:1;background-color:#ff9500;box-shadow:0 0 8px #ff9500}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;font-weight:700;letter-spacing:.12em;font-size:1rem;padding:14px 28px;border-radius:999px;color:var(--text);border:1px solid var(--edge);background:var(--glass);transition:all .25s ease;cursor:pointer}
+.btn:hover{background:rgba(255,149,0,.2);border-color:rgba(255,149,0,.6);color:#fff;box-shadow:0 0 24px rgba(255,149,0,.35)}
 .btn-primary{background:rgba(255,149,0,.15);border-color:rgba(255,149,0,.5);color:#fff}
 section{padding:60px 0;scroll-margin-top:80px}
 h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-height:1;margin-bottom:12px}
@@ -83,66 +96,52 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 /* Ceník */
 .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:30px}
 .price-card{
-  background:var(--glass);
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  border:1px solid var(--edge);border-radius:16px;
-  padding:35px 25px;text-align:center;
-  transition:all .3s cubic-bezier(.16,1,.3,1);
-  display:flex;flex-direction:column;
-  -webkit-tap-highlight-color:transparent;cursor:pointer;
-  transform:translateZ(0);
-  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  background:var(--glass);border:1px solid var(--edge);border-radius:16px;
+  padding:35px 25px;text-align:center;transition:all .3s ease;display:flex;flex-direction:column;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .price-card h3{font-size:1.6rem;color:#fff;margin-bottom:8px;letter-spacing:.05em}
-.price-card .price{font-size:1.8rem;font-weight:700;color:#ff9500;font-family:"Barlow Condensed",sans-serif;margin-bottom:18px;letter-spacing:.05em}
+.price-card .price{font-size:1.8rem;font-weight:700;color:#ff9500;font-family:"Barlow Condensed",sans-serif;margin-bottom:18px}
 .price-card p{color:var(--muted);font-size:.95rem;line-height:1.6;flex-grow:1}
-.price-card:hover,
-.price-card:active,
-.price-card.active-tap{
-  background:rgba(255,149,0,.12);
-  border-color:rgba(255,149,0,.6);
-  transform:translateY(-5px) translateZ(0);
-  box-shadow:0 15px 35px rgba(255,149,0,.25),inset 0 1px 2px rgba(255,149,0,.35);
-}
+.price-card:hover,.price-card.active-tap{background:rgba(255,149,0,.12);border-color:rgba(255,149,0,.6);box-shadow:0 10px 30px rgba(255,149,0,.25)}
 
 /* Galerie */
 .gallery{columns:auto 150px;column-gap:12px}
 .gallery a{
-  display:block;margin-bottom:12px;border-radius:8px;overflow:hidden;
-  break-inside:avoid-column;
-  border:1px solid var(--edge);background:rgba(0,0,0,.6);
-  cursor:pointer;position:relative;
-  -webkit-user-select:none;user-select:none;opacity:1;
-  -webkit-backface-visibility:hidden;backface-visibility:hidden;
-  transform:translateZ(0);
+  display:block;margin-bottom:12px;border-radius:8px;overflow:hidden;break-inside:avoid-column;
+  border:1px solid var(--edge);background:rgba(0,0,0,.6);cursor:pointer;position:relative;
 }
-@keyframes revealPhoto{0%{opacity:0;transform:translateY(40px) scale(.95);filter:blur(10px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-.gallery img{display:block;width:100%;height:auto;opacity:1;transition:transform .8s cubic-bezier(.16,1,.3,1),filter .4s;filter:brightness(.85);pointer-events:none;-webkit-user-drag:none;user-select:none}
-.gallery a:hover img{filter:brightness(1.15);transform:scale(1.1)}
+@keyframes revealPhoto{0%{opacity:0;transform:translateY(25px)}100%{opacity:1;transform:translateY(0)}}
+.gallery img{display:block;width:100%;height:auto;transition:transform .6s ease;filter:brightness(.88);pointer-events:none}
+.gallery a:hover img{filter:brightness(1.1);transform:scale(1.08)}
 .gallery-controls{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:40px}
-.gallery-controls .btn svg{width:20px;height:20px;transition:transform .3s ease}
-#load-more:hover svg{transform:translateY(4px)}
-#hide-photos:hover svg{transform:translateY(-4px)}
+.gallery-controls .btn svg{width:20px;height:20px}
 
 /* E-Shop */
 .shop-filters{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap}
-.shop-filter-btn{padding:8px 18px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--muted);font-size:.9rem;letter-spacing:.08em;font-weight:700;cursor:pointer;transition:all .3s ease}
+.shop-filter-btn{padding:8px 18px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--muted);font-size:.9rem;letter-spacing:.08em;font-weight:700;cursor:pointer;transition:all .25s ease}
 .shop-filter-btn.active,.shop-filter-btn:hover{color:#fff;border-color:rgba(255,149,0,.6);background:rgba(255,149,0,.15);box-shadow:0 0 16px rgba(255,149,0,.25)}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:24px}
+
+.shop-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+  gap:24px;
+  width:100%;
+}
 .product-card{
   background:var(--glass);border:1px solid var(--edge);border-radius:20px;overflow:hidden;
-  display:flex;flex-direction:column;transition:all .3s cubic-bezier(.16,1,.3,1);
-  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+  display:flex;flex-direction:column;transition:border-color .3s ease, transform .3s ease;
+  width:100%;max-width:100%;
 }
-.product-card:hover{transform:translateY(-5px);border-color:rgba(255,149,0,.5);box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 24px rgba(255,149,0,.2)}
+.product-card:hover{transform:translateY(-4px);border-color:rgba(255,149,0,.5);box-shadow:0 14px 35px rgba(0,0,0,.6)}
 .product-img-box{position:relative;width:100%;aspect-ratio:1/1.05;overflow:hidden;background:#0d0e12}
-.product-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;filter:brightness(.92)}
-.product-card:hover .product-img-box img{transform:scale(1.06);filter:brightness(1.05)}
+.product-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;filter:brightness(.92)}
+.product-card:hover .product-img-box img{transform:scale(1.05);filter:brightness(1.02)}
 .product-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.75);border:1px solid var(--edge);padding:4px 10px;border-radius:999px;font-size:.7rem;letter-spacing:.1em;color:#ff9500;font-weight:700;text-transform:uppercase}
 .product-info{padding:22px;display:flex;flex-direction:column;flex-grow:1}
 .product-title{font-size:1.35rem;letter-spacing:.04em;color:#fff;margin-bottom:6px}
 .product-desc{font-size:.88rem;color:var(--muted);margin-bottom:16px;line-height:1.5;flex-grow:1}
-.product-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.product-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;min-height:38px}
 .product-price{font-size:1.5rem;font-weight:700;color:#ff9500}
 .product-select{
   padding:8px 12px;background:rgba(10,10,11,.8);border:1px solid var(--edge);
@@ -159,12 +158,11 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 /* Plovoucí košík */
 #cart-floating-btn{
   position:fixed;bottom:84px;right:26px;width:52px;height:52px;border-radius:50%;
-  background:rgba(18,20,24,.85);border:1px solid rgba(255,149,0,.6);color:#ff9500;
+  background:rgba(18,20,24,.9);border:1px solid rgba(255,149,0,.6);color:#ff9500;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  box-shadow:0 0 20px rgba(255,149,0,.35);z-index:150;transition:all .3s ease;
+  box-shadow:0 0 20px rgba(255,149,0,.35);z-index:150;transition:transform .2s ease;
 }
-#cart-floating-btn:hover{transform:scale(1.1);background:rgba(255,149,0,.25);color:#fff}
+#cart-floating-btn:hover{transform:scale(1.08);background:rgba(255,149,0,.25);color:#fff}
 #cart-floating-btn svg{width:24px;height:24px}
 .cart-badge{
   position:absolute;top:-4px;right:-4px;background:#ff9500;color:#0a0a0b;
@@ -172,39 +170,39 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okno košíku */
+/* Modální okno košíku & checkoutu */
 #cart-modal{
   border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;
   background:transparent;position:fixed;inset:0;overflow:hidden;
 }
 #cart-modal[open]{display:flex;align-items:center;justify-content:center}
-#cart-modal::backdrop{background:rgba(0,0,0,.85);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#cart-modal::backdrop{background:rgba(0,0,0,.85)}
 .cart-content{
-  position:relative;width:92vw;max-width:540px;max-height:88vh;
-  background:rgba(18,20,24,.92);border:1px solid var(--edge);border-radius:24px;
-  padding:32px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.8);
-  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+  position:relative;width:92vw;max-width:560px;max-height:90vh;
+  background:rgba(18,20,24,.96);border:1px solid var(--edge);border-radius:24px;
+  padding:28px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.8);
+  overflow-y:auto;
 }
-.cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--edge);padding-bottom:14px;margin-bottom:18px}
+.cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--edge);padding-bottom:14px;margin-bottom:16px}
 .cart-header h3{font-size:1.6rem;color:#fff;letter-spacing:.05em}
 .close-cart{background:transparent;border:0;color:var(--muted);cursor:pointer;padding:6px;transition:.2s}
 .close-cart:hover{color:#fff;transform:scale(1.2)}
 .close-cart svg{width:22px;height:22px}
-.cart-items{overflow-y:auto;display:flex;flex-direction:column;gap:14px;max-height:36vh;padding-right:6px}
-.cart-item{display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,11,.6);padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.06)}
+.cart-items{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;background:rgba(10,10,11,.6);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.06)}
 .cart-item-title{font-weight:700;font-size:.95rem;color:#fff}
 .cart-item-variant{font-size:.8rem;color:var(--muted)}
 .cart-item-price{color:#ff9500;font-weight:700;font-size:1.05rem}
 .cart-remove-btn{background:transparent;border:0;color:#ff4757;cursor:pointer;padding:4px;font-size:.8rem;margin-left:8px}
 .cart-empty-text{color:var(--muted);text-align:center;padding:30px 0;font-size:.95rem}
-.cart-footer{border-top:1px solid var(--edge);padding-top:16px;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+.cart-footer{border-top:1px solid var(--edge);padding-top:16px;display:flex;flex-direction:column;gap:12px}
 .cart-total-row{display:flex;justify-content:space-between;align-items:center;font-size:1.25rem;font-weight:700}
 .cart-total-row span:last-child{color:#ff9500;font-size:1.45rem;font-family:"Barlow Condensed",sans-serif}
 
-/* Zásilkovna komponenty */
+/* Zásilkovna komponenty v pokladně košíku */
 .packeta-box{
   background:rgba(10,10,11,.6);border:1px dashed var(--edge);padding:14px 16px;border-radius:12px;
-  display:flex;flex-direction:column;gap:10px;margin-top:4px;
+  display:flex;flex-direction:column;gap:10px;margin-top:6px;
 }
 .btn-packeta{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
@@ -218,69 +216,65 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   border:1px solid rgba(46,213,115,.25);padding:8px 12px;border-radius:8px;display:none;
 }
 
-/* Formulář sekce */
-#kontakt{text-align:center}
-#kontakt .lead{margin-left:auto;margin-right:auto;margin-bottom:24px;font-size:.95rem}
-.contact-container{width:100%;margin:30px auto 0;text-align:left}
-.inquiry-form{width:100%;padding:38px;display:flex;flex-direction:column;gap:16px;border-radius:22px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.form-group{display:flex;flex-direction:column;gap:6px}
+/* Společný styl vstupů */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .form-group label{font-size:.85rem;letter-spacing:.08em;color:var(--muted);font-weight:700}
 .form-control{
-  width:100%;padding:13px 16px;background:rgba(10,10,11,.75);
+  width:100%;padding:12px 15px;background:rgba(10,10,11,.75);
   border:1px solid var(--edge);border-radius:10px;color:#fff;
-  font-family:inherit;font-size:.95rem;transition:all .25s ease;outline:none;
+  font-family:inherit;font-size:.95rem;transition:border-color .25s ease;outline:none;
 }
-.form-control:focus{
-  border-color:#ff9500;box-shadow:0 0 14px rgba(255,149,0,.35);
-  background:rgba(10,10,11,.95);
-}
+.form-control:focus{border-color:#ff9500;box-shadow:0 0 12px rgba(255,149,0,.35)}
 select.form-control{
   cursor:pointer;appearance:none;
   background-image:url("data:image/svg+xml;utf8,<svg fill='%239a9ba2' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat:no-repeat;background-position:right 14px center;
 }
 select.form-control option{background-color:#121418;color:#fff}
-textarea.form-control{resize:vertical;min-height:115px}
-.form-status{display:none;padding:12px;border-radius:10px;font-size:.9rem;text-align:center}
+textarea.form-control{resize:vertical;min-height:105px}
+.form-status{display:none;padding:12px;border-radius:10px;font-size:.9rem;text-align:center;margin-top:10px}
 .form-status.success{display:block;background:rgba(46,213,115,.15);border:1px solid rgba(46,213,115,.4);color:#2ed573}
 .form-status.error{display:block;background:rgba(255,71,87,.15);border:1px solid rgba(255,71,87,.4);color:#ff4757}
 .gdpr-notice{font-size:0.75rem;color:rgba(154,155,162,0.65);margin-top:6px;text-align:center;line-height:1.4}
 
+/* Poptávkový formulář dole na stránce */
+#kontakt{text-align:center}
+#kontakt .lead{margin-left:auto;margin-right:auto;margin-bottom:24px;font-size:.95rem}
+.contact-container{width:100%;margin:30px auto 0;text-align:left}
+.inquiry-form{width:100%;padding:38px;display:flex;flex-direction:column;gap:14px;border-radius:22px}
+
 @media(max-width:768px){
   .inquiry-form{padding:24px 18px}
-  .form-row{grid-template-columns:1fr;gap:14px}
+  .form-row{grid-template-columns:1fr;gap:12px}
   #cart-floating-btn{bottom:76px;right:18px}
 }
 
 footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:column;align-items:center;gap:20px}
 .footer-links{display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
-.footer-links a{color:var(--text);text-decoration:none;font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:1.05rem;transition:all .3s ease}
-.footer-links a:hover{color:#ff9500;text-shadow:0 0 10px rgba(255,149,0,.3)}
+.footer-links a{color:var(--text);text-decoration:none;font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:1.05rem;transition:color .3s ease}
+.footer-links a:hover{color:#ff9500}
 .copyright{font-size:.85rem;color:rgba(154,155,162,.5)}
 
 /* Lightbox */
 #lb{border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:transparent;position:fixed;inset:0;overflow:hidden}
 #lb[open]{display:flex;align-items:center;justify-content:center}
-#lb::backdrop{background:rgba(0,0,0,.88);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-.lb-content{position:relative;padding:14px;border-radius:1.5rem;background:rgba(18,20,24,.75);-webkit-backdrop-filter:blur(24px) saturate(120%);backdrop-filter:blur(24px) saturate(120%);border:1px solid rgba(255,255,255,.15);max-width:85vw;max-height:85vh;display:flex;align-items:center;justify-content:center;animation:cardPulse 3s infinite ease-in-out,modalPop .4s cubic-bezier(.16,1,.3,1) forwards}
-@keyframes cardPulse{0%,100%{border-color:rgba(255,149,0,.4);box-shadow:0 30px 60px -15px rgba(0,0,0,.9),0 0 40px -5px rgba(255,149,0,.25),inset 0 1px 2px 0 rgba(255,149,0,.4)}50%{border-color:rgba(255,59,48,.7);box-shadow:0 30px 60px -15px rgba(0,0,0,.9),0 0 65px 5px rgba(255,59,48,.4),inset 0 1px 5px 0 rgba(255,59,48,.6)}}
-@keyframes modalPop{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-.lb-content img{display:block;max-width:100%;max-height:calc(85vh - 30px);object-fit:contain;border-radius:.6rem;pointer-events:none;-webkit-user-drag:none;user-select:none}
-.close-lb{position:fixed;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#9a9ba2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s ease;z-index:300;padding:0;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+#lb::backdrop{background:rgba(0,0,0,.88)}
+.lb-content{position:relative;padding:14px;border-radius:1.5rem;background:rgba(18,20,24,.85);border:1px solid rgba(255,255,255,.15);max-width:85vw;max-height:85vh;display:flex;align-items:center;justify-content:center}
+.lb-content img{display:block;max-width:100%;max-height:calc(85vh - 30px);object-fit:contain;border-radius:.6rem;pointer-events:none}
+.close-lb{position:fixed;top:24px;right:24px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#9a9ba2;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:300}
 .close-lb svg{width:22px;height:22px}
-.close-lb:hover{color:#fff;background:rgba(255,149,0,.8);border-color:rgba(255,149,0,1);transform:rotate(90deg) scale(1.1)}
-.nv{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:all .3s ease;padding:0;z-index:300}
+.close-lb:hover{color:#fff;background:rgba(255,149,0,.8)}
+.nv{position:fixed;top:50%;transform:translateY(-50%);width:54px;height:54px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.5);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:300}
 .nv svg{width:26px;height:26px}
-.nv:hover{background:rgba(255,149,0,.25);border-color:rgba(255,149,0,.6);color:#ff9500;transform:translateY(-50%) scale(1.1)}
+.nv:hover{background:rgba(255,149,0,.25);border-color:rgba(255,149,0,.6);color:#ff9500}
 #prev{left:24px}#next{right:24px}
 
-/* Scroll-to-top tlačítko */
-#scroll-top{position:fixed;bottom:26px;right:26px;width:48px;height:48px;border-radius:50%;background:rgba(18,20,24,.75);border:1px solid rgba(255,149,0,.5);color:#ff9500;display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 0 18px rgba(255,149,0,.25),inset 0 1px 2px rgba(255,149,0,.3);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(16px) scale(0.9);transition:all .35s cubic-bezier(.16,1,.3,1);z-index:150;padding:0}
-#scroll-top.visible{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0) scale(1)}
-#scroll-top:hover{background:rgba(255,149,0,.25);border-color:#ff9500;color:#fff;box-shadow:0 0 28px rgba(255,149,0,.65),inset 0 1px 3px rgba(255,149,0,.6);transform:translateY(-3px) scale(1.08)}
+/* Scroll-to-top */
+#scroll-top{position:fixed;bottom:26px;right:26px;width:48px;height:48px;border-radius:50%;background:rgba(18,20,24,.85);border:1px solid rgba(255,149,0,.5);color:#ff9500;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(16px);transition:all .3s ease;z-index:150}
+#scroll-top.visible{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+#scroll-top:hover{background:rgba(255,149,0,.25);border-color:#ff9500;color:#fff}
 #scroll-top svg{width:22px;height:22px}
-#scroll-top:hover svg{transform:translateY(-2px)}
 
 @media(max-width:768px){
   .lb-content{max-width:92vw;padding:8px}
@@ -288,10 +282,6 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   #prev{left:10px}#next{right:10px}
   .close-lb{top:14px;right:14px;width:38px;height:38px}
   #scroll-top{bottom:18px;right:18px;width:44px;height:44px}
-}
-@media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .gallery a{opacity:1!important;transform:none!important;filter:none!important}
 }
 </style>
 </head>
@@ -307,7 +297,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#tvorba">Tvorba</a>
     <a href="#shop" class="nav-shop">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
-    <a href="#kontakt">Kontakt</a>
+    <a href="#kontakt">Poptávka</a>
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="external-link hover-ig">Instagram</a>
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="external-link hover-zon">Zonerama</a>
   </div>
@@ -444,11 +434,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
           <p class="product-desc">Klasický 6-panel střih, černý matný vršek, zelený spodek kšiltu a vystouplá tonální 3D výšivka.</p>
           <div class="product-meta">
             <span class="product-price">790 Kč</span>
-            <select class="product-select" id="opt-sb">
-              <option value="Univerzální" selected>One Size (Snapback)</option>
-            </select>
           </div>
-          <button class="btn-buy" onclick="addToCart('SnapBack „TB SIGNATURE“', 790, document.getElementById('opt-sb').value)">
+          <button class="btn-buy" onclick="addToCart('SnapBack „TB SIGNATURE“', 790, 'Univerzální velikost')">
             Do košíku
           </button>
         </div>
@@ -568,19 +555,16 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     </div>
   </section>
 
-  <!-- KONTAKT & OBJEDNÁVKA SE ZÁSILKOVNOU A GOOGLE APPS SCRIPT -->
+  <!-- POUZE POPTÁVKOVÝ FORMULÁŘ NA SLUŽBY -->
   <section id="kontakt">
-    <h2>Kontakt & Objednávka</h2>
-    <p class="lead">Máš zájem o focení, video nebo objednávku merche přes Zásilkovnu? Napiš mi níže přes formulář a domluvíme podrobnosti.</p>
+    <h2>Poptávka služeb</h2>
+    <p class="lead">Máš zájem o focení, video nebo dlouhodobou spolupráci? Napiš mi a probereme termín i realizaci.</p>
     <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Sokolově (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
     
     <div class="contact-container">
       <form id="contact-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST" class="inquiry-form glass">
         <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
-
-        <!-- Skrytá pole pro Zásilkovnu -->
-        <input type="hidden" id="packeta-point-id" name="zasilkovna_point_id" value="">
-        <input type="hidden" id="packeta-point-name" name="zasilkovna_point_name" value="">
+        <input type="hidden" name="form_type" value="Poptávka focení / video">
 
         <div class="form-row">
           <div class="form-group">
@@ -602,48 +586,29 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
               class="form-control" 
               placeholder="+420 777 123 456" 
               pattern="[+]?[0-9\s-]{9,16}" 
-              title="Zadejte platné telefonní číslo pro Zásilkovnu (např. +420 777 123 456)" 
+              title="Zadejte platné telefonní číslo" 
               required>
           </div>
           <div class="form-group">
-            <label for="form-service">Typ poptávky / zprávy</label>
-            <select id="form-service" name="service" class="form-control" onchange="toggleShippingSection()">
-              <option value="Objednávka merche / tisk">Objednávka merche / tisk</option>
+            <label for="form-service">Typ poptávky</label>
+            <select id="form-service" name="service" class="form-control">
               <option value="Portrétní focení">Portrétní focení</option>
               <option value="Reportáž / Event">Reportáž / Event</option>
               <option value="Videotvorba">Videotvorba</option>
               <option value="Svatba / Více tvůrců">Svatba / Více tvůrců</option>
-              <option value="Jiné / Spolupráce">Jiné / Individuální</option>
+              <option value="Jiné / Spolupráce">Jiné / Individuální projekt</option>
             </select>
           </div>
         </div>
 
-        <!-- Výběr dopravy a Zásilkovny -->
-        <div id="shipping-section" class="form-group">
-          <label>Způsob dopravy</label>
-          <select id="shipping-method" name="shipping_method" class="form-control" onchange="handleShippingChange()">
-            <option value="Zásilkovna (Z-BOX / Výdejní místo) - 79 Kč" selected>Zásilkovna: Z-BOX / Výdejní místo (+79 Kč)</option>
-            <option value="Osobní předání Sokolov - Zdarma">Osobní předání: Sokolov a okolí (Zdarma)</option>
-          </select>
-
-          <div id="packeta-picker-wrapper" class="packeta-box">
-            <button type="button" class="btn-packeta" onclick="openPacketaWidget()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-              Vybrat Z-BOX nebo výdejní místo Zásilkovny
-            </button>
-            <div id="packeta-selected-display" class="packeta-selected-info">
-              ✓ Vybrané místo: <strong id="packeta-place-name">Zatím nevybráno</strong>
-            </div>
-          </div>
-        </div>
-
         <div class="form-group">
-          <label for="form-msg">Zpráva / Detaily objednávky & projektu *</label>
-          <textarea id="form-msg" name="message" class="form-control" placeholder="Popiš svou představu nebo poznámku k doručení..." required></textarea>
+          <label for="form-msg">Zpráva / Představa o projektu *</label>
+          <textarea id="form-msg" name="message" class="form-control" placeholder="Popiš termín, lokalitu, požadavky a svou představu..." required></textarea>
         </div>
-        <button type="submit" id="form-submit-btn" class="btn" style="width:100%;margin-top:4px">Odeslat objednávku / poptávku</button>
+
+        <button type="submit" id="form-submit-btn" class="btn" style="width:100%;margin-top:4px">Odeslat poptávku</button>
         <p class="gdpr-notice">
-          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky nebo doručení objednávky. Údaje nepředávám třetím stranám a neposílám žádný spam.
+          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky a kalkulace. Údaje nikomu nepředávám a neposílám žádný spam.
         </p>
         <div id="form-status" class="form-status"></div>
       </form>
@@ -666,53 +631,126 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <span class="cart-badge" id="cart-count">0</span>
 </button>
 
-<!-- Modální okno košíku -->
+<!-- Modální okno košíku & SAMOSTATNÁ OBJEDNÁVKA MERCHE -->
 <dialog id="cart-modal">
   <div class="cart-content">
     <div class="cart-header">
-      <h3>Váš Košík</h3>
-      <button class="close-cart" id="close-cart-btn" aria-label="Zavřít košík">
+      <h3 id="cart-modal-title">Váš Košík</h3>
+      <button class="close-cart" id="close-cart-btn" aria-label="Zavřít">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
-    <div class="cart-items" id="cart-items-container">
-      <div class="cart-empty-text">Košík je zatím prázdný.</div>
-    </div>
-    <div class="cart-footer">
-      <div class="cart-total-row">
-        <span>Zboží celkem:</span>
-        <span id="cart-total-price">0 Kč</span>
+
+    <!-- Část 1: Položky v košíku -->
+    <div id="cart-view-items">
+      <div class="cart-items" id="cart-items-container">
+        <div class="cart-empty-text">Košík je zatím prázdný.</div>
       </div>
-      <button class="btn btn-primary" id="checkout-btn" style="width:100%" onclick="checkoutCart()">
-        Vybrat Zásilkovnu a objednat
-      </button>
+      <div class="cart-footer">
+        <div class="cart-total-row">
+          <span>Zboží celkem:</span>
+          <span id="cart-total-price">0 Kč</span>
+        </div>
+        <button class="btn btn-primary" id="go-to-checkout-btn" style="width:100%" onclick="showCheckoutForm()">
+          Přejít k objednávce
+        </button>
+      </div>
+    </div>
+
+    <!-- Část 2: Samostatný Checkout formulář v modálu -->
+    <div id="cart-view-checkout" style="display:none;">
+      <form id="order-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST">
+        <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
+        <input type="hidden" name="form_type" value="Objednávka merche">
+        <input type="hidden" name="service" value="Objednávka merche / tisk">
+        <input type="hidden" id="order-summary-field" name="message" value="">
+        <input type="hidden" id="packeta-point-id" name="zasilkovna_point_id" value="">
+        <input type="hidden" id="packeta-point-name" name="zasilkovna_point_name" value="">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="order-name">Jméno a příjmení *</label>
+            <input type="text" id="order-name" name="name" class="form-control" placeholder="Jan Novák" required>
+          </div>
+          <div class="form-group">
+            <label for="order-email">E-mail pro potvrzení *</label>
+            <input type="email" id="order-email" name="email" class="form-control" placeholder="jan.novak@email.cz" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="order-phone">Telefon pro Zásilkovnu *</label>
+            <input 
+              type="tel" 
+              id="order-phone" 
+              name="phone" 
+              class="form-control" 
+              placeholder="+420 777 123 456" 
+              pattern="[+]?[0-9\s-]{9,16}" 
+              title="Zadejte platné telefonní číslo" 
+              required>
+          </div>
+          <div class="form-group">
+            <label for="order-shipping">Způsob dopravy</label>
+            <select id="order-shipping" name="shipping_method" class="form-control" onchange="handleModalShippingChange()">
+              <option value="Zásilkovna (Z-BOX / Výdejní místo) - 79 Kč" selected>Zásilkovna (+79 Kč)</option>
+              <option value="Osobní předání Sokolov - Zdarma">Osobní předání Sokolov (Zdarma)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="modal-packeta-box" class="packeta-box">
+          <button type="button" class="btn-packeta" onclick="openPacketaWidget()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            Vybrat Z-BOX nebo pobočku Zásilkovny
+          </button>
+          <div id="modal-packeta-display" class="packeta-selected-info">
+            ✓ Vybráno: <strong id="modal-packeta-place-name">Zatím nevybráno</strong>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top:12px">
+          <label for="order-note">Poznámka k objednávce (volitelné)</label>
+          <textarea id="order-note" class="form-control" style="min-height:60px" placeholder="Např. patro, doplňující info k doručení..."></textarea>
+        </div>
+
+        <div class="cart-total-row" style="margin:16px 0 8px">
+          <span>Celkem k úhradě:</span>
+          <span id="order-final-price">0 Kč</span>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button type="button" class="btn" style="flex:1" onclick="backToCartItems()">Zpět ke košíku</button>
+          <button type="submit" id="order-submit-btn" class="btn btn-primary" style="flex:2">Dokončit a odeslat</button>
+        </div>
+
+        <div id="order-status" class="form-status"></div>
+      </form>
     </div>
   </div>
 </dialog>
 
-<!-- Tlačítko zpět nahoru -->
-<button id="scroll-top" title="Zpět nahoru" aria-label="Zpět nahoru">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
-</button>
-
 <!-- Lightbox -->
 <dialog id="lb">
-  <button class="close-lb" id="close-lb" aria-label="Zavřít galerii">
+  <button class="close-lb" id="close-lb" aria-label="Zavřít">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
   </button>
-  <button class="nv" id="prev" aria-label="Předchozí fotka">
+  <button class="nv" id="prev" aria-label="Předchozí">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
   </button>
-  <div class="lb-content">
-    <img id="lb-img" src="" alt="Detail">
-  </div>
-  <button class="nv" id="next" aria-label="Další fotka">
+  <div class="lb-content"><img id="lb-img" src="" alt="Detail"></div>
+  <button class="nv" id="next" aria-label="Další">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
   </button>
 </dialog>
 
+<button id="scroll-top" title="Zpět nahoru" aria-label="Zpět nahoru">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
+</button>
+
 <script>
-// Navigace & Hamburger
+// Navigace
 const homeBtn = document.getElementById('home-btn');
 const menuToggle = document.getElementById('menu-toggle');
 const navLinks = document.getElementById('nav-links');
@@ -720,7 +758,7 @@ menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
 homeBtn.addEventListener('click', e => { e.preventDefault(); navLinks.classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'}); });
 
-// Galerie portfolio
+// Galerie
 const g = document.getElementById('gallery');
 const lb = document.getElementById('lb');
 const big = document.getElementById('lb-img');
@@ -748,11 +786,11 @@ function renderBatch(count) {
   next.forEach((id, idx) => {
     const a = document.createElement('a');
     a.href = `img-web/foto-${id}.webp`;
-    a.setAttribute('aria-label', `Zvětšit fotografii ${id}`);
-    a.style.animation = `revealPhoto 0.8s cubic-bezier(0.16,1,0.3,1) both ${idx * 0.05}s`;
+    a.setAttribute('aria-label', `Fotografie ${id}`);
+    a.style.animation = `revealPhoto 0.5s ease both ${idx * 0.04}s`;
     const im = document.createElement('img');
     im.src = `img-web/foto-${id}.webp`;
-    im.alt = `Tony Brenx - profesionální fotografie ${id}`;
+    im.alt = `Tony Brenx foto ${id}`;
     im.loading = 'lazy';
     a.appendChild(im);
     g.appendChild(a);
@@ -773,7 +811,7 @@ hidePhotosBtn.addEventListener('click', () => {
   document.getElementById('tvorba').scrollIntoView({behavior:'smooth'});
 });
 
-// Ceník touch
+// Ceník tap
 const priceCards = document.querySelectorAll('.price-card');
 priceCards.forEach(card => {
   card.addEventListener('pointerdown', () => {
@@ -816,9 +854,11 @@ function updateCartUI() {
   if (cart.length === 0) {
     cartItemsContainer.innerHTML = '<div class="cart-empty-text">Košík je zatím prázdný.</div>';
     cartTotalPrice.textContent = '0 Kč';
+    document.getElementById('go-to-checkout-btn').style.display = 'none';
     return;
   }
 
+  document.getElementById('go-to-checkout-btn').style.display = 'block';
   cartItemsContainer.innerHTML = '';
   let sum = 0;
   cart.forEach((item, index) => {
@@ -838,6 +878,7 @@ function updateCartUI() {
     cartItemsContainer.appendChild(div);
   });
   cartTotalPrice.textContent = sum.toLocaleString('cs-CZ') + ' Kč';
+  updateCheckoutTotal();
 }
 
 function addToCart(title, price, variant) {
@@ -845,8 +886,7 @@ function addToCart(title, price, variant) {
   if (existing) existing.qty += 1;
   else cart.push({ title, price, variant, qty: 1 });
   updateCartUI();
-  cartFloatingBtn.style.transform = 'scale(1.25)';
-  setTimeout(() => cartFloatingBtn.style.transform = 'scale(1)', 250);
+  backToCartItems();
   cartModal.showModal();
 }
 
@@ -855,111 +895,127 @@ function removeFromCart(index) {
   updateCartUI();
 }
 
-cartFloatingBtn.addEventListener('click', () => cartModal.showModal());
+cartFloatingBtn.addEventListener('click', () => {
+  backToCartItems();
+  cartModal.showModal();
+});
 closeCartBtn.addEventListener('click', () => cartModal.close());
 cartModal.addEventListener('click', e => { if (e.target === cartModal) cartModal.close(); });
 
-function checkoutCart() {
+// Přepínání mezi košíkem a checkoutem v okně
+function showCheckoutForm() {
   if (cart.length === 0) return;
-  cartModal.close();
-  
-  const serviceSelect = document.getElementById('form-service');
-  serviceSelect.value = 'Objednávka merche / tisk';
-  toggleShippingSection();
-  
-  refreshOrderSummary();
-  document.getElementById('kontakt').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('cart-view-items').style.display = 'none';
+  document.getElementById('cart-view-checkout').style.display = 'block';
+  document.getElementById('cart-modal-title').textContent = 'Objednávka merche';
+  updateCheckoutTotal();
+}
+
+function backToCartItems() {
+  document.getElementById('cart-view-items').style.display = 'block';
+  document.getElementById('cart-view-checkout').style.display = 'none';
+  document.getElementById('cart-modal-title').textContent = 'Váš Košík';
+}
+
+function handleModalShippingChange() {
+  const method = document.getElementById('order-shipping').value;
+  const box = document.getElementById('modal-packeta-box');
+  box.style.display = method.includes('Zásilkovna') ? 'flex' : 'none';
+  updateCheckoutTotal();
+}
+
+function updateCheckoutTotal() {
+  const method = document.getElementById('order-shipping').value;
+  const shippingCost = method.includes('Zásilkovna') ? 79 : 0;
+  const goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+  const total = goodsSum + shippingCost;
+  document.getElementById('order-final-price').textContent = total.toLocaleString('cs-CZ') + ' Kč';
 }
 updateCartUI();
 
-// ==========================================
-// ZÁSILKOVNA INTEGRACE
-// ==========================================
+// Zásilkovna Widget
 let selectedPacketaPoint = null;
 const packetaApiKey = 'a1b2c3d4e5f6';
 
 function openPacketaWidget() {
-  const packetaOptions = {
-    country: 'cz',
-    language: 'cs'
-  };
-
   Packeta.Widget.pick(packetaApiKey, (point) => {
     if (point) {
       selectedPacketaPoint = point;
       document.getElementById('packeta-point-id').value = point.id;
       document.getElementById('packeta-point-name').value = `${point.name}, ${point.street}, ${point.city} (${point.zip})`;
       
-      const display = document.getElementById('packeta-selected-display');
+      const display = document.getElementById('modal-packeta-display');
       display.style.display = 'block';
-      document.getElementById('packeta-place-name').textContent = `${point.name} (${point.city})`;
-      
-      refreshOrderSummary();
+      document.getElementById('modal-packeta-place-name').textContent = `${point.name} (${point.city})`;
     }
-  }, packetaOptions);
+  }, { country: 'cz', language: 'cs' });
 }
 
-function handleShippingChange() {
-  const method = document.getElementById('shipping-method').value;
-  const wrapper = document.getElementById('packeta-picker-wrapper');
-  if (method.includes('Zásilkovna')) {
-    wrapper.style.display = 'flex';
-  } else {
-    wrapper.style.display = 'none';
+// 1. ODESLÁNÍ OBJEDNÁVKY MERCHE (z modálu)
+const orderForm = document.getElementById('order-form');
+const orderStatus = document.getElementById('order-status');
+const orderSubmitBtn = document.getElementById('order-submit-btn');
+
+orderForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const method = document.getElementById('order-shipping').value;
+  if (method.includes('Zásilkovna') && !selectedPacketaPoint) {
+    alert('Vyber prosím výdejní místo nebo Z-BOX Zásilkovny.');
+    openPacketaWidget();
+    return;
   }
-  refreshOrderSummary();
-}
 
-function toggleShippingSection() {
-  const service = document.getElementById('form-service').value;
-  const shippingSec = document.getElementById('shipping-section');
-  if (service === 'Objednávka merche / tisk') {
-    shippingSec.style.display = 'flex';
-  } else {
-    shippingSec.style.display = 'none';
-  }
-}
+  // Sestavení přehledu pro zprávu
+  const shippingCost = method.includes('Zásilkovna') ? 79 : 0;
+  const goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+  const total = goodsSum + shippingCost;
+  const note = document.getElementById('order-note').value;
 
-function refreshOrderSummary() {
-  const msgField = document.getElementById('form-msg');
-  if (document.getElementById('form-service').value !== 'Objednávka merche / tisk') return;
-
-  const shippingMethod = document.getElementById('shipping-method').value;
-  const isZasilkovna = shippingMethod.includes('Zásilkovna');
-  const shippingCost = isZasilkovna ? 79 : 0;
-  
-  let goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-  let totalWithShipping = goodsSum + shippingCost;
-
-  let text = 'Ahoj Tony, chci si objednat:\n\n';
+  let summary = 'OBJEDNÁVKA MERCHE:\n\n';
   cart.forEach(item => {
-    text += `• ${item.title} [${item.variant}] - ${item.qty} ks (${item.price * item.qty} Kč)\n`;
+    summary += `• ${item.title} [${item.variant}] - ${item.qty} ks (${item.price * item.qty} Kč)\n`;
   });
-  text += `\nDoprava: ${shippingMethod}\n`;
-  if (isZasilkovna && selectedPacketaPoint) {
-    text += `Pobočka / Z-BOX: ${selectedPacketaPoint.name}, ${selectedPacketaPoint.street}, ${selectedPacketaPoint.city} [ID: ${selectedPacketaPoint.id}]\n`;
+  summary += `\nDoprava: ${method}\n`;
+  if (selectedPacketaPoint) {
+    summary += `Pobočka / Z-BOX: ${selectedPacketaPoint.name}, ${selectedPacketaPoint.street}, ${selectedPacketaPoint.city} [ID: ${selectedPacketaPoint.id}]\n`;
   }
-  text += `Celková cena s dopravou: ${totalWithShipping.toLocaleString('cs-CZ')} Kč\n\nPoznámka / doplňující info: `;
-  
-  msgField.value = text;
-}
+  summary += `Celková cena s dopravou: ${total} Kč\n`;
+  if (note) summary += `Poznámka: ${note}\n`;
 
-// ODESLÁNÍ FORMULÁŘE PŘES GOOGLE APPS SCRIPT
+  document.getElementById('order-summary-field').value = summary;
+
+  orderSubmitBtn.disabled = true;
+  orderSubmitBtn.textContent = 'Odesílám...';
+  orderStatus.className = 'form-status';
+  orderStatus.style.display = 'none';
+
+  const data = new FormData(orderForm);
+  try {
+    await fetch(orderForm.action, { method: 'POST', body: data, mode: 'no-cors' });
+    orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Potvrzení a QR platba ti dorazí do e-mailu.';
+    orderStatus.className = 'form-status success';
+    cart = [];
+    selectedPacketaPoint = null;
+    document.getElementById('modal-packeta-display').style.display = 'none';
+    orderForm.reset();
+    updateCartUI();
+    setTimeout(() => { cartModal.close(); backToCartItems(); }, 3500);
+  } catch (err) {
+    orderStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu.';
+    orderStatus.className = 'form-status error';
+  } finally {
+    orderSubmitBtn.disabled = false;
+    orderSubmitBtn.textContent = 'Dokončit a odeslat';
+  }
+});
+
+// 2. ODESLÁNÍ POPTÁVKY SLUŽEB (dole na stránce)
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 const formSubmitBtn = document.getElementById('form-submit-btn');
 
 contactForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  
-  const service = document.getElementById('form-service').value;
-  const shippingMethod = document.getElementById('shipping-method').value;
-  if (service === 'Objednávka merche / tisk' && shippingMethod.includes('Zásilkovna') && !selectedPacketaPoint) {
-    alert('Vyber prosím výdejní místo nebo Z-BOX Zásilkovny kliknutím na červené tlačítko.');
-    openPacketaWidget();
-    return;
-  }
-
   formSubmitBtn.disabled = true;
   formSubmitBtn.textContent = 'Odesílám...';
   formStatus.className = 'form-status';
@@ -967,56 +1023,25 @@ contactForm.addEventListener('submit', async (e) => {
 
   const data = new FormData(contactForm);
   try {
-    // mode: 'no-cors' zajistí úspěšné odeslání do Google Apps Scriptu bez blokování v prohlížeči
-    await fetch(contactForm.action, {
-      method: 'POST',
-      body: data,
-      mode: 'no-cors'
-    });
-
-    formStatus.textContent = 'Díky za zprávu/objednávku! Vše bylo uloženo a potvrzení ti dorazí do e-mailu.';
+    await fetch(contactForm.action, { method: 'POST', body: data, mode: 'no-cors' });
+    formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu.';
     formStatus.className = 'form-status success';
     contactForm.reset();
-    cart = [];
-    selectedPacketaPoint = null;
-    const disp = document.getElementById('packeta-selected-display');
-    if (disp) disp.style.display = 'none';
-    updateCartUI();
   } catch (err) {
     formStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu.';
     formStatus.className = 'form-status error';
   } finally {
     formSubmitBtn.disabled = false;
-    formSubmitBtn.textContent = 'Odeslat objednávku / poptávku';
+    formSubmitBtn.textContent = 'Odeslat poptávku';
   }
 });
 
+// Scroll to top
 window.addEventListener('scroll', () => {
   if (window.scrollY > 250) scrollTopBtn.classList.add('visible');
   else scrollTopBtn.classList.remove('visible');
 }, {passive:true});
 scrollTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
-
-// 3D Tilt
-g.addEventListener('mousemove', e => {
-  const a = e.target.closest('a');
-  if(!a) return;
-  const rect = a.getBoundingClientRect();
-  const rx = ((e.clientY - rect.top - rect.height/2) / (rect.height/2)) * -12;
-  const ry = ((e.clientX - rect.left - rect.width/2) / (rect.width/2)) * 12;
-  a.style.transition = 'none';
-  a.style.transform = `perspective(1000px) scale(1.03) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-  a.style.zIndex = '10';
-  a.style.boxShadow = '0 20px 40px rgba(0,0,0,0.6)';
-});
-g.addEventListener('mouseout', e => {
-  const a = e.target.closest('a');
-  if(!a) return;
-  a.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1), box-shadow .5s ease';
-  a.style.transform = 'perspective(1000px) scale(1) rotateX(0) rotateY(0) translateZ(0)';
-  a.style.zIndex = '1';
-  a.style.boxShadow = 'none';
-});
 
 // Lightbox
 const list = () => [...g.querySelectorAll('a')];
