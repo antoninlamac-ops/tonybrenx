@@ -25,10 +25,10 @@ body{
   -webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none;
 }
 
-/* Stabilní fixní pozadí s rozmazáním (BLUR) */
+/* Fixní pozadí s rozmazáním (BLUR) */
 .bg-photo-layer{
   position:fixed;
-  inset:-20px; /* Přesah zabrání bílým/tmavým pruhům po rozostření okrajů */
+  inset:-20px;
   background-image:url('img-web/foto-53.webp');
   background-size:cover;
   background-position:center center;
@@ -174,17 +174,18 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okno košíku & pokladny */
-#cart-modal{
-  border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;
-  background:transparent;position:fixed;inset:0;overflow:hidden;
+/* Modální okno košíku & checkoutu bez blokace vrstev */
+.custom-modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;
 }
-#cart-modal[open]{display:flex;align-items:center;justify-content:center}
-#cart-modal::backdrop{background:rgba(0,0,0,.85)}
+.custom-modal-overlay.open{
+  display:flex;
+}
 .cart-content{
-  position:relative;width:92vw;max-width:560px;max-height:90vh;
-  background:rgba(18,20,24,.96);border:1px solid var(--edge);border-radius:24px;
-  padding:28px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.8);
+  position:relative;width:100%;max-width:560px;max-height:90vh;
+  background:rgba(18,20,24,.98);border:1px solid var(--edge);border-radius:24px;
+  padding:28px;display:flex;flex-direction:column;box-shadow:0 30px 60px rgba(0,0,0,.9);
   overflow-y:auto;
 }
 .cart-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--edge);padding-bottom:14px;margin-bottom:16px}
@@ -210,14 +211,19 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 }
 .btn-packeta{
   display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  padding:10px 18px;border-radius:8px;background:rgba(180,30,30,.2);
-  border:1px solid rgba(220,50,50,.6);color:#ff5e57;font-size:.95rem;font-weight:700;
+  padding:12px 18px;border-radius:8px;background:rgba(180,30,30,.25);
+  border:1px solid rgba(220,50,50,.7);color:#ff5e57;font-size:.95rem;font-weight:700;
   cursor:pointer;transition:all .25s ease;width:100%;letter-spacing:.08em;
 }
-.btn-packeta:hover{background:rgba(220,50,50,.4);color:#fff;box-shadow:0 0 16px rgba(220,50,50,.35)}
+.btn-packeta:hover{background:rgba(220,50,50,.45);color:#fff;box-shadow:0 0 16px rgba(220,50,50,.35)}
 .packeta-selected-info{
   font-size:.85rem;color:#2ed573;background:rgba(46,213,115,.08);
   border:1px solid rgba(46,213,115,.25);padding:8px 12px;border-radius:8px;display:none;
+}
+
+/* Prioritní z-index pro widget Packety */
+.packeta-widget, #packeta-widget, div[id*="packeta"] {
+  z-index: 99999 !important;
 }
 
 /* Formuláře */
@@ -635,8 +641,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <span class="cart-badge" id="cart-count">0</span>
 </button>
 
-<!-- Modální okno košíku & SAMOSTATNÁ OBJEDNÁVKA MERCHE -->
-<dialog id="cart-modal">
+<!-- VLASTNÍ OVERLAY PRO KOŠÍK & OBJEDNÁVKU -->
+<div class="custom-modal-overlay" id="cart-modal">
   <div class="cart-content">
     <div class="cart-header">
       <h3 id="cart-modal-title">Váš Košík</h3>
@@ -716,7 +722,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
         <div class="form-group" style="margin-top:12px">
           <label for="order-note">Poznámka k objednávce (volitelné)</label>
-          <textarea id="order-note" class="form-control" style="min-height:60px" placeholder="Např. patro, doplňující info k doručení..."></textarea>
+          <textarea id="order-note" class="form-control" style="min-height:60px" placeholder="Např. doplňující info k doručení..."></textarea>
         </div>
 
         <div class="cart-total-row" style="margin:16px 0 8px">
@@ -725,7 +731,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
 
         <div style="display:flex;gap:10px;margin-top:10px">
-          <button type="button" class="btn" style="flex:1" onclick="backToCartItems()">Zpět ke košíku</button>
+          <button type="button" class="btn" style="flex:1" onclick="backToCartItems()">Zpět</button>
           <button type="submit" id="order-submit-btn" class="btn btn-primary" style="flex:2">Dokončit a odeslat</button>
         </div>
 
@@ -733,7 +739,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </form>
     </div>
   </div>
-</dialog>
+</div>
 
 <!-- Lightbox -->
 <dialog id="lb">
@@ -850,6 +856,14 @@ filterBtns.forEach(btn => {
   });
 });
 
+function openCartModal() {
+  cartModal.classList.add('open');
+}
+
+function closeCartModal() {
+  cartModal.classList.remove('open');
+}
+
 function updateCartUI() {
   localStorage.setItem('tb_cart', JSON.stringify(cart));
   const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
@@ -891,7 +905,7 @@ function addToCart(title, price, variant) {
   else cart.push({ title, price, variant, qty: 1 });
   updateCartUI();
   backToCartItems();
-  cartModal.showModal();
+  openCartModal();
 }
 
 function removeFromCart(index) {
@@ -901,10 +915,12 @@ function removeFromCart(index) {
 
 cartFloatingBtn.addEventListener('click', () => {
   backToCartItems();
-  cartModal.showModal();
+  openCartModal();
 });
-closeCartBtn.addEventListener('click', () => cartModal.close());
-cartModal.addEventListener('click', e => { if (e.target === cartModal) cartModal.close(); });
+closeCartBtn.addEventListener('click', closeCartModal);
+cartModal.addEventListener('click', e => {
+  if (e.target === cartModal) closeCartModal();
+});
 
 function showCheckoutForm() {
   if (cart.length === 0) return;
@@ -936,25 +952,17 @@ function updateCheckoutTotal() {
 }
 updateCartUI();
 
-// Zásilkovna Widget
+// Zásilkovna Widget (vlož sem svůj API klíč místo testovacího)
 let selectedPacketaPoint = null;
 const packetaApiKey = 'c7e8e50b71aa5a3b';
 
 function openPacketaWidget() {
-  if (cartModal && cartModal.open) {
-    cartModal.close();
-  }
-
   const packetaOptions = {
     country: 'cz',
     language: 'cs'
   };
 
   Packeta.Widget.pick(packetaApiKey, (point) => {
-    if (cartModal) {
-      cartModal.showModal();
-    }
-
     if (point) {
       selectedPacketaPoint = point;
       document.getElementById('packeta-point-id').value = point.id;
@@ -978,7 +986,7 @@ orderForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const method = document.getElementById('order-shipping').value;
   if (method.includes('Zásilkovna') && !selectedPacketaPoint) {
-    alert('Vyber prosím výdejní místo nebo Z-BOX Zásilkovny.');
+    alert('Vyber prosím výdejní místo nebo Z-BOX Zásilkovny kliknutím na červené tlačítko.');
     openPacketaWidget();
     return;
   }
@@ -1016,7 +1024,7 @@ orderForm.addEventListener('submit', async (e) => {
     document.getElementById('modal-packeta-display').style.display = 'none';
     orderForm.reset();
     updateCartUI();
-    setTimeout(() => { cartModal.close(); backToCartItems(); }, 3500);
+    setTimeout(() => { closeCartModal(); backToCartItems(); }, 3500);
   } catch (err) {
     orderStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu.';
     orderStatus.className = 'form-status error';
