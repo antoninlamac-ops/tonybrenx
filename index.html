@@ -25,16 +25,20 @@ body{
   -webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none;
 }
 
+/* Stabilní fixní pozadí s rozmazáním (BLUR) */
 .bg-photo-layer{
-  position:fixed;inset:0;
+  position:fixed;
+  inset:-20px; /* Přesah zabrání bílým/tmavým pruhům po rozostření okrajů */
   background-image:url('img-web/foto-53.webp');
-  background-size:cover;background-position:center center;
-  filter:brightness(30%) contrast(105%);
-  z-index:-2;
-  transform:translate3d(0,0,0);
-  -webkit-transform:translate3d(0,0,0);
+  background-size:cover;
+  background-position:center center;
+  filter:brightness(30%) contrast(105%) blur(14px);
+  -webkit-filter:brightness(30%) contrast(105%) blur(14px);
+  transform:scale(1.06) translate3d(0,0,0);
+  -webkit-transform:scale(1.06) translate3d(0,0,0);
   -webkit-backface-visibility:hidden;
   backface-visibility:hidden;
+  z-index:-2;
   pointer-events:none;
 }
 
@@ -117,43 +121,43 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 .gallery-controls{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:40px}
 .gallery-controls .btn svg{width:20px;height:20px}
 
-/* E-Shop */
-.shop-filters{display:flex;gap:10px;margin-bottom:30px;flex-wrap:wrap}
-.shop-filter-btn{padding:8px 18px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--muted);font-size:.9rem;letter-spacing:.08em;font-weight:700;cursor:pointer;transition:all .25s ease}
-.shop-filter-btn.active,.shop-filter-btn:hover{color:#fff;border-color:rgba(255,149,0,.6);background:rgba(255,149,0,.15);box-shadow:0 0 16px rgba(255,149,0,.25)}
+/* E-Shop (kompaktní karty) */
+.shop-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.shop-filter-btn{padding:6px 14px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--muted);font-size:.82rem;letter-spacing:.08em;font-weight:700;cursor:pointer;transition:all .25s ease}
+.shop-filter-btn.active,.shop-filter-btn:hover{color:#fff;border-color:rgba(255,149,0,.6);background:rgba(255,149,0,.15);box-shadow:0 0 14px rgba(255,149,0,.25)}
 
 .shop-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
-  gap:24px;
+  grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+  gap:16px;
   width:100%;
 }
 .product-card{
-  background:var(--glass);border:1px solid var(--edge);border-radius:20px;overflow:hidden;
-  display:flex;flex-direction:column;transition:border-color .3s ease, transform .3s ease;
-  width:100%;max-width:100%;
+  background:var(--glass);border:1px solid var(--edge);border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color .25s ease, transform .25s ease;
+  width:100%;
 }
-.product-card:hover{transform:translateY(-4px);border-color:rgba(255,149,0,.5);box-shadow:0 14px 35px rgba(0,0,0,.6)}
-.product-img-box{position:relative;width:100%;aspect-ratio:1/1.05;overflow:hidden;background:#0d0e12}
-.product-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;filter:brightness(.92)}
-.product-card:hover .product-img-box img{transform:scale(1.05);filter:brightness(1.02)}
-.product-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.75);border:1px solid var(--edge);padding:4px 10px;border-radius:999px;font-size:.7rem;letter-spacing:.1em;color:#ff9500;font-weight:700;text-transform:uppercase}
-.product-info{padding:22px;display:flex;flex-direction:column;flex-grow:1}
-.product-title{font-size:1.35rem;letter-spacing:.04em;color:#fff;margin-bottom:6px}
-.product-desc{font-size:.88rem;color:var(--muted);margin-bottom:16px;line-height:1.5;flex-grow:1}
-.product-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;min-height:38px}
-.product-price{font-size:1.5rem;font-weight:700;color:#ff9500}
+.product-card:hover{transform:translateY(-3px);border-color:rgba(255,149,0,.5);box-shadow:0 10px 25px rgba(0,0,0,.6)}
+.product-img-box{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#0d0e12}
+.product-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;filter:brightness(.92)}
+.product-card:hover .product-img-box img{transform:scale(1.04);filter:brightness(1.02)}
+.product-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.8);border:1px solid var(--edge);padding:3px 8px;border-radius:999px;font-size:.65rem;letter-spacing:.08em;color:#ff9500;font-weight:700;text-transform:uppercase}
+.product-info{padding:14px;display:flex;flex-direction:column;flex-grow:1}
+.product-title{font-size:1.1rem;letter-spacing:.03em;color:#fff;margin-bottom:4px;line-height:1.2}
+.product-desc{font-size:.78rem;color:var(--muted);margin-bottom:12px;line-height:1.4;flex-grow:1}
+.product-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;min-height:30px}
+.product-price{font-size:1.25rem;font-weight:700;color:#ff9500}
 .product-select{
-  padding:8px 12px;background:rgba(10,10,11,.8);border:1px solid var(--edge);
-  color:#fff;border-radius:8px;font-family:inherit;font-size:.85rem;outline:none;cursor:pointer;
+  padding:5px 8px;background:rgba(10,10,11,.8);border:1px solid var(--edge);
+  color:#fff;border-radius:6px;font-family:inherit;font-size:.78rem;outline:none;cursor:pointer;
 }
 .btn-buy{
-  width:100%;padding:11px;border-radius:10px;border:1px solid rgba(255,149,0,.5);
+  width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,149,0,.5);
   background:rgba(255,149,0,.15);color:#fff;font-family:"Barlow Condensed",sans-serif;
-  font-weight:700;letter-spacing:.1em;font-size:1rem;text-transform:uppercase;cursor:pointer;
-  transition:all .25s ease;display:flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:700;letter-spacing:.08em;font-size:.9rem;text-transform:uppercase;cursor:pointer;
+  transition:all .2s ease;display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.btn-buy:hover{background:#ff9500;color:#0a0a0b;box-shadow:0 0 20px rgba(255,149,0,.6)}
+.btn-buy:hover{background:#ff9500;color:#0a0a0b;box-shadow:0 0 16px rgba(255,149,0,.6)}
 
 /* Plovoucí košík */
 #cart-floating-btn{
@@ -170,7 +174,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okno košíku & checkoutu */
+/* Modální okno košíku & pokladny */
 #cart-modal{
   border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;
   background:transparent;position:fixed;inset:0;overflow:hidden;
@@ -199,7 +203,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 .cart-total-row{display:flex;justify-content:space-between;align-items:center;font-size:1.25rem;font-weight:700}
 .cart-total-row span:last-child{color:#ff9500;font-size:1.45rem;font-family:"Barlow Condensed",sans-serif}
 
-/* Zásilkovna komponenty v pokladně košíku */
+/* Zásilkovna komponenty */
 .packeta-box{
   background:rgba(10,10,11,.6);border:1px dashed var(--edge);padding:14px 16px;border-radius:12px;
   display:flex;flex-direction:column;gap:10px;margin-top:6px;
@@ -216,7 +220,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   border:1px solid rgba(46,213,115,.25);padding:8px 12px;border-radius:8px;display:none;
 }
 
-/* Společný styl vstupů */
+/* Formuláře */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .form-group label{font-size:.85rem;letter-spacing:.08em;color:var(--muted);font-weight:700}
@@ -238,7 +242,7 @@ textarea.form-control{resize:vertical;min-height:105px}
 .form-status.error{display:block;background:rgba(255,71,87,.15);border:1px solid rgba(255,71,87,.4);color:#ff4757}
 .gdpr-notice{font-size:0.75rem;color:rgba(154,155,162,0.65);margin-top:6px;text-align:center;line-height:1.4}
 
-/* Poptávkový formulář dole na stránce */
+/* Poptávkový formulář */
 #kontakt{text-align:center}
 #kontakt .lead{margin-left:auto;margin-right:auto;margin-bottom:24px;font-size:.95rem}
 .contact-container{width:100%;margin:30px auto 0;text-align:left}
@@ -340,7 +344,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     </div>
   </section>
 
-  <!-- MERCH E-SHOP SEKCE -->
+  <!-- KOMPAKTNÍ MERCH E-SHOP SEKCE -->
   <section id="shop">
     <h2>Merch & Tisk</h2>
     <p class="lead">Limitovaná streetwear série a velkoformátové fine-art fototisky doručované přes <strong>Zásilkovnu (Z-BOX)</strong>.</p>
@@ -356,19 +360,19 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       <!-- 3x TRIKA -->
       <div class="product-card" data-category="trika">
         <div class="product-img-box">
-          <span class="product-badge">Heavyweight 240g</span>
+          <span class="product-badge">Heavy 240g</span>
           <img src="img-web/foto-1.webp" alt="Tee Revír">
         </div>
         <div class="product-info">
           <h3 class="product-title">Tee „REVÍR“ Black</h3>
-          <p class="product-desc">Oversized střih z těžké 100% bavlny. Minimalistický černobílý sítotisk na hrudi a zádech.</p>
+          <p class="product-desc">Oversized střih z těžké 100% bavlny. Černobílý sítotisk.</p>
           <div class="product-meta">
             <span class="product-price">890 Kč</span>
             <select class="product-select" id="opt-t1">
-              <option value="S">Velikost S</option>
-              <option value="M" selected>Velikost M</option>
-              <option value="L">Velikost L</option>
-              <option value="XL">Velikost XL</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Tee „REVÍR“ Black', 890, document.getElementById('opt-t1').value)">
@@ -384,14 +388,14 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
         <div class="product-info">
           <h3 class="product-title">Tee „BROKEN PLACE“</h3>
-          <p class="product-desc">Vintage acid wash úprava, syrový streetový vibe, limitovaná číslovaná série studiového merche.</p>
+          <p class="product-desc">Vintage acid wash úprava, syrový streetový vibe, limitovaná série.</p>
           <div class="product-meta">
             <span class="product-price">950 Kč</span>
             <select class="product-select" id="opt-t2">
-              <option value="S">Velikost S</option>
-              <option value="M" selected>Velikost M</option>
-              <option value="L">Velikost L</option>
-              <option value="XL">Velikost XL</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Tee „BROKEN PLACE“', 950, document.getElementById('opt-t2').value)">
@@ -407,14 +411,14 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
         <div class="product-info">
           <h3 class="product-title">Tee „RAW ATMOSPHERE“</h3>
-          <p class="product-desc">Pevný límec, spadlá ramena a autorský analogový grafický print s motivem nočního města.</p>
+          <p class="product-desc">Pevný límec, spadlá ramena a autorský print nočního města.</p>
           <div class="product-meta">
             <span class="product-price">890 Kč</span>
             <select class="product-select" id="opt-t3">
-              <option value="S">Velikost S</option>
-              <option value="M" selected>Velikost M</option>
-              <option value="L">Velikost L</option>
-              <option value="XL">Velikost XL</option>
+              <option value="S">S</option>
+              <option value="M" selected>M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Tee „RAW ATMOSPHERE“', 890, document.getElementById('opt-t3').value)">
@@ -431,7 +435,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
         <div class="product-info">
           <h3 class="product-title">SnapBack „TB SIGNATURE“</h3>
-          <p class="product-desc">Klasický 6-panel střih, černý matný vršek, zelený spodek kšiltu a vystouplá tonální 3D výšivka.</p>
+          <p class="product-desc">Klasický 6-panel střih, černý mat, zelený spodek kšiltu, 3D výšivka.</p>
           <div class="product-meta">
             <span class="product-price">790 Kč</span>
           </div>
@@ -449,12 +453,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „URBAN SHADOW“</h3>
-          <p class="product-desc">Černobílý kontrastní tisk ze série sokolovských a karlovarských ulic. Hluboká černá a jemné zrno.</p>
+          <p class="product-desc">Černobílý kontrastní tisk z ulic. Hluboká černá a jemné zrno.</p>
           <div class="product-meta">
             <span class="product-price">590 Kč</span>
             <select class="product-select" id="opt-p1">
-              <option value="A3 (30x42 cm)" selected>Formát A3</option>
-              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+              <option value="A3 (30x42 cm)" selected>A3</option>
+              <option value="A2 (42x59 cm)">A2 (+250)</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Poster „URBAN SHADOW“', document.getElementById('opt-p1').value.includes('A2')?840:590, document.getElementById('opt-p1').value)">
@@ -465,17 +469,17 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
       <div class="product-card" data-category="postery">
         <div class="product-img-box">
-          <span class="product-badge">Fine-Art Print</span>
+          <span class="product-badge">Fine-Art</span>
           <img src="img-web/foto-33.webp" alt="Poster V-Log Night">
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „NOCTURNAL DRIFT“</h3>
-          <p class="product-desc">Filmový frame z nočního natáčení s mlžnou atmosférou a neonovým protisvětlem na 250g fotopapíru.</p>
+          <p class="product-desc">Filmový frame z nočního natáčení s mlžnou neonovou atmosférou.</p>
           <div class="product-meta">
             <span class="product-price">590 Kč</span>
             <select class="product-select" id="opt-p2">
-              <option value="A3 (30x42 cm)" selected>Formát A3</option>
-              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+              <option value="A3 (30x42 cm)" selected>A3</option>
+              <option value="A2 (42x59 cm)">A2 (+250)</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Poster „NOCTURNAL DRIFT“', document.getElementById('opt-p2').value.includes('A2')?840:590, document.getElementById('opt-p2').value)">
@@ -486,17 +490,17 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
       <div class="product-card" data-category="postery">
         <div class="product-img-box">
-          <span class="product-badge">Hahnemühle 310g</span>
+          <span class="product-badge">310g Print</span>
           <img src="img-web/foto-42.webp" alt="Poster Helios Bokeh">
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „VINTAGE FLARE“</h3>
-          <p class="product-desc">Autentický swirl bokeh focený manuální optikou Helios 44-2 na plném formátu. Hřejivý kinofilmový tón.</p>
+          <p class="product-desc">Swirl bokeh focený optikou Helios 44-2 na plném formátu.</p>
           <div class="product-meta">
             <span class="product-price">650 Kč</span>
             <select class="product-select" id="opt-p3">
-              <option value="A3 (30x42 cm)" selected>Formát A3</option>
-              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+              <option value="A3 (30x42 cm)" selected>A3</option>
+              <option value="A2 (42x59 cm)">A2 (+250)</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Poster „VINTAGE FLARE“', document.getElementById('opt-p3').value.includes('A2')?900:650, document.getElementById('opt-p3').value)">
@@ -512,12 +516,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „REVÍR KRUŠNOHOŘÍ“</h3>
-          <p class="product-desc">Geometrie industriální krajiny a hřebenů Krušných hor pod těžkými mraky. Ručně signováno.</p>
+          <p class="product-desc">Industriální krajina a Krušné hory pod těžkými mraky. Signováno.</p>
           <div class="product-meta">
             <span class="product-price">650 Kč</span>
             <select class="product-select" id="opt-p4">
-              <option value="A3 (30x42 cm)" selected>Formát A3</option>
-              <option value="A2 (42x59 cm)">Formát A2 (+250 Kč)</option>
+              <option value="A3 (30x42 cm)" selected>A3</option>
+              <option value="A2 (42x59 cm)">A2 (+250)</option>
             </select>
           </div>
           <button class="btn-buy" onclick="addToCart('Poster „REVÍR KRUŠNOHOŘÍ“', document.getElementById('opt-p4').value.includes('A2')?900:650, document.getElementById('opt-p4').value)">
@@ -902,7 +906,6 @@ cartFloatingBtn.addEventListener('click', () => {
 closeCartBtn.addEventListener('click', () => cartModal.close());
 cartModal.addEventListener('click', e => { if (e.target === cartModal) cartModal.close(); });
 
-// Přepínání mezi košíkem a checkoutem v okně
 function showCheckoutForm() {
   if (cart.length === 0) return;
   document.getElementById('cart-view-items').style.display = 'none';
@@ -935,23 +938,38 @@ updateCartUI();
 
 // Zásilkovna Widget
 let selectedPacketaPoint = null;
-const packetaApiKey = 'a1b2c3d4e5f6';
+const packetaApiKey = 'c7e8e50b71aa5a3b';
 
 function openPacketaWidget() {
+  if (cartModal && cartModal.open) {
+    cartModal.close();
+  }
+
+  const packetaOptions = {
+    country: 'cz',
+    language: 'cs'
+  };
+
   Packeta.Widget.pick(packetaApiKey, (point) => {
+    if (cartModal) {
+      cartModal.showModal();
+    }
+
     if (point) {
       selectedPacketaPoint = point;
       document.getElementById('packeta-point-id').value = point.id;
       document.getElementById('packeta-point-name').value = `${point.name}, ${point.street}, ${point.city} (${point.zip})`;
       
       const display = document.getElementById('modal-packeta-display');
-      display.style.display = 'block';
-      document.getElementById('modal-packeta-place-name').textContent = `${point.name} (${point.city})`;
+      if (display) {
+        display.style.display = 'block';
+        document.getElementById('modal-packeta-place-name').textContent = `${point.name} (${point.city})`;
+      }
     }
-  }, { country: 'cz', language: 'cs' });
+  }, packetaOptions);
 }
 
-// 1. ODESLÁNÍ OBJEDNÁVKY MERCHE (z modálu)
+// 1. ODESLÁNÍ OBJEDNÁVKY MERCHE
 const orderForm = document.getElementById('order-form');
 const orderStatus = document.getElementById('order-status');
 const orderSubmitBtn = document.getElementById('order-submit-btn');
@@ -965,7 +983,6 @@ orderForm.addEventListener('submit', async (e) => {
     return;
   }
 
-  // Sestavení přehledu pro zprávu
   const shippingCost = method.includes('Zásilkovna') ? 79 : 0;
   const goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
   const total = goodsSum + shippingCost;
@@ -1009,7 +1026,7 @@ orderForm.addEventListener('submit', async (e) => {
   }
 });
 
-// 2. ODESLÁNÍ POPTÁVKY SLUŽEB (dole na stránce)
+// 2. ODESLÁNÍ POPTÁVKY SLUŽEB
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 const formSubmitBtn = document.getElementById('form-submit-btn');
