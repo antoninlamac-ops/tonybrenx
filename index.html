@@ -121,7 +121,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 .gallery-controls{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:40px}
 .gallery-controls .btn svg{width:20px;height:20px}
 
-/* E-Shop (kompaktní karty) */
+/* E-Shop */
 .shop-filters{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
 .shop-filter-btn{padding:6px 14px;border-radius:999px;border:1px solid var(--edge);background:var(--glass);color:var(--muted);font-size:.82rem;letter-spacing:.08em;font-weight:700;cursor:pointer;transition:all .25s ease}
 .shop-filter-btn.active,.shop-filter-btn:hover{color:#fff;border-color:rgba(255,149,0,.6);background:rgba(255,149,0,.15);box-shadow:0 0 14px rgba(255,149,0,.25)}
@@ -174,7 +174,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   display:flex;align-items:center;justify-content:center;padding:0 4px;font-family:Arial,sans-serif;
 }
 
-/* Modální okna (Košík & Podmínky) */
+/* Modální okna */
 .custom-modal-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.88);
   z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;
@@ -571,7 +571,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <section id="kontakt">
     <h2>Poptávka služeb</h2>
     <p class="lead">Máš zájem o focení, video nebo dlouhodobou spolupráci? Napiš mi a probereme termín i realizaci.</p>
-    <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Sokolově a Svatavě (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
+    <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Svatavě a Sokolově (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
     
     <div class="contact-container">
       <form id="contact-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST" class="inquiry-form glass">
@@ -638,8 +638,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="hover-zon">Zonerama</a>
   </div>
   <div class="company-info">
-    <strong>Provozovatel:</strong> Antonín Lamač, Svatava | <strong>IČO:</strong> 87481235<br>
-    Fyzická osoba zapsaná v živnostenském rejstříku. | <strong>E-mail:</strong> t.brenx@gmail.com
+    <strong>Provozovatel:</strong> Antonín Lamač, Palackého 364, Svatava 357 03 | <strong>IČO:</strong> 87481235<br>
+    Fyzická osoba zapsaná v živnostenském rejstříku. | <strong>E-mail:</strong> antonin.lamac@gmail.com
   </div>
   <div class="copyright">© 2026 Tony Brenx • Všechna práva vyhrazena</div>
 </footer>
@@ -739,7 +739,6 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
           <span id="order-final-price">0 Kč</span>
         </div>
 
-        <!-- ZÁVAZNÝ SOUHLAS S OBCHODNÍMI PODMÍNKAMI A GDPR -->
         <div style="margin: 12px 0 10px; font-size: 0.8rem; color: var(--muted); line-height: 1.4;">
           <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer;">
             <input type="checkbox" id="order-terms-check" required style="margin-top: 3px; accent-color: #ff9500; cursor: pointer;">
@@ -1111,8 +1110,8 @@ function openLegalModal(type) {
         <strong>Provozovatel e-shopu:</strong><br>
         <strong>Jméno:</strong> Antonín Lamač (Tony Brenx)<br>
         <strong>IČO:</strong> 87481235<br>
-        <strong>Sídlo:</strong> Svatava, Česká republika<br>
-        <strong>E-mail:</strong> t.brenx@gmail.com<br>
+        <strong>Sídlo:</strong> Palackého 364, Svatava, 357 03<br>
+        <strong>E-mail:</strong> antonin.lamac@gmail.com<br>
         <em>Fyzická osoba podnikající dle živnostenského zákona.</em>
       </p>
       
@@ -1131,15 +1130,15 @@ function openLegalModal(type) {
       <p style="font-size:0.8rem; color:var(--muted); margin-top:4px;">Právo na odstoupení se nevztahuje na zboží vyrobené nebo upravené podle přání spotřebitele (např. individuálně podepsané velkoformátové tisky na zakázku dle § 1837 občanského zákoníku).</p>
       
       <h4 style="margin-top:14px;">5. Reklamace a záruka</h4>
-      <p>Zákonná záruční doba na spotřební zboží činí 24 měsíců. V případě poškození zásilky či vady zboží kontaktujte prodávajícího na e-mailu: <strong>t.brenx@gmail.com</strong>.</p>
+      <p>Zákonná záruční doba na spotřební zboží činí 24 měsíců. V případě poškození zásilky či vady zboží kontaktujte prodávajícího na e-mailu: <strong>antonin.lamac@gmail.com</strong>.</p>
     `;
   } else if (type === 'privacy') {
     title.textContent = 'Zásady ochrany osobních údajů (GDPR)';
     body.innerHTML = `
       <p style="background: rgba(255,149,0,0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,149,0,0.3); margin-bottom: 16px;">
         <strong>Správce osobních údajů:</strong><br>
-        Antonín Lamač, IČO: 87481235, Svatava<br>
-        <strong>E-mail:</strong> t.brenx@gmail.com
+        Antonín Lamač, IČO: 87481235, Palackého 364, Svatava 357 03<br>
+        <strong>E-mail:</strong> antonin.lamac@gmail.com
       </p>
       <h4>1. Rozsah a účel zpracování</h4>
       <p>Správce zpracovává osobní údaje poskytnuté zákazníkem (jméno, příjmení, e-mail, telefon, zvolené výdejní místo) výhradně za účelem vyřízení objednávky, fakturace, doručení zboží a komunikace ohledně zakázky.</p>
@@ -1215,7 +1214,7 @@ async function handleWithdrawSubmit(e) {
   formData.append('email', email);
   formData.append('phone', 'Odstoupení 14 dnů');
   formData.append('service', 'Odstoupení od smlouvy');
-  formData.append('message', `ODSTOUPENÍ OD SMLOUVY:\nČíslo objednávky (VS): ${vs}\nČíslo účtu pro vrácení: ${account}\nZboží / zpráva: ${msg}`);
+  formData.append('message', `ODSTOUPENÍ OD SMLOUVY:\nČíslo objednávky (VS): ${vs}\nČíslo účtu pro vrácení: ${account}\nZboží / doplňující text: ${msg}`);
 
   try {
     await fetch("https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec", {
@@ -1223,11 +1222,11 @@ async function handleWithdrawSubmit(e) {
       body: formData,
       mode: 'no-cors'
     });
-    status.textContent = 'Oznámení o odstoupení bylo úspěšně odesláno. Brzy tě budu kontaktovat ohledně převzetí zásilky.';
+    status.textContent = 'Oznámení o odstoupení bylo úspěšně odesláno. Brzy tě budu kontaktovat.';
     status.className = 'form-status success';
-    setTimeout(() => closeLegalModal(), 4000);
+    setTimeout(() => closeLegalModal(), 3500);
   } catch (err) {
-    status.textContent = 'Došlo k chybě připojení. Napiš prosím přímo na t.brenx@gmail.com';
+    status.textContent = 'Došlo k chybě připojení. Napiš prosím přímo na antonin.lamac@gmail.com';
     status.className = 'form-status error';
   } finally {
     btn.disabled = false;
