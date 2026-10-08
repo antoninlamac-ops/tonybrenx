@@ -30,7 +30,7 @@ body{color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden;font-f
   will-change:transform;
   pointer-events:none;
 }
-body::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+body::after{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
 h1,h2,h3,nav .brand,.btn,.contact-link,.beep-text,.form-group label{font-family:"Barlow Condensed","Arial Narrow","Helvetica Neue",sans-serif;text-transform:uppercase}
 .glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--edge);border-radius:22px;box-shadow:0 18px 50px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
@@ -118,24 +118,29 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 #load-more:hover svg{transform:translateY(4px)}
 #hide-photos:hover svg{transform:translateY(-4px)}
 
-/* Kontaktní sekce s vycentrovaným formulářem */
+/* Kontaktní sekce s formulářem na plnou šířku */
 #kontakt{text-align:center}
 #kontakt .lead{margin-left:auto;margin-right:auto;margin-bottom:24px;font-size:.95rem}
 .contact-container{
-  max-width:640px;
+  width:100%;
   margin:30px auto 0;
   text-align:left;
 }
 
 /* Formulář */
 .inquiry-form{
-  padding:36px;display:flex;flex-direction:column;gap:14px;border-radius:20px;
+  width:100%;
+  padding:38px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  border-radius:22px;
 }
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .form-group{display:flex;flex-direction:column;gap:6px}
 .form-group label{font-size:.85rem;letter-spacing:.08em;color:var(--muted);font-weight:700}
 .form-control{
-  width:100%;padding:11px 15px;background:rgba(10,10,11,.75);
+  width:100%;padding:13px 16px;background:rgba(10,10,11,.75);
   border:1px solid var(--edge);border-radius:10px;color:#fff;
   font-family:inherit;font-size:.95rem;transition:all .25s ease;outline:none;
 }
@@ -149,15 +154,15 @@ select.form-control{
   background-repeat:no-repeat;background-position:right 14px center;
 }
 select.form-control option{background-color:#121418;color:#fff}
-textarea.form-control{resize:vertical;min-height:105px}
+textarea.form-control{resize:vertical;min-height:115px}
 .form-status{display:none;padding:12px;border-radius:10px;font-size:.9rem;text-align:center}
 .form-status.success{display:block;background:rgba(46,213,115,.15);border:1px solid rgba(46,213,115,.4);color:#2ed573}
 .form-status.error{display:block;background:rgba(255,71,87,.15);border:1px solid rgba(255,71,87,.4);color:#ff4757}
 .gdpr-notice{font-size:0.75rem;color:rgba(154,155,162,0.65);margin-top:6px;text-align:center;line-height:1.4}
 
-@media(max-width:640px){
+@media(max-width:768px){
   .inquiry-form{padding:24px 18px}
-  .form-row{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr;gap:14px}
 }
 
 footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:column;align-items:center;gap:20px}
@@ -294,8 +299,16 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label for="form-phone">Telefon</label>
-            <input type="tel" id="form-phone" name="phone" class="form-control" placeholder="+420 ...">
+            <label for="form-phone">Telefon *</label>
+            <input 
+              type="tel" 
+              id="form-phone" 
+              name="phone" 
+              class="form-control" 
+              placeholder="+420 777 123 456" 
+              pattern="[+]?[0-9\s-]{9,16}" 
+              title="Zadejte platné telefonní číslo (např. +420 777 123 456)" 
+              required>
           </div>
           <div class="form-group">
             <label for="form-service">Typ poptávky</label>
