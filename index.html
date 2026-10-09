@@ -138,10 +138,16 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
   width:100%;
 }
 .product-card:hover{transform:translateY(-3px);border-color:rgba(255,149,0,.5);box-shadow:0 10px 25px rgba(0,0,0,.6)}
-.product-img-box{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#0d0e12}
+.product-img-box{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;background:#0d0e12;cursor:pointer}
 .product-img-box img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;filter:brightness(.92)}
 .product-card:hover .product-img-box img{transform:scale(1.04);filter:brightness(1.02)}
-.product-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.8);border:1px solid var(--edge);padding:3px 8px;border-radius:999px;font-size:.65rem;letter-spacing:.08em;color:#ff9500;font-weight:700;text-transform:uppercase}
+.product-img-box .zoom-hint{
+  position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.65);border-radius:50%;
+  width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:#fff;
+  opacity:0;transition:opacity .25s ease;pointer-events:none;
+}
+.product-img-box:hover .zoom-hint{opacity:1}
+.product-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.8);border:1px solid var(--edge);padding:3px 8px;border-radius:999px;font-size:.65rem;letter-spacing:.08em;color:#ff9500;font-weight:700;text-transform:uppercase;z-index:2}
 .product-info{padding:14px;display:flex;flex-direction:column;flex-grow:1}
 .product-title{font-size:1.1rem;letter-spacing:.03em;color:#fff;margin-bottom:4px;line-height:1.2}
 .product-desc{font-size:.78rem;color:var(--muted);margin-bottom:12px;line-height:1.4;flex-grow:1}
@@ -352,10 +358,10 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     </div>
   </section>
 
-  <!-- KOMPAKTNÍ MERCH E-SHOP SEKCE -->
+  <!-- KOMPAKTNÍ MERCH E-SHOP SEKCE (OBRÁZKY OTEVÍRAJÍ LIGHTBOX) -->
   <section id="shop">
     <h2>Merch & Tisk</h2>
-    <p class="lead">Limitovaná streetwear série a velkoformátové fine-art fototisky doručované přes <strong>Zásilkovnu (Z-BOX)</strong>.</p>
+    <p class="lead">Limitovaná streetwear série a velkoformátové fine-art fototisky doručované přes <strong>Zásilkovnu (Z-BOX)</strong>. Kliknutím na produkt otevřeš velký detail s možností listování.</p>
 
     <div class="shop-filters">
       <button class="shop-filter-btn active" data-filter="all">Všechny produkty (8)</button>
@@ -367,9 +373,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <div class="shop-grid">
       <!-- 3x TRIKA -->
       <div class="product-card" data-category="trika">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-1.webp')">
           <span class="product-badge">Heavy 240g</span>
           <img src="img-web/foto-1.webp" alt="Tee Revír">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Tee „REVÍR“ Black</h3>
@@ -390,9 +399,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
 
       <div class="product-card" data-category="trika">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-5.webp')">
           <span class="product-badge">Acid Wash</span>
           <img src="img-web/foto-5.webp" alt="Tee Broken Place">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Tee „BROKEN PLACE“</h3>
@@ -413,9 +425,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
 
       <div class="product-card" data-category="trika">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-12.webp')">
           <span class="product-badge">Boxy Fit</span>
           <img src="img-web/foto-12.webp" alt="Tee Raw Atmosphere">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Tee „RAW ATMOSPHERE“</h3>
@@ -437,9 +452,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
       <!-- 1x SNAPBACK -->
       <div class="product-card" data-category="headwear">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-20.webp')">
           <span class="product-badge">3D Výšivka</span>
           <img src="img-web/foto-20.webp" alt="SnapBack Tony Brenx">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">SnapBack „TB SIGNATURE“</h3>
@@ -455,9 +473,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
       <!-- 4x POSTERY -->
       <div class="product-card" data-category="postery">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-25.webp')">
           <span class="product-badge">Archival Matte</span>
           <img src="img-web/foto-25.webp" alt="Poster Urban Shadow">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „URBAN SHADOW“</h3>
@@ -476,9 +497,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
 
       <div class="product-card" data-category="postery">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-33.webp')">
           <span class="product-badge">Fine-Art</span>
           <img src="img-web/foto-33.webp" alt="Poster V-Log Night">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „NOCTURNAL DRIFT“</h3>
@@ -497,9 +521,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
 
       <div class="product-card" data-category="postery">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-42.webp')">
           <span class="product-badge">310g Print</span>
           <img src="img-web/foto-42.webp" alt="Poster Helios Bokeh">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „VINTAGE FLARE“</h3>
@@ -518,9 +545,12 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
 
       <div class="product-card" data-category="postery">
-        <div class="product-img-box">
+        <div class="product-img-box" onclick="openProductLightbox('img-web/foto-50.webp')">
           <span class="product-badge">Limitovaná Edice</span>
           <img src="img-web/foto-50.webp" alt="Poster Industrial Krušnohoří">
+          <span class="zoom-hint">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
+          </span>
         </div>
         <div class="product-info">
           <h3 class="product-title">Poster „REVÍR KRUŠNOHOŘÍ“</h3>
@@ -676,7 +706,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
     </div>
 
-    <!-- Část 2: Samostatný Checkout formulář v modálu (Nové URL pro merch) -->
+    <!-- Část 2: Samostatný Checkout formulář v modálu -->
     <div id="cart-view-checkout" style="display:none;">
       <form id="order-form" action="https://script.google.com/macros/s/AKfycbx1KAhUSid5hGxZM7WlFNKmuM4dSWUxBS8-zZNvNJcbN7h83Ar_eSNnaX0Qr9JsS0cQdg/exec" method="POST">
         <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
@@ -717,6 +747,20 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
               <option value="Osobní předání Sokolov - Zdarma">Osobní předání Sokolov (Zdarma)</option>
             </select>
           </div>
+        </div>
+
+        <!-- FIXNÍ ZPŮSOB PLATBY -->
+        <div class="form-group">
+          <label>Způsob platby</label>
+          <div style="background: rgba(10,10,11,.6); border: 1px solid var(--edge); padding: 12px 14px; border-radius: 10px;">
+            <div style="color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+              <span style="color:#ff9500;">✓</span> Bankovní převod (instrukce v e-mailu)
+            </div>
+            <div style="color: #ff5e57; font-size: 0.78rem; margin-top: 4px; line-height: 1.35;">
+              Bez připsání platby do 48 hodin se objednávka automaticky ruší.
+            </div>
+          </div>
+          <input type="hidden" name="payment_method" value="Bankovní převod (platnost 48h)">
         </div>
 
         <div id="modal-packeta-box" class="packeta-box">
@@ -772,7 +816,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   </div>
 </div>
 
-<!-- Lightbox -->
+<!-- Lightbox (společný pro Portfolio i Merch) -->
 <dialog id="lb">
   <button class="close-lb" id="close-lb" aria-label="Zavřít">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -799,7 +843,7 @@ menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
 navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
 homeBtn.addEventListener('click', e => { e.preventDefault(); navLinks.classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'}); });
 
-// Galerie
+// Galerie Portfolio
 const g = document.getElementById('gallery');
 const lb = document.getElementById('lb');
 const big = document.getElementById('lb-img');
@@ -1037,6 +1081,7 @@ orderForm.addEventListener('submit', async (e) => {
     summary += `• ${item.title} [${item.variant}] - ${item.qty} ks (${item.price * item.qty} Kč)\n`;
   });
   summary += `\nDoprava: ${method}\n`;
+  summary += `Platba: Bankovní převod (splatnost do 48h)\n`;
   if (selectedPacketaPoint) {
     summary += `Pobočka / Z-BOX: ${selectedPacketaPoint.name}, ${selectedPacketaPoint.street}, ${selectedPacketaPoint.city} [ID: ${selectedPacketaPoint.id}]\n`;
   }
@@ -1053,7 +1098,7 @@ orderForm.addEventListener('submit', async (e) => {
   const data = new FormData(orderForm);
   try {
     await fetch(orderForm.action, { method: 'POST', body: data, mode: 'no-cors' });
-    orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Potvrzení a QR platba ti dorazí do e-mailu.';
+    orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Platební instrukce s číslem účtu a variabilním symbolem ti dorazí do e-mailu.';
     orderStatus.className = 'form-status success';
     cart = [];
     selectedPacketaPoint = null;
@@ -1121,8 +1166,8 @@ function openLegalModal(type) {
       <h4 style="margin-top:14px;">2. Objednávka a uzavření kupní smlouvy</h4>
       <p>Odesláním objednávky prostřednictvím nákupního košíku kupující potvrzuje, že se seznámil s těmito obchodními podmínkami a souhlasí s nimi. Kupní smlouva vzniká potvrzením objednávky prodávajícím formou automatického e-mailu.</p>
       
-      <h4 style="margin-top:14px;">3. Ceny, platba a doprava</h4>
-      <p>Veškeré ceny jsou konečné. Platba probíhá bezhotovostně bankovním převodem nebo okamžitou platbou prostřednictvíc vygenerovaného QR kódu. Zboží je doručováno prostřednictvím sítě Zásilkovna (Z-BOX / výdejní místo) nebo formou osobního předání dle zvolené volby.</p>
+      <h4 style="margin-top:14px;">3. Ceny, platba a storno rezervace</h4>
+      <p>Veškeré ceny jsou konečné. Platba probíhá výhradně bezhotovostně bankovním převodem na účet prodávajícího (č. ú. 2203409972/2010). Zboží je rezervováno po dobu 48 hodin od odeslání objednávky. Pokud nedojde k připsání platby do 48 hodin, objednávka se automaticky ruší.</p>
       
       <h4 style="margin-top:14px; color:#ff4757;">4. Právo na odstoupení od smlouvy (14 dní)</h4>
       <p>Spotřebitel má právo odstoupit od kupní smlouvy bez udání důvodu ve lhůtě 14 dnů ode dne převzetí zboží. Pro odstoupení můžete využít náš 
@@ -1241,29 +1286,46 @@ window.addEventListener('scroll', () => {
 }, {passive:true});
 scrollTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
-// Lightbox
-const list = () => [...g.querySelectorAll('a')];
-let cur = 0;
-function show(i) {
-  const l = list();
-  if (!l.length) return;
-  cur = (i + l.length) % l.length;
-  big.src = l[cur].href;
+// UNIVERZÁLNÍ LIGHTBOX (Pro Portfolio i pro E-Shop zboží)
+let currentLightboxList = [];
+let currentLbIndex = 0;
+
+function showLbImage(index) {
+  if (!currentLightboxList.length) return;
+  currentLbIndex = (index + currentLightboxList.length) % currentLightboxList.length;
+  big.src = currentLightboxList[currentLbIndex];
 }
+
+// 1. Otevření z portfolia
 g.addEventListener('click', e => {
   const a = e.target.closest('a');
   if(!a) return;
   e.preventDefault();
-  show(list().indexOf(a));
+  const portfolioLinks = Array.from(g.querySelectorAll('a')).map(el => el.href);
+  currentLightboxList = portfolioLinks;
+  currentLbIndex = portfolioLinks.indexOf(a.href);
+  big.src = currentLightboxList[currentLbIndex];
   lb.showModal();
 });
-document.getElementById('prev').onclick = e => { e.stopPropagation(); show(cur-1); };
-document.getElementById('next').onclick = e => { e.stopPropagation(); show(cur+1); };
+
+// 2. Otevření z produktů v Merch Shopu
+function openProductLightbox(imgSrc) {
+  // Seznam všech obrázků produktů v e-shopu
+  const productImgs = Array.from(document.querySelectorAll('.product-img-box img')).map(el => el.src);
+  currentLightboxList = productImgs;
+  currentLbIndex = productImgs.findIndex(src => src.includes(imgSrc) || imgSrc.includes(src));
+  if (currentLbIndex === -1) currentLbIndex = 0;
+  big.src = currentLightboxList[currentLbIndex];
+  lb.showModal();
+}
+
+document.getElementById('prev').onclick = e => { e.stopPropagation(); showLbImage(currentLbIndex - 1); };
+document.getElementById('next').onclick = e => { e.stopPropagation(); showLbImage(currentLbIndex + 1); };
 closeBtn.onclick = e => { e.stopPropagation(); lb.close(); };
 lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 lb.addEventListener('keydown', e => {
-  if(e.key === 'ArrowLeft') show(cur-1);
-  if(e.key === 'ArrowRight') show(cur+1);
+  if(e.key === 'ArrowLeft') showLbImage(currentLbIndex - 1);
+  if(e.key === 'ArrowRight') showLbImage(currentLbIndex + 1);
 });
 
 const io = new IntersectionObserver(es => es.forEach(e => {
