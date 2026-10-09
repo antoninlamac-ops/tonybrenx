@@ -310,8 +310,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#shop" class="nav-shop">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
-    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="hover-ig">Instagram</a>
-    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="hover-zon">Zonerama</a>
+    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="external-link hover-ig">Instagram</a>
+    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="external-link hover-zon">Zonerama</a>
   </div>
 </nav>
 
@@ -676,9 +676,9 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </div>
     </div>
 
-    <!-- Část 2: Samostatný Checkout formulář v modálu -->
+    <!-- Část 2: Samostatný Checkout formulář v modálu (Nové URL pro merch) -->
     <div id="cart-view-checkout" style="display:none;">
-      <form id="order-form" action="https://script.google.com/macros/s/AKfycbyZhN-nq-wOZnU4D_kKqqQviFWMmsy_kUMgXflZveLXj25asovkH-YaL9V7eWwiCcM9/exec" method="POST">
+      <form id="order-form" action="https://script.google.com/macros/s/AKfycbx1KAhUSid5hGxZM7WlFNKmuM4dSWUxBS8-zZNvNJcbN7h83Ar_eSNnaX0Qr9JsS0cQdg/exec" method="POST">
         <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
         <input type="hidden" name="form_type" value="Objednávka merche">
         <input type="hidden" name="service" value="Objednávka merche / tisk">
@@ -1122,7 +1122,7 @@ function openLegalModal(type) {
       <p>Odesláním objednávky prostřednictvím nákupního košíku kupující potvrzuje, že se seznámil s těmito obchodními podmínkami a souhlasí s nimi. Kupní smlouva vzniká potvrzením objednávky prodávajícím formou automatického e-mailu.</p>
       
       <h4 style="margin-top:14px;">3. Ceny, platba a doprava</h4>
-      <p>Veškeré ceny jsou konečné. Platba probíhá bezhotovostně bankovním převodem nebo okamžitou platbou prostřednictvím vygenerovaného QR kódu. Zboží je doručováno prostřednictvím sítě Zásilkovna (Z-BOX / výdejní místo) nebo formou osobního předání dle zvolené volby.</p>
+      <p>Veškeré ceny jsou konečné. Platba probíhá bezhotovostně bankovním převodem nebo okamžitou platbou prostřednictvíc vygenerovaného QR kódu. Zboží je doručováno prostřednictvím sítě Zásilkovna (Z-BOX / výdejní místo) nebo formou osobního předání dle zvolené volby.</p>
       
       <h4 style="margin-top:14px; color:#ff4757;">4. Právo na odstoupení od smlouvy (14 dní)</h4>
       <p>Spotřebitel má právo odstoupit od kupní smlouvy bez udání důvodu ve lhůtě 14 dnů ode dne převzetí zboží. Pro odstoupení můžete využít náš 
@@ -1194,7 +1194,7 @@ document.getElementById('legal-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('legal-modal')) closeLegalModal();
 });
 
-// Odeslání odstoupení od smlouvy do Apps Scriptu (Skript 2)
+// 3. ODESLÁNÍ ODSTOUPENÍ OD SMLOUVY (Skript 3)
 async function handleWithdrawSubmit(e) {
   e.preventDefault();
   const vs = document.getElementById('w-vs').value;
