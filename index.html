@@ -63,9 +63,33 @@ nav .brand:hover{color:#ff9500}
 nav a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 14px;border-radius:999px;transition:.3s ease;white-space:nowrap}
 nav a:hover,nav a.on{color:var(--text);background:rgba(255,255,255,.1)}
 nav a.nav-shop{color:#ff9500;font-weight:700}
-nav a.external-link{color:#d1d1d3}
-nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C}
-nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2}
+
+/* Sociální ikony / Favicony */
+.icon-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px !important;
+  color: var(--muted);
+  transition: all .25s ease;
+  line-height: 0;
+}
+.icon-social svg {
+  width: 19px;
+  height: 19px;
+  display: block;
+}
+.icon-social.hover-ig:hover {
+  color: #E1306C !important;
+  filter: drop-shadow(0 0 8px rgba(225, 48, 108, 0.6));
+  transform: translateY(-1px);
+}
+.icon-social.hover-zon:hover {
+  color: #00a2e2 !important;
+  filter: drop-shadow(0 0 8px rgba(0, 162, 226, 0.6));
+  transform: translateY(-1px);
+}
+
 .menu-toggle{display:none;background:transparent;border:0;color:var(--text);cursor:pointer;padding:8px;border-radius:50%;align-items:center;justify-content:center;transition:all .3s ease}
 .menu-toggle svg{width:24px;height:24px}
 .menu-toggle:hover{color:#ff9500}
@@ -77,6 +101,11 @@ nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-
   .nav-links{position:absolute;top:calc(100% + 10px);left:0;right:0;flex-direction:column;gap:6px;padding:16px;background:rgba(18,20,24,.96);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);border:1px solid var(--edge);border-radius:20px;box-shadow:0 20px 45px rgba(0,0,0,.7);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .3s ease;pointer-events:none}
   .nav-links.open{opacity:1;visibility:visible;transform:translateY(0);pointer-events:auto}
   nav a{width:100%;text-align:center;padding:12px;font-size:1rem}
+  .nav-links .icon-social {
+    display: inline-flex;
+    width: auto;
+    padding: 10px !important;
+  }
 }
 
 .hero{padding:19vh 0 12vh;text-align:center;display:flex;flex-direction:column;align-items:center}
@@ -225,7 +254,7 @@ iframe[name="packeta-widget"], div[id*="packeta-widget"] {
   z-index: 999999 !important;
 }
 
-/* MODAL PRO DETAIL PRODUKTU (PRODUKTOVÝ LIGHTBOX S TEXTEM A LOUPOU) */
+/* MODAL PRO DETAIL PRODUKTU (GALERIE + LUPA) */
 .product-modal-content{
   position:relative;width:100%;max-width:920px;max-height:92vh;
   background:rgba(18,20,24,.97);border:1px solid var(--edge);border-radius:24px;
@@ -322,7 +351,7 @@ textarea.form-control{resize:vertical;min-height:105px}
 }
 
 footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:column;align-items:center;gap:18px}
-.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;align-items:center}
 .footer-links a{color:var(--text);text-decoration:none;font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:1.02rem;transition:color .3s ease}
 .footer-links a:hover{color:#ff9500}
 .footer-withdraw-btn{color:#ff4757 !important;cursor:pointer}
@@ -330,7 +359,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .company-info{font-size:.82rem;color:rgba(154,155,162,.7);line-height:1.5;max-width:700px}
 .copyright{font-size:.82rem;color:rgba(154,155,162,.4)}
 
-/* Lightbox pro fotky (Portfolio) */
+/* Lightbox pro portfolio fotky */
 #lb{border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:transparent;position:fixed;inset:0;overflow:hidden}
 #lb[open]{display:flex;align-items:center;justify-content:center}
 #lb::backdrop{background:rgba(0,0,0,.88)}
@@ -361,6 +390,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 </head>
 <body oncontextmenu="return false;">
 <div class="bg-photo-layer"></div>
+
 <nav class="glass">
   <a href="#" id="home-btn" class="brand" aria-label="Úvodní stránka Tony Brenx">Tony Brenx</a>
   <button class="menu-toggle" id="menu-toggle" aria-label="Otevřít menu">
@@ -372,8 +402,23 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#shop" class="nav-shop">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
-    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="external-link hover-ig">Instagram</a>
-    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="external-link hover-zon">Zonerama</a>
+    
+    <!-- Instagram SVG ikona -->
+    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" title="Instagram @antonin_l_foto" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+
+    <!-- Zonerama SVG ikona -->
+    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" title="Zonerama Portfolio" aria-label="Zonerama">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+    </a>
   </div>
 </nav>
 
@@ -417,7 +462,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <!-- MERCH E-SHOP SEKCE -->
   <section id="shop">
     <h2>Merch & Tisk</h2>
-    <p class="lead">Limitovaná série streetwearu a fine-art tisků. Kliknutím na jakýkoliv produkt otevřeš jeho detail, galerii a lupu.</p>
+    <p class="lead">Limitovaná série streetwearu a fine-art tisků doručovaných přes <strong>Zásilkovnu (Z-BOX)</strong>. Kliknutím na produkt otevřeš kompletní detail s galerií a lupou.</p>
 
     <div class="shop-filters">
       <button class="shop-filter-btn active" data-filter="all">Všechny produkty (8)</button>
@@ -427,7 +472,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     </div>
 
     <div class="shop-grid" id="shop-grid-container">
-      <!-- Produkty se vykreslují skriptem níže pro kompletní interaktivitu -->
+      <!-- Produkty se vykreslují skriptem -->
     </div>
   </section>
 
@@ -525,8 +570,23 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#" onclick="openLegalModal('terms'); return false;">Obchodní podmínky</a>
     <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
     <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn">Odstoupení od smlouvy</a>
-    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="hover-ig">Instagram</a>
-    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="hover-zon">Zonerama</a>
+    
+    <!-- Instagram SVG ikona -->
+    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" title="Instagram @antonin_l_foto" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+      </svg>
+    </a>
+
+    <!-- Zonerama SVG ikona -->
+    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" title="Zonerama Portfolio" aria-label="Zonerama">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+        <circle cx="12" cy="13" r="4"></circle>
+      </svg>
+    </a>
   </div>
   <div class="company-info">
     <strong>Provozovatel:</strong> Antonín Lamač, Palackého 364, Svatava 357 03 | <strong>IČO:</strong> 87481235<br>
@@ -615,7 +675,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
           <label>Způsob platby</label>
           <div style="background: rgba(10,10,11,.6); border: 1px solid var(--edge); padding: 12px 14px; border-radius: 10px;">
             <div style="color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
-              <span style="color:#ff9500;">✓</span> Bankovní převod (číslo účtu a VS obdržíte v e-mailu)
+              <span style="color:#ff9500;">✓</span> Bankovní převod (instrukce s číslem účtu a VS dorazí do e-mailu)
             </div>
             <div style="color: #ff5e57; font-size: 0.78rem; margin-top: 4px; line-height: 1.35;">
               Bez připsání platby do 48 hodin se objednávka automaticky ruší.
@@ -664,14 +724,14 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   </div>
 </div>
 
-<!-- NOVÝ MODÁL PRO DETAILNÍ NÁHLED PRODUKTU S GALERIÍ A LOUPOU -->
+<!-- MODÁL PRO DETAILNÍ NÁHLED PRODUKTU S GALERIÍ A LOUPOU -->
 <div class="custom-modal-overlay" id="product-detail-modal">
   <div class="product-modal-content">
     <button class="close-cart" onclick="closeProductModal()" style="position:absolute;top:18px;right:18px;z-index:20;" aria-label="Zavřít">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     
-    <!-- Levý sloupec: Galerie produktu s lupou -->
+    <!-- Levý sloupec: Galerie s lupou -->
     <div class="pm-gallery-col">
       <div class="pm-main-img-box" id="pm-zoom-container">
         <button class="pm-zoom-btn" id="pm-toggle-zoom" title="Zvětšit / Zmenšit detail">
@@ -689,7 +749,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       <div class="pm-thumbs-row" id="pm-thumbs-container"></div>
     </div>
 
-    <!-- Pravý sloupec: Popis, volby a tlačítko koupit -->
+    <!-- Pravý sloupec: Informace, varianty a tlačítko koupit -->
     <div class="pm-info-col">
       <span class="pm-badge" id="pm-badge"></span>
       <h3 class="pm-title" id="pm-title"></h3>
@@ -801,7 +861,7 @@ hidePhotosBtn.addEventListener('click', () => {
   document.getElementById('tvorba').scrollIntoView({behavior:'smooth'});
 });
 
-// Ceník tap
+// Ceník tap efekt
 const priceCards = document.querySelectorAll('.price-card');
 priceCards.forEach(card => {
   card.addEventListener('pointerdown', () => {
@@ -814,7 +874,7 @@ document.addEventListener('pointerdown', (e) => {
 });
 
 // ==========================================
-// DATA PRODUKTŮ (Včetně více fotek pro každé zboží)
+// DATA PRODUKTŮ (Včetně fotografií variant)
 // ==========================================
 const productsData = [
   {
@@ -823,7 +883,7 @@ const productsData = [
     badge: 'Heavy 240g',
     title: 'Tee „REVÍR“ Black',
     price: 890,
-    desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nosení.',
+    desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.',
     images: ['img-web/foto-1.webp', 'img-web/foto-2.webp', 'img-web/foto-3.webp'],
     variants: [
       { name: 'S', price: 890 },
@@ -928,7 +988,7 @@ const productsData = [
   }
 ];
 
-// Vykreslení produktových karet v katalogu
+// Vykreslení karet v katalogu
 const shopGrid = document.getElementById('shop-grid-container');
 function renderShopGrid() {
   shopGrid.innerHTML = '';
@@ -937,7 +997,6 @@ function renderShopGrid() {
     card.className = 'product-card';
     card.dataset.category = prod.category;
     card.onclick = (e) => {
-      // Pokud nebylo kliknuto přímo na rychlý select nebo tlačítko rychlého nákupu, otevři detail
       if (!e.target.closest('button') && !e.target.closest('select')) {
         openProductModal(prod.id);
       }
@@ -945,7 +1004,7 @@ function renderShopGrid() {
 
     let selectHtml = '';
     if (prod.variants.length > 1) {
-      selectHtml = `<select class="product-select" id="quick-opt-${prod.id}" onclick="e.stopPropagation()">
+      selectHtml = `<select class="product-select" id="quick-opt-${prod.id}" onclick="event.stopPropagation()">
         ${prod.variants.map((v, i) => `<option value="${v.name}" ${i===1?'selected':''}>${v.name}</option>`).join('')}
       </select>`;
     }
@@ -1013,7 +1072,6 @@ function openProductModal(productId) {
   pmPrice.textContent = currentProduct.price + ' Kč';
   pmDesc.textContent = currentProduct.desc;
 
-  // Vyplnění variant
   pmVariantSelect.innerHTML = currentProduct.variants.map(v => `<option value="${v.name}" data-price="${v.price}">${v.name} (${v.price} Kč)</option>`).join('');
   pmVariantSelect.onchange = () => {
     const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
@@ -1026,8 +1084,6 @@ function openProductModal(productId) {
 
 function updateProductImageDisplay() {
   pmActiveImg.src = currentProduct.images[currentProdImgIndex];
-  
-  // Vykreslení miniatur
   pmThumbsBox.innerHTML = '';
   currentProduct.images.forEach((imgUrl, idx) => {
     const thumb = document.createElement('div');
@@ -1065,7 +1121,7 @@ prodModal.addEventListener('click', e => {
   if (e.target === prodModal) closeProductModal();
 });
 
-// LUPA / ZOOM LOGIKA
+// Zoom / Lupa logika
 let isZoomed = false;
 function toggleZoom() {
   isZoomed = !isZoomed;
@@ -1090,7 +1146,6 @@ pmZoomBox.addEventListener('click', (e) => {
   toggleZoom();
 });
 
-// Pohyb myší po zvětšené fotce (přirozené prozkoumání detailu)
 pmZoomBox.addEventListener('mousemove', (e) => {
   if (!isZoomed) return;
   const rect = pmZoomBox.getBoundingClientRect();
@@ -1099,7 +1154,6 @@ pmZoomBox.addEventListener('mousemove', (e) => {
   pmActiveImg.style.transformOrigin = `${x}% ${y}%`;
 });
 
-// Nákup přímo z produktového modálu
 pmAddToCartBtn.onclick = () => {
   const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
   const variantName = selectedOpt.value;
