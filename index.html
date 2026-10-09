@@ -64,8 +64,9 @@ nav a{color:var(--muted);text-decoration:none;font-size:.9rem;padding:8px 14px;b
 nav a:hover,nav a.on{color:var(--text);background:rgba(255,255,255,.1)}
 nav a.nav-shop{color:#ff9500;font-weight:700}
 
-/* Sociální ikony / Favicony */
+/* Sociální ikony s tooltipem (bublinou s názvem) */
 .icon-social {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -78,6 +79,34 @@ nav a.nav-shop{color:#ff9500;font-weight:700}
   width: 19px;
   height: 19px;
   display: block;
+}
+.icon-social::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: -32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(18, 20, 24, 0.95);
+  color: var(--text);
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--edge);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 300;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+.icon-social:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 .icon-social.hover-ig:hover {
   color: #E1306C !important;
@@ -403,8 +432,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
     
-    <!-- Instagram SVG ikona -->
-    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" title="Instagram @antonin_l_foto" aria-label="Instagram">
+    <!-- Instagram ikona s tooltipem -->
+    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -412,11 +441,11 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </svg>
     </a>
 
-    <!-- Zonerama SVG ikona -->
-    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" title="Zonerama Portfolio" aria-label="Zonerama">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-        <circle cx="12" cy="13" r="4"></circle>
+    <!-- Oficiální Zonerama ikona s tooltipem -->
+    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" aria-label="Zonerama">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M2 2h10v10H2V2zm10 0h10v10H12V2zM2 12h10v10H2V12z" fill="#00b4ed"></path>
+        <path d="M12 2h10v10H12V2z" fill="#2b9cd8" opacity="0.8"></path>
       </svg>
     </a>
   </div>
@@ -503,7 +532,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     </div>
   </section>
 
-  <!-- POPTÁVKOVÝ FORMULÁŘ NA SLUŽBY (SKRIPT 1) -->
+  <!-- POPTÁVKOVÝ FORMULÁŘ NA SLUŽBY -->
   <section id="kontakt">
     <h2>Poptávka služeb</h2>
     <p class="lead">Máš zájem o focení, video nebo dlouhodobou spolupráci? Napiš mi a probereme termín i realizaci.</p>
@@ -571,8 +600,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
     <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn">Odstoupení od smlouvy</a>
     
-    <!-- Instagram SVG ikona -->
-    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" title="Instagram @antonin_l_foto" aria-label="Instagram">
+    <!-- Instagram ikona s tooltipem v patičce -->
+    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
         <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -580,11 +609,11 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </svg>
     </a>
 
-    <!-- Zonerama SVG ikona -->
-    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" title="Zonerama Portfolio" aria-label="Zonerama">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-        <circle cx="12" cy="13" r="4"></circle>
+    <!-- Zonerama ikona s tooltipem v patičce -->
+    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" aria-label="Zonerama">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M2 2h10v10H2V2zm10 0h10v10H12V2zM2 12h10v10H2V12z" fill="#00b4ed"></path>
+        <path d="M12 2h10v10H12V2z" fill="#2b9cd8" opacity="0.8"></path>
       </svg>
     </a>
   </div>
@@ -601,7 +630,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <span class="cart-badge" id="cart-count">0</span>
 </button>
 
-<!-- VLASTNÍ OVERLAY PRO KOŠÍK & OBJEDNÁVKU (SKRIPT 2) -->
+<!-- VLASTNÍ OVERLAY PRO KOŠÍK & OBJEDNÁVKU -->
 <div class="custom-modal-overlay" id="cart-modal">
   <div class="cart-content">
     <div class="cart-header">
@@ -670,7 +699,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
           </div>
         </div>
 
-        <!-- FIXNÍ ZPŮSOB PLATBY S UPOZORNĚNÍM -->
+        <!-- FIXNÍ ZPŮSOB PLATBY -->
         <div class="form-group">
           <label>Způsob platby</label>
           <div style="background: rgba(10,10,11,.6); border: 1px solid var(--edge); padding: 12px 14px; border-radius: 10px;">
