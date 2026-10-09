@@ -12,7 +12,7 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Oficiální skript Zásilkovny -->
+<!-- Oficiální knihovna Zásilkovny -->
 <script src="https://widget.packeta.com/www/js/library.js"></script>
 
 <style>
@@ -67,7 +67,7 @@ nav a.external-link{color:#d1d1d3}
 nav a.hover-ig:hover,.footer-links a.hover-ig:hover{color:#fff!important;text-shadow:0 0 12px #E1306C}
 nav a.hover-zon:hover,.footer-links a.hover-zon:hover{color:#fff!important;text-shadow:0 0 12px #00a2e2}
 .menu-toggle{display:none;background:transparent;border:0;color:var(--text);cursor:pointer;padding:8px;border-radius:50%;align-items:center;justify-content:center;transition:all .3s ease}
-.menu-toggle svg{width:24px;height:24px;display:block}
+.menu-toggle svg{width:24px;height:24px}
 .menu-toggle:hover{color:#ff9500}
 
 @media(max-width:860px){
@@ -310,8 +310,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <a href="#shop" class="nav-shop">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
-    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="external-link hover-ig">Instagram</a>
-    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="external-link hover-zon">Zonerama</a>
+    <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="hover-ig">Instagram</a>
+    <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="hover-zon">Zonerama</a>
   </div>
 </nav>
 
@@ -567,14 +567,14 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     </div>
   </section>
 
-  <!-- POUZE POPTÁVKOVÝ FORMULÁŘ NA SLUŽBY -->
+  <!-- POPTÁVKOVÝ FORMULÁŘ NA SLUŽBY (SKRIPT 1) -->
   <section id="kontakt">
     <h2>Poptávka služeb</h2>
     <p class="lead">Máš zájem o focení, video nebo dlouhodobou spolupráci? Napiš mi a probereme termín i realizaci.</p>
     <p style="color:var(--muted);font-size:.95rem;margin-bottom:30px"><strong>Lokace:</strong> Základnu mám v Svatavě a Sokolově (Karlovarský kraj), ale se svou technikou za tebou po domluvě rád přijedu v podstatě kamkoliv.</p>
     
     <div class="contact-container">
-      <form id="contact-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST" class="inquiry-form glass">
+      <form id="contact-form" action="https://script.google.com/macros/s/AKfycbwGoTfB47_dNgs7QjERzE8G_PjuRS1LECeNRTA69a8rxBjvJtGkViICH4ZdGSoke7AscQ/exec" method="POST" class="inquiry-form glass">
         <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
         <input type="hidden" name="form_type" value="Poptávka focení / video">
 
@@ -650,7 +650,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
   <span class="cart-badge" id="cart-count">0</span>
 </button>
 
-<!-- VLASTNÍ OVERLAY PRO KOŠÍK & OBJEDNÁVKU -->
+<!-- VLASTNÍ OVERLAY PRO KOŠÍK & OBJEDNÁVKU (SKRIPT 2) -->
 <div class="custom-modal-overlay" id="cart-modal">
   <div class="cart-content">
     <div class="cart-header">
@@ -678,7 +678,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
     <!-- Část 2: Samostatný Checkout formulář v modálu -->
     <div id="cart-view-checkout" style="display:none;">
-      <form id="order-form" action="https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec" method="POST">
+      <form id="order-form" action="https://script.google.com/macros/s/AKfycbyZhN-nq-wOZnU4D_kKqqQviFWMmsy_kUMgXflZveLXj25asovkH-YaL9V7eWwiCcM9/exec" method="POST">
         <input type="text" name="_gotcha" style="display:none !important" tabindex="-1" autocomplete="off">
         <input type="hidden" name="form_type" value="Objednávka merche">
         <input type="hidden" name="service" value="Objednávka merche / tisk">
@@ -983,7 +983,7 @@ function updateCheckoutTotal() {
 }
 updateCartUI();
 
-// Zásilkovna Widget s oficiálním API klíčem
+// Zásilkovna Widget
 let selectedPacketaPoint = null;
 const packetaApiKey = 'f277c2daae06a692';
 
@@ -1013,7 +1013,7 @@ function openPacketaWidget() {
   }, packetaOptions);
 }
 
-// 1. ODESLÁNÍ OBJEDNÁVKY MERCHE
+// 1. ODESLÁNÍ OBJEDNÁVKY MERCHE (Skript 2)
 const orderForm = document.getElementById('order-form');
 const orderStatus = document.getElementById('order-status');
 const orderSubmitBtn = document.getElementById('order-submit-btn');
@@ -1070,7 +1070,7 @@ orderForm.addEventListener('submit', async (e) => {
   }
 });
 
-// 2. ODESLÁNÍ POPTÁVKY SLUŽEB
+// 2. ODESLÁNÍ POPTÁVKY SLUŽEB (Skript 1)
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 const formSubmitBtn = document.getElementById('form-submit-btn');
@@ -1194,7 +1194,7 @@ document.getElementById('legal-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('legal-modal')) closeLegalModal();
 });
 
-// Odeslání odstoupení od smlouvy do Apps Scriptu
+// Odeslání odstoupení od smlouvy do Apps Scriptu (Skript 2)
 async function handleWithdrawSubmit(e) {
   e.preventDefault();
   const vs = document.getElementById('w-vs').value;
@@ -1217,7 +1217,7 @@ async function handleWithdrawSubmit(e) {
   formData.append('message', `ODSTOUPENÍ OD SMLOUVY:\nČíslo objednávky (VS): ${vs}\nČíslo účtu pro vrácení: ${account}\nZboží / doplňující text: ${msg}`);
 
   try {
-    await fetch("https://script.google.com/macros/s/AKfycbx-5tiE0ClXtluETh71unDTCQRm6FQeBr_fnzSH8eYoih9Gz_JOZh2GIngTt4LhhJnw/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbyZhN-nq-wOZnU4D_kKqqQviFWMmsy_kUMgXflZveLXj25asovkH-YaL9V7eWwiCcM9/exec", {
       method: 'POST',
       body: formData,
       mode: 'no-cors'
