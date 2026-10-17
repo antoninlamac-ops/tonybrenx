@@ -12,8 +12,7 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Oficiální knihovna Zásilkovny -->
-<script src="https://widget.packeta.com/www/js/library.js"></script>
+<!-- Knihovna Zásilkovny se NENAČÍTÁ staticky - viz loadPacketaScriptIfNeeded() na konci souboru -->
 
 <style>
 :root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.75);--edge:rgba(255,255,255,.12)}
@@ -22,7 +21,7 @@ html{scroll-behavior:smooth}
 body{
   color:var(--text);line-height:1.6;min-height:100vh;overflow-x:hidden;
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;background-color:#0a0a0b;-webkit-user-select:none;user-select:none;
+  -webkit-font-smoothing:antialiased;background-color:#0a0a0b;
 }
 
 /* Fixní pozadí s rozmazáním */
@@ -175,6 +174,7 @@ h2{font-size:clamp(2.2rem,5vw,3.4rem);font-weight:700;letter-spacing:.04em;line-
 }
 @keyframes revealPhoto{0%{opacity:0;transform:translateY(25px)}100%{opacity:1;transform:translateY(0)}}
 .gallery img{display:block;width:100%;height:auto;transition:transform .6s ease;filter:brightness(.88);pointer-events:none}
+.gallery img,.product-img-box img,.pm-main-img-box img,.pm-thumb img{-webkit-user-select:none;user-select:none}
 .gallery a:hover img{filter:brightness(1.1);transform:scale(1.08)}
 .gallery-controls{display:flex;justify-content:center;flex-wrap:wrap;gap:16px;margin-top:40px}
 .gallery-controls .btn svg{width:20px;height:20px}
@@ -408,6 +408,10 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 #scroll-top:hover{background:rgba(255,149,0,.25);border-color:#ff9500;color:#fff}
 #scroll-top svg{width:22px;height:22px}
 
+/* E-SHOP VYPNUTÝ STAV: schováno rovnou v CSS, aby nebliklo před načtením JS.
+   JS sekci naopak ZOBRAZÍ, pokud je isShopActive = true (viz script na konci souboru). */
+#shop,#cart-floating-btn,.nav-shop{display:none}
+
 @media(max-width:768px){
   .lb-content{max-width:92vw;padding:8px}
   .nv{width:42px;height:42px}.nv svg{width:20px;height:20px}
@@ -417,7 +421,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 }
 </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 <div class="bg-photo-layer"></div>
 
 <nav class="glass">
@@ -441,7 +445,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
       </svg>
     </a>
 
-    <!-- Oficiální Zonerama ikona s tooltipem -->
+    <!-- Zonerama ikona s tooltipem -->
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" aria-label="Zonerama">
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M2 2h10v10H2V2zm10 0h10v10H12V2zM2 12h10v10H2V12z" fill="#00b4ed"></path>
@@ -460,7 +464,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <h1>Tony<br>Brenx</h1>
     <p>Černobílá fotografie z ulice, portréty, video a autorský merch.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary" href="#shop">Prohlédnout Merch</a>
+      <a class="btn btn-primary nav-shop" href="#shop">Prohlédnout Merch</a>
       <a class="btn" href="#tvorba">Portfolio</a>
     </div>
   </header>
@@ -494,10 +498,10 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
     <p class="lead">Limitovaná série streetwearu a fine-art tisků doručovaných přes <strong>Zásilkovnu (Z-BOX)</strong>. Kliknutím na produkt otevřeš kompletní detail s galerií a lupou.</p>
 
     <div class="shop-filters">
-      <button class="shop-filter-btn active" data-filter="all">Všechny produkty (8)</button>
-      <button class="shop-filter-btn" data-filter="trika">Trika (3)</button>
-      <button class="shop-filter-btn" data-filter="headwear">Headwear (1)</button>
-      <button class="shop-filter-btn" data-filter="postery">Postery & Tisky (4)</button>
+      <button class="shop-filter-btn active" data-filter="all">Všechny produkty</button>
+      <button class="shop-filter-btn" data-filter="trika">Trika</button>
+      <button class="shop-filter-btn" data-filter="headwear">Headwear</button>
+      <button class="shop-filter-btn" data-filter="postery">Postery & Tisky</button>
     </div>
 
     <div class="shop-grid" id="shop-grid-container">
@@ -595,10 +599,10 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
 <footer>
   <div class="footer-links">
-    <a href="#shop" style="color:#ff9500">Merch Shop</a>
+    <a href="#shop" style="color:#ff9500" class="nav-shop">Merch Shop</a>
     <a href="#" onclick="openLegalModal('terms'); return false;">Obchodní podmínky</a>
     <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
-    <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn">Odstoupení od smlouvy</a>
+    <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn nav-shop">Odstoupení od smlouvy</a>
     
     <!-- Instagram ikona s tooltipem v patičce -->
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
@@ -769,7 +773,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
         <button class="pm-nav-arrow prev" onclick="prevProductImage(event)" aria-label="Předchozí foto">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
         </button>
-        <img id="pm-active-image" src="" alt="Detail produktu">
+        <img id="pm-active-image" src="" alt="Detail produktu" draggable="false" oncontextmenu="return false;">
         <button class="pm-nav-arrow next" onclick="nextProductImage(event)" aria-label="Další foto">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
         </button>
@@ -829,6 +833,60 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 </button>
 
 <script>
+// HLAVNÍ PŘEPÍNAČ E-SHOPU (true = zapnuto, false = vypnuto)
+// Shop sekce, plovoucí košík a .nav-shop odkazy jsou defaultně schované v CSS
+// (viz "E-SHOP VYPNUTÝ STAV" v <style>), takže při vypnutém shopu nic nebliká
+// ani před načtením JS. Tady se jen případně ZAPNOU, pokud isShopActive = true.
+const isShopActive = false;
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (isShopActive) {
+    const shopSec = document.getElementById('shop');
+    if (shopSec) shopSec.style.display = '';
+    const cartBtn = document.getElementById('cart-floating-btn');
+    if (cartBtn) cartBtn.style.display = 'flex';
+    document.querySelectorAll('.nav-shop').forEach(el => {
+      el.style.display = el.tagName === 'A' ? 'inline-flex' : '';
+    });
+    // Knihovna Zásilkovny se stahuje až teď, jen když je eshop skutečně aktivní.
+    loadPacketaScriptIfNeeded();
+  }
+});
+
+// Lazy-load skriptu Zásilkovny - nestahuje se zbytečně, dokud eshop neběží.
+function loadPacketaScriptIfNeeded() {
+  if (window.Packeta || document.getElementById('packeta-widget-lib')) return;
+  const s = document.createElement('script');
+  s.id = 'packeta-widget-lib';
+  s.src = 'https://widget.packeta.com/www/js/library.js';
+  document.head.appendChild(s);
+}
+
+// ==========================================
+// POMOCNÉ FUNKCE PRO ODESÍLÁNÍ FORMULÁŘŮ (poptávka, objednávka, odstoupení)
+// ==========================================
+const pageLoadTime = Date.now();
+const MIN_HUMAN_FILL_TIME = 3000; // ms
+
+// Jednoduchá časová past na jednoduché boty: lidská ruka formulář za míň než
+// 3s nevyplní. Pokud je formulář odeslán rychleji, předstíráme úspěch,
+// ale reálně nic neposíláme - šetří to kvótu Apps Scriptu a bot nepozná,
+// že byl odhalen (nezkusí to tedy obejít jinak).
+function looksLikeBot() {
+  return (Date.now() - pageLoadTime) < MIN_HUMAN_FILL_TIME;
+}
+
+// fetch() s timeoutem - mode:'no-cors' nedovolí přečíst odpověď Apps Scriptu
+// (je to tzv. opaque response), takže klient nikdy nepozná chybu NA STRANĚ
+// skriptu (pád, kvóta). Dá se aspoň odchytit, když spojení úplně zamrzne
+// nebo je uživatel offline, a nenechat ho čekat donekonečna.
+function postWithTimeout(url, formData, timeoutMs = 15000) {
+  return Promise.race([
+    fetch(url, { method: 'POST', body: formData, mode: 'no-cors' }),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeoutMs))
+  ]);
+}
+
 // Navigace
 const homeBtn = document.getElementById('home-btn');
 const menuToggle = document.getElementById('menu-toggle');
@@ -852,8 +910,14 @@ const initialBatch = isMobile ? 10 : 30;
 const stepBatch = isMobile ? 10 : 30;
 let currentLoadedCount = 0;
 
-let photoIds = Array.from({length: totalPhotos}, (_, i) => i + 1);
-photoIds.sort(() => Math.random() - 0.5);
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+let photoIds = shuffleArray(Array.from({length: totalPhotos}, (_, i) => i + 1));
 
 function updateButtons() {
   loadMoreBtn.style.display = currentLoadedCount >= totalPhotos ? 'none' : 'inline-flex';
@@ -871,6 +935,8 @@ function renderBatch(count) {
     im.src = `img-web/foto-${id}.webp`;
     im.alt = `Tony Brenx foto ${id}`;
     im.loading = 'lazy';
+    im.draggable = false;
+    im.oncontextmenu = () => false;
     a.appendChild(im);
     g.appendChild(a);
   });
@@ -903,8 +969,13 @@ document.addEventListener('pointerdown', (e) => {
 });
 
 // ==========================================
-// DATA PRODUKTŮ (Včetně fotografií variant)
+// E-SHOP: DATA, RENDER A KOŠÍK
+// Celý tento blok se inicializuje jen pokud je isShopActive = true,
+// aby se zbytečně nevykonával kód a nevolal localStorage pro vypnutý shop.
 // ==========================================
+if (isShopActive) {
+
+// DATA PRODUKTŮ (Včetně fotografií variant)
 const productsData = [
   {
     id: 't1',
@@ -1041,7 +1112,7 @@ function renderShopGrid() {
     card.innerHTML = `
       <div class="product-img-box">
         <span class="product-badge">${prod.badge}</span>
-        <img src="${prod.images[0]}" alt="${prod.title}" loading="lazy">
+        <img src="${prod.images[0]}" alt="${prod.title}" loading="lazy" draggable="false" oncontextmenu="return false;">
       </div>
       <div class="product-info">
         <h3 class="product-title">${prod.title}</h3>
@@ -1059,6 +1130,18 @@ function renderShopGrid() {
   });
 }
 renderShopGrid();
+
+// Dopočítá počty produktů do filtrů přímo z productsData (nemůže se rozejít se skutečností)
+function updateFilterCounts() {
+  const counts = { all: productsData.length };
+  productsData.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+  document.querySelectorAll('.shop-filter-btn').forEach(btn => {
+    const f = btn.dataset.filter;
+    const label = btn.textContent.replace(/\s*\(\d+\)\s*$/, '').trim();
+    btn.textContent = `${label} (${counts[f] || 0})`;
+  });
+}
+updateFilterCounts();
 
 // Filtrování produktů
 const filterBtns = document.querySelectorAll('.shop-filter-btn');
@@ -1117,7 +1200,7 @@ function updateProductImageDisplay() {
   currentProduct.images.forEach((imgUrl, idx) => {
     const thumb = document.createElement('div');
     thumb.className = `pm-thumb ${idx === currentProdImgIndex ? 'active' : ''}`;
-    thumb.innerHTML = `<img src="${imgUrl}" alt="thumb">`;
+    thumb.innerHTML = `<img src="${imgUrl}" alt="thumb" draggable="false" oncontextmenu="return false;">`;
     thumb.onclick = () => {
       currentProdImgIndex = idx;
       resetZoom();
@@ -1336,7 +1419,7 @@ function openPacketaWidget() {
   }, packetaOptions);
 }
 
-// 1. ODESLÁNÍ OBJEDNÁVKY MERCHE (Skript 2)
+// ODESLÁNÍ OBJEDNÁVKY MERCHE
 const orderForm = document.getElementById('order-form');
 const orderStatus = document.getElementById('order-status');
 const orderSubmitBtn = document.getElementById('order-submit-btn');
@@ -1375,9 +1458,26 @@ orderForm.addEventListener('submit', async (e) => {
   orderStatus.style.display = 'none';
 
   const data = new FormData(orderForm);
+
+  if (looksLikeBot()) {
+    setTimeout(() => {
+      orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Platební instrukce s číslem účtu a variabilním symbolem ti dorazí do e-mailu.';
+      orderStatus.className = 'form-status success';
+      cart = [];
+      selectedPacketaPoint = null;
+      document.getElementById('modal-packeta-display').style.display = 'none';
+      orderForm.reset();
+      updateCartUI();
+      orderSubmitBtn.disabled = false;
+      orderSubmitBtn.textContent = 'Dokončit a odeslat';
+      setTimeout(() => { closeCartModal(); backToCartItems(); }, 3500);
+    }, 600);
+    return;
+  }
+
   try {
-    await fetch(orderForm.action, { method: 'POST', body: data, mode: 'no-cors' });
-    orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Platební instrukce s číslem účtu a variabilním symbolem ti dorazí do e-mailu.';
+    await postWithTimeout(orderForm.action, data);
+    orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Platební instrukce s číslem účtu a variabilním symbolem ti dorazí do e-mailu. Pokud instrukce nedorazí do 24 hodin, napiš prosím na antonin.lamac@gmail.com.';
     orderStatus.className = 'form-status success';
     cart = [];
     selectedPacketaPoint = null;
@@ -1386,7 +1486,7 @@ orderForm.addEventListener('submit', async (e) => {
     updateCartUI();
     setTimeout(() => { closeCartModal(); backToCartItems(); }, 3500);
   } catch (err) {
-    orderStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu.';
+    orderStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu, nebo napiš přímo na antonin.lamac@gmail.com.';
     orderStatus.className = 'form-status error';
   } finally {
     orderSubmitBtn.disabled = false;
@@ -1394,7 +1494,9 @@ orderForm.addEventListener('submit', async (e) => {
   }
 });
 
-// 2. ODESLÁNÍ POPTÁVKY SLUŽEB (Skript 1)
+} // konec bloku if (isShopActive) { ... }
+
+// ODESLÁNÍ POPTÁVKY SLUŽEB (vždy aktivní, nezávisí na eshopu)
 const contactForm = document.getElementById('contact-form');
 const formStatus = document.getElementById('form-status');
 const formSubmitBtn = document.getElementById('form-submit-btn');
@@ -1407,13 +1509,25 @@ contactForm.addEventListener('submit', async (e) => {
   formStatus.style.display = 'none';
 
   const data = new FormData(contactForm);
+
+  if (looksLikeBot()) {
+    setTimeout(() => {
+      formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu.';
+      formStatus.className = 'form-status success';
+      contactForm.reset();
+      formSubmitBtn.disabled = false;
+      formSubmitBtn.textContent = 'Odeslat poptávku';
+    }, 600);
+    return;
+  }
+
   try {
-    await fetch(contactForm.action, { method: 'POST', body: data, mode: 'no-cors' });
-    formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu.';
+    await postWithTimeout(contactForm.action, data);
+    formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu. Pokud se do 2 pracovních dnů neozvu, napiš mi prosím přímo na antonin.lamac@gmail.com - mohlo dojít k technické chybě.';
     formStatus.className = 'form-status success';
     contactForm.reset();
   } catch (err) {
-    formStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu.';
+    formStatus.textContent = 'Došlo k chybě připojení. Zkus to prosím znovu, nebo napiš přímo na antonin.lamac@gmail.com.';
     formStatus.className = 'form-status error';
   } finally {
     formSubmitBtn.disabled = false;
@@ -1518,7 +1632,7 @@ document.getElementById('legal-modal').addEventListener('click', e => {
   if (e.target === document.getElementById('legal-modal')) closeLegalModal();
 });
 
-// 3. ODESLÁNÍ ODSTOUPENÍ OD SMLOUVY (Skript 3)
+// ODESLÁNÍ ODSTOUPENÍ OD SMLOUVY
 async function handleWithdrawSubmit(e) {
   e.preventDefault();
   const vs = document.getElementById('w-vs').value;
@@ -1541,12 +1655,11 @@ async function handleWithdrawSubmit(e) {
   formData.append('message', `ODSTOUPENÍ OD SMLOUVY:\nČíslo objednávky (VS): ${vs}\nČíslo účtu pro vrácení: ${account}\nZboží / doplňující text: ${msg}`);
 
   try {
-    await fetch("https://script.google.com/macros/s/AKfycbyZhN-nq-wOZnU4D_kKqqQviFWMmsy_kUMgXflZveLXj25asovkH-YaL9V7eWwiCcM9/exec", {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors'
-    });
-    status.textContent = 'Oznámení o odstoupení bylo úspěšně odesláno. Brzy tě budu kontaktovat.';
+    await postWithTimeout(
+      "https://script.google.com/macros/s/AKfycbyZhN-nq-wOZnU4D_kKqqQviFWMmsy_kUMgXflZveLXj25asovkH-YaL9V7eWwiCcM9/exec",
+      formData
+    );
+    status.textContent = 'Oznámení o odstoupení bylo úspěšně odesláno. Brzy tě budu kontaktovat. Pokud se do 2 pracovních dnů neozvu, napiš prosím přímo na antonin.lamac@gmail.com.';
     status.className = 'form-status success';
     setTimeout(() => closeLegalModal(), 3500);
   } catch (err) {
@@ -1587,17 +1700,21 @@ closeBtn.onclick = e => { e.stopPropagation(); lb.close(); };
 lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
 lb.addEventListener('keydown', e => {
   if(e.key === 'ArrowLeft') {
-    if (prodModal.classList.contains('open')) prevProductImage();
+    if (isShopActive && prodModalIsOpen()) prevProductImage();
     else show(cur-1);
   }
   if(e.key === 'ArrowRight') {
-    if (prodModal.classList.contains('open')) nextProductImage();
+    if (isShopActive && prodModalIsOpen()) nextProductImage();
     else show(cur+1);
   }
   if(e.key === 'Escape') {
-    if (prodModal.classList.contains('open')) closeProductModal();
+    if (isShopActive && prodModalIsOpen()) closeProductModal();
   }
 });
+function prodModalIsOpen() {
+  const m = document.getElementById('product-detail-modal');
+  return m && m.classList.contains('open');
+}
 
 const io = new IntersectionObserver(es => es.forEach(e => {
   if (e.isIntersecting) document.querySelectorAll('nav .nav-links a:not(.external-link)').forEach(a => a.classList.toggle('on', a.hash === '#' + e.target.id));
