@@ -290,7 +290,7 @@ iframe[name="packeta-widget"], div[id*="packeta-widget"] {
   padding:26px;display:grid;grid-template-columns:1.05fr 1fr;gap:28px;
   box-shadow:0 30px 70px rgba(0,0,0,.9);overflow-y:auto;
 }
-.pm-gallery-col{display:flex;flex-direction:column;gap:12px}
+.pm-gallery-col{display:flex;flex-direction:column;gap:12px;-webkit-user-select:none;user-select:none}
 .pm-main-img-box{
   position:relative;width:100%;aspect-ratio:1/1;border-radius:14px;
   overflow:hidden;background:#0d0e12;border:1px solid var(--edge);cursor:zoom-in;
@@ -389,7 +389,7 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .copyright{font-size:.82rem;color:rgba(154,155,162,.4)}
 
 /* Lightbox pro portfolio fotky */
-#lb{border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:transparent;position:fixed;inset:0;overflow:hidden}
+#lb{border:0;padding:0;margin:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:transparent;position:fixed;inset:0;overflow:hidden;-webkit-user-select:none;user-select:none}
 #lb[open]{display:flex;align-items:center;justify-content:center}
 #lb::backdrop{background:rgba(0,0,0,.88)}
 .lb-content{position:relative;padding:14px;border-radius:1.5rem;background:rgba(18,20,24,.85);border:1px solid rgba(255,255,255,.15);max-width:85vw;max-height:85vh;display:flex;align-items:center;justify-content:center}
