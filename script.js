@@ -39,9 +39,13 @@ function postWithTimeout(url, formData, timeoutMs = 15000) {
 const homeBtn = document.getElementById('home-btn');
 const menuToggle = document.getElementById('menu-toggle');
 const navLinks = document.getElementById('nav-links');
-menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
-navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
-homeBtn.addEventListener('click', e => { e.preventDefault(); navLinks.classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'}); });
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('open')));
+}
+if (homeBtn && navLinks) {
+  homeBtn.addEventListener('click', e => { e.preventDefault(); navLinks.classList.remove('open'); window.scrollTo({top:0,behavior:'smooth'}); });
+}
 
 const g = document.getElementById('gallery');
 const lb = document.getElementById('lb');
@@ -51,11 +55,15 @@ const loadMoreBtn = document.getElementById('load-more');
 const hidePhotosBtn = document.getElementById('hide-photos');
 const scrollTopBtn = document.getElementById('scroll-top');
 
-const totalPhotos = 59;
-const isMobile = window.innerWidth <= 768;
-const initialBatch = isMobile ? 10 : 30;
-const stepBatch = isMobile ? 10 : 30;
-let currentLoadedCount = 0;
+
+let photoIds = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+  21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+  31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+  41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+  51, 52, 53, 54, 55, 58
+];
 
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -64,14 +72,21 @@ function shuffleArray(arr) {
   }
   return arr;
 }
-let photoIds = shuffleArray(Array.from({length: totalPhotos}, (_, i) => i + 1));
+photoIds = shuffleArray(photoIds);
+
+const totalPhotos = photoIds.length;
+const isMobile = window.innerWidth <= 768;
+const initialBatch = isMobile ? 10 : 30;
+const stepBatch = isMobile ? 10 : 30;
+let currentLoadedCount = 0;
 
 function updateButtons() {
-  loadMoreBtn.style.display = currentLoadedCount >= totalPhotos ? 'none' : 'inline-flex';
-  hidePhotosBtn.style.display = currentLoadedCount > initialBatch ? 'inline-flex' : 'none';
+  if (loadMoreBtn) loadMoreBtn.style.display = currentLoadedCount >= totalPhotos ? 'none' : 'inline-flex';
+  if (hidePhotosBtn) hidePhotosBtn.style.display = currentLoadedCount > initialBatch ? 'inline-flex' : 'none';
 }
 
 function renderBatch(count) {
+  if (!g) return;
   const next = photoIds.slice(currentLoadedCount, currentLoadedCount + count);
   next.forEach((id, idx) => {
     const a = document.createElement('a');
@@ -92,18 +107,23 @@ function renderBatch(count) {
   currentLoadedCount += next.length;
   updateButtons();
 }
-renderBatch(initialBatch);
-loadMoreBtn.addEventListener('click', () => renderBatch(stepBatch));
 
-hidePhotosBtn.addEventListener('click', () => {
-  const children = Array.from(g.children);
-  for (let i = initialBatch; i < children.length; i++) {
-    g.removeChild(children[i]);
+if (g) {
+  renderBatch(initialBatch);
+  if (loadMoreBtn) loadMoreBtn.addEventListener('click', () => renderBatch(stepBatch));
+  if (hidePhotosBtn) {
+    hidePhotosBtn.addEventListener('click', () => {
+      const children = Array.from(g.children);
+      for (let i = initialBatch; i < children.length; i++) {
+        g.removeChild(children[i]);
+      }
+      currentLoadedCount = initialBatch;
+      updateButtons();
+      const tvorbaSec = document.getElementById('tvorba');
+      if (tvorbaSec) tvorbaSec.scrollIntoView({behavior:'smooth'});
+    });
   }
-  currentLoadedCount = initialBatch;
-  updateButtons();
-  document.getElementById('tvorba').scrollIntoView({behavior:'smooth'});
-});
+}
 
 const priceCards = document.querySelectorAll('.price-card');
 priceCards.forEach(card => {
@@ -169,46 +189,48 @@ if (isShopActive) {
   ];
 
   const shopGrid = document.getElementById('shop-grid-container');
-  function renderShopGrid() {
-    shopGrid.innerHTML = '';
-    productsData.forEach(prod => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.dataset.category = prod.category;
-      card.onclick = (e) => {
-        if (!e.target.closest('button') && !e.target.closest('select')) {
-          openProductModal(prod.id);
+  if (shopGrid) {
+    function renderShopGrid() {
+      shopGrid.innerHTML = '';
+      productsData.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.dataset.category = prod.category;
+        card.onclick = (e) => {
+          if (!e.target.closest('button') && !e.target.closest('select')) {
+            openProductModal(prod.id);
+          }
+        };
+
+        let selectHtml = '';
+        if (prod.variants.length > 1) {
+          selectHtml = `<select class="product-select" id="quick-opt-${prod.id}" onclick="event.stopPropagation()">
+            ${prod.variants.map((v, i) => `<option value="${v.name}" ${i===1?'selected':''}>${v.name}</option>`).join('')}
+          </select>`;
         }
-      };
 
-      let selectHtml = '';
-      if (prod.variants.length > 1) {
-        selectHtml = `<select class="product-select" id="quick-opt-${prod.id}" onclick="event.stopPropagation()">
-          ${prod.variants.map((v, i) => `<option value="${v.name}" ${i===1?'selected':''}>${v.name}</option>`).join('')}
-        </select>`;
-      }
-
-      card.innerHTML = `
-        <div class="product-img-box">
-          <span class="product-badge">${prod.badge}</span>
-          <img src="${prod.images[0]}" alt="${prod.title}" loading="lazy" draggable="false" oncontextmenu="return false;">
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">${prod.title}</h3>
-          <p class="product-desc">${prod.desc.substring(0, 75)}...</p>
-          <div class="product-meta">
-            <span class="product-price">${prod.price} Kč</span>
-            ${selectHtml}
+        card.innerHTML = `
+          <div class="product-img-box">
+            <span class="product-badge">${prod.badge}</span>
+            <img src="${prod.images[0]}" alt="${prod.title}" loading="lazy" draggable="false" oncontextmenu="return false;">
           </div>
-          <button class="btn-buy" onclick="event.stopPropagation(); handleQuickBuy('${prod.id}')">
-            Do košíku
-          </button>
-        </div>
-      `;
-      shopGrid.appendChild(card);
-    });
+          <div class="product-info">
+            <h3 class="product-title">${prod.title}</h3>
+            <p class="product-desc">${prod.desc.substring(0, 75)}...</p>
+            <div class="product-meta">
+              <span class="product-price">${prod.price} Kč</span>
+              ${selectHtml}
+            </div>
+            <button class="btn-buy" onclick="event.stopPropagation(); handleQuickBuy('${prod.id}')">
+              Do košíku
+            </button>
+          </div>
+        `;
+        shopGrid.appendChild(card);
+      });
+    }
+    renderShopGrid();
   }
-  renderShopGrid();
 
   function updateFilterCounts() {
     const counts = { all: productsData.length };
@@ -255,35 +277,40 @@ function openProductModal(productId) {
   currentProdImgIndex = 0;
   resetZoom();
 
-  pmBadge.textContent = currentProduct.badge;
-  pmTitle.textContent = currentProduct.title;
-  pmPrice.textContent = currentProduct.price + ' Kč';
-  pmDesc.textContent = currentProduct.desc;
+  if (pmBadge) pmBadge.textContent = currentProduct.badge;
+  if (pmTitle) pmTitle.textContent = currentProduct.title;
+  if (pmPrice) pmPrice.textContent = currentProduct.price + ' Kč';
+  if (pmDesc) pmDesc.textContent = currentProduct.desc;
 
-  pmVariantSelect.innerHTML = currentProduct.variants.map(v => `<option value="${v.name}" data-price="${v.price}">${v.name} (${v.price} Kč)</option>`).join('');
-  pmVariantSelect.onchange = () => {
-    const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
-    pmPrice.textContent = selectedOpt.dataset.price + ' Kč';
-  };
+  if (pmVariantSelect) {
+    pmVariantSelect.innerHTML = currentProduct.variants.map(v => `<option value="${v.name}" data-price="${v.price}">${v.name} (${v.price} Kč)</option>`).join('');
+    pmVariantSelect.onchange = () => {
+      const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
+      if (pmPrice) pmPrice.textContent = selectedOpt.dataset.price + ' Kč';
+    };
+  }
 
   updateProductImageDisplay();
-  prodModal.classList.add('open');
+  if (prodModal) prodModal.classList.add('open');
 }
 
 function updateProductImageDisplay() {
+  if (!pmActiveImg || !currentProduct) return;
   pmActiveImg.src = currentProduct.images[currentProdImgIndex];
-  pmThumbsBox.innerHTML = '';
-  currentProduct.images.forEach((imgUrl, idx) => {
-    const thumb = document.createElement('div');
-    thumb.className = `pm-thumb ${idx === currentProdImgIndex ? 'active' : ''}`;
-    thumb.innerHTML = `<img src="${imgUrl}" alt="thumb" draggable="false" oncontextmenu="return false;">`;
-    thumb.onclick = () => {
-      currentProdImgIndex = idx;
-      resetZoom();
-      updateProductImageDisplay();
-    };
-    pmThumbsBox.appendChild(thumb);
-  });
+  if (pmThumbsBox) {
+    pmThumbsBox.innerHTML = '';
+    currentProduct.images.forEach((imgUrl, idx) => {
+      const thumb = document.createElement('div');
+      thumb.className = `pm-thumb ${idx === currentProdImgIndex ? 'active' : ''}`;
+      thumb.innerHTML = `<img src="${imgUrl}" alt="thumb" draggable="false" oncontextmenu="return false;">`;
+      thumb.onclick = () => {
+        currentProdImgIndex = idx;
+        resetZoom();
+        updateProductImageDisplay();
+      };
+      pmThumbsBox.appendChild(thumb);
+    });
+  }
 }
 
 function prevProductImage(e) {
@@ -301,7 +328,7 @@ function nextProductImage(e) {
 }
 
 function closeProductModal() {
-  prodModal.classList.remove('open');
+  if (prodModal) prodModal.classList.remove('open');
   resetZoom();
 }
 
@@ -315,7 +342,7 @@ let isZoomed = false;
 function toggleZoom() {
   isZoomed = !isZoomed;
   if (isZoomed) {
-    pmZoomBox.classList.add('zoomed');
+    if (pmZoomBox) pmZoomBox.classList.add('zoomed');
   } else {
     resetZoom();
   }
@@ -339,7 +366,7 @@ if (pmZoomBox) {
     toggleZoom();
   });
   pmZoomBox.addEventListener('mousemove', (e) => {
-    if (!isZoomed) return;
+    if (!isZoomed || !pmActiveImg) return;
     const rect = pmZoomBox.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -347,7 +374,7 @@ if (pmZoomBox) {
   });
 }
 
-if (pmAddToCartBtn) {
+if (pmAddToCartBtn && pmVariantSelect) {
   pmAddToCartBtn.onclick = () => {
     const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
     const variantName = selectedOpt.value;
@@ -359,6 +386,7 @@ if (pmAddToCartBtn) {
 
 function handleQuickBuy(prodId) {
   const prod = productsData.find(p => p.id === prodId);
+  if (!prod) return;
   let variant = prod.variants[0].name;
   let price = prod.variants[0].price;
   const selectElem = document.getElementById(`quick-opt-${prodId}`);
