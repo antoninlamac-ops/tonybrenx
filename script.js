@@ -51,7 +51,7 @@ const loadMoreBtn = document.getElementById('load-more');
 const hidePhotosBtn = document.getElementById('hide-photos');
 const scrollTopBtn = document.getElementById('scroll-top');
 
-const totalPhotos = 55;
+const totalPhotos = 59;
 const isMobile = window.innerWidth <= 768;
 const initialBatch = isMobile ? 10 : 30;
 const stepBatch = isMobile ? 10 : 30;
@@ -76,14 +76,16 @@ function renderBatch(count) {
   next.forEach((id, idx) => {
     const a = document.createElement('a');
     a.href = `img-web/foto-${id}.webp`;
-    a.setAttribute('aria-label', `Fotografie ${id}`);
+    a.setAttribute('aria-label', `Černobílá fotografie ${id}`);
     a.style.animation = `revealPhoto 0.5s ease both ${idx * 0.04}s`;
+    
     const im = document.createElement('img');
     im.src = `img-web/foto-${id}.webp`;
-    im.alt = `Tony Brenx foto ${id}`;
+    im.alt = `Autorská černobílá fotografie z ulice a portrét od Tony Brenx - snímek ${id}`;
     im.loading = 'lazy';
     im.draggable = false;
     im.oncontextmenu = () => false;
+    
     a.appendChild(im);
     g.appendChild(a);
   });
