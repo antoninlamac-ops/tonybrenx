@@ -82,14 +82,9 @@ function renderBatch(count) {
     const im = document.createElement('img');
     im.src = `img-web/foto-${id}.webp`;
     im.alt = `Autorská černobílá fotografie z ulice a portrét od Tony Brenx - snímek ${id}`;
-    im.title = "";
     im.loading = 'lazy';
     im.draggable = false;
     im.oncontextmenu = () => false;
-    im.style.display = 'block';
-    im.style.width = '100%';
-    im.style.height = '100%';
-    im.style.objectFit = 'cover';
     
     a.appendChild(im);
     g.appendChild(a);
