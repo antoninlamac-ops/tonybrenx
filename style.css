@@ -473,7 +473,9 @@ dialog#lb {
   border: none;
   padding: 0;
   z-index: 9999;
-  display: flex;
+  /* display zde záměrně NENÍ nastaven - dialog je defaultně display:none,
+     dokud nemá atribut [open] (viz pravidlo níže). Nastavit display:flex
+     rovnou tady by ho zobrazilo hned po načtení stránky i bez otevření. */
   align-items: center;
   justify-content: center;
 }
