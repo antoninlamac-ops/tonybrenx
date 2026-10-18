@@ -61,7 +61,7 @@
   <div class="nav-links" id="nav-links">
     <a href="#o-mne">O mně</a>
     <a href="#tvorba">Tvorba</a>
-    <a href="#shop" class="nav-shop">Merch / Shop</a>
+    <a href="#shop" class="nav-shop" style="display:none;">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
     
@@ -93,7 +93,7 @@
     <h1>Tony<br>Brenx</h1>
     <p>Černobílá fotografie z ulice, portréty, video a autorský merch.</p>
     <div class="hero-btns">
-      <a class="btn btn-primary nav-shop" href="#shop">Prohlédnout Merch</a>
+      <a class="btn btn-primary nav-shop" href="#shop" style="display:none;">Prohlédnout Merch</a>
       <a class="btn" href="#tvorba">Portfolio</a>
     </div>
   </header>
@@ -121,7 +121,7 @@
     </div>
   </section>
 
-  <!-- MERCH E-SHOP SEKCE -->
+  <!-- MERCH E-SHOP SEKCE (skrytá dle isShopActive) -->
   <section id="shop" style="display:none;">
     <h2>Merch & Tisk</h2>
     <p class="lead">Limitovaná série streetwearu a fine-art tisků doručovaných přes <strong>Zásilkovnu (Z-BOX)</strong>. Kliknutím na produkt otevřeš kompletní detail s galerií a lupou.</p>
@@ -133,9 +133,7 @@
       <button class="shop-filter-btn" data-filter="postery">Postery & Tisky</button>
     </div>
 
-    <div class="shop-grid" id="shop-grid-container">
-      <!-- Produkty se vykreslují skriptem -->
-    </div>
+    <div class="shop-grid" id="shop-grid-container"></div>
   </section>
 
   <section id="cenik">
@@ -228,10 +226,10 @@
 
 <footer>
   <div class="footer-links">
-    <a href="#shop" style="color:#ff9500" class="nav-shop">Merch Shop</a>
+    <a href="#shop" style="color:#ff9500;display:none;" class="nav-shop">Merch Shop</a>
     <a href="#" onclick="openLegalModal('terms'); return false;">Obchodní podmínky</a>
     <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
-    <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn nav-shop">Odstoupení od smlouvy</a>
+    <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn nav-shop" style="display:none;">Odstoupení od smlouvy</a>
     
     <!-- Instagram ikona s tooltipem v patičce -->
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
@@ -336,9 +334,6 @@
             <div style="color: #fff; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
               <span style="color:#ff9500;">✓</span> Bankovní převod (instrukce s číslem účtu a VS dorazí do e-mailu)
             </div>
-            <div style="color: #ff5e57; font-size: 0.78rem; margin-top: 4px; line-height: 1.35;">
-              Bez připsání platby do 48 hodin se objednávka automaticky ruší.
-            </div>
           </div>
           <input type="hidden" name="payment_method" value="Bankovní převod (platnost 48h)">
         </div>
@@ -361,15 +356,6 @@
         <div class="cart-total-row" style="margin:12px 0 6px">
           <span>Celkem k úhradě:</span>
           <span id="order-final-price">0 Kč</span>
-        </div>
-
-        <div style="margin: 12px 0 10px; font-size: 0.8rem; color: var(--muted); line-height: 1.4;">
-          <label style="display: flex; align-items: flex-start; gap: 8px; cursor: pointer;">
-            <input type="checkbox" id="order-terms-check" required style="margin-top: 3px; accent-color: #ff9500; cursor: pointer;">
-            <span>
-              Souhlasím s <a href="#" onclick="openLegalModal('terms'); return false;" style="color:#ff9500; text-decoration: underline;">obchodními podmínkami</a> a beru na vědomí <a href="#" onclick="openLegalModal('privacy'); return false;" style="color:#ff9500; text-decoration: underline;">zpracování osobních údajů</a>.
-            </span>
-          </label>
         </div>
 
         <div style="display:flex;gap:10px;margin-top:10px">
