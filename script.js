@@ -2,6 +2,9 @@
 const isShopActive = false;
 
 document.addEventListener("DOMContentLoaded", () => {
+  // 👀 Telegram notifikace o návštěvě webu
+  sendVisitNotification();
+
   if (isShopActive) {
     const shopSec = document.getElementById('shop');
     if (shopSec) shopSec.style.display = '';
@@ -13,6 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
     loadPacketaScriptIfNeeded();
   }
 });
+
+function sendVisitNotification() {
+  try {
+    const img = new Image();
+    img.src = 'https://script.google.com/macros/s/AKfycbxctDn8h7ZE472yJG_ppNO7Yy6fFOkoUBBvvPVzKR9EOHc_dJR7MAz0N6bf28fBX0fQvA/exec?t=' + Date.now();
+  } catch (e) {
+    // tichá chyba - notifikace nesmí nijak narušit chod webu
+  }
+}
 
 function loadPacketaScriptIfNeeded() {
   if (window.Packeta || document.getElementById('packeta-widget-lib')) return;
