@@ -2,7 +2,7 @@
 const isShopActive = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 👀 Telegram notifikace o návštěvě webu
+  // 👀 Tel
   sendVisitNotification();
 
   if (isShopActive) {
