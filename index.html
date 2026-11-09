@@ -7,7 +7,6 @@
 <meta name="description" content="Profesionální fotograf a kameraman z Karlovarského kraje. Portréty, reportáže z eventů, street fotografie a dynamická videotvorba. Sokolov, Karlovy Vary, Cheb.">
 <meta name="theme-color" content="#0a0a0b">
 
-<!-- Ikony webu pro prohlížeče a Apple -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%230a0a0b'/><circle cx='50' cy='50' r='44' stroke='%23ff9500' stroke-width='4' fill='none'/><text x='50%' y='58%' text-anchor='middle' fill='%23f1f1f2' font-family='Arial, sans-serif' font-weight='900' font-size='38' letter-spacing='-1'>TB</text></svg>">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -17,10 +16,8 @@
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&display=swap"></noscript>
 
-<!-- Napojení odděleného designu -->
 <link rel="stylesheet" href="style.css">
 
-<!-- Strojově čitelná data pro Google (JSON-LD) -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -40,13 +37,11 @@
 }
 </script>
 
-<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FH4P3QX2RQ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-FH4P3QX2RQ');
 </script>
 </head>
@@ -65,7 +60,6 @@
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
     
-    <!-- Instagram ikona s tooltipem -->
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -74,7 +68,6 @@
       </svg>
     </a>
 
-    <!-- Zonerama ikona s tooltipem -->
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" aria-label="Zonerama">
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M2 2h10v10H2V2zm10 0h10v10H12V2zM2 12h10v10H2V12z" fill="#00b4ed"></path>
@@ -88,9 +81,9 @@
   <header class="hero">
     <div class="beep-indicator">
       <span class="beep-dot"></span>
-      <span class="beep-text">Karlovarský kraj & okolí</span>
+      <span class="beep-text">Tony Brenx Online</span>
     </div>
-    <h1>Fotograf & Kameraman</h1>
+    <h1>Tony Brenx<br>kameraman & fotograf</h1>
     <p>Surová černobílá fotografie z ulice, autentické portréty a filmová videotvorba.</p>
     <div class="hero-btns">
       <a class="btn btn-primary" href="#tvorba">Prohlédnout portfolio</a>
@@ -101,13 +94,13 @@
   <section id="o-mne">
     <div class="about glass">
       <h2>O mně</h2>
-      <p>Jmenuji se Antonín Lamač, ale v digitálním a kreativním světě mě najdeš pod pseudonymem <strong>Tony Brenx</strong>. Jsem fotograf a kameraman působící primárně v <strong>Karlovarském kraji (Sokolov, Karlovy Vary, Cheb)</strong>, ale za zajímavým projektem dorazím kamkoliv. Mým revírem je surová černobílá street fotografie, zachycení autentických portrétů a dynamická videotvorba s filmovým color gradingem. Často mě potkáš s Lumixem v ruce v kombinaci se starými manuálními objektivy.</p>
+      <p>Jmenuji se Antonín Lamač, ale v digitálním a kreativním světě mě najdeš pod pseudonymem <strong>Tony Brenx</strong>. Jsem fotograf a kameraman působící primárně v <strong>Karlovarském kraji (Sokolov, Karlovy Vary, Cheb)</strong>, ale za zajímavým projektem dorazím kamkoliv. Mojí srdeční záležitostí je sice surová černobílá street fotografie, ale <strong>nefotím a netočím zdaleka jen černobíle – umím a dělám i plně barevné komerční a kreativní projekty</strong>. Ať už jde o autentické portréty, firemní eventy nebo dynamickou videotvorbu s filmovým color gradingem. Často mě potkáš s Lumixem v ruce v kombinaci se starými manuálními objektivy.</p>
     </div>
   </section>
 
   <section id="tvorba">
     <h2>Tvorba</h2>
-    <p class="lead">Výběr z fotografií. Kliknutím zvětšíš, šipkami nebo klávesami listuješ.</p>
+    <p class="lead">Výběr z fotografií a videí (barevné i černobílé portfolio). Kliknutím zvětšíš, šipkami nebo klávesami listuješ.</p>
     <div class="gallery" id="gallery"></div>
     <div class="gallery-controls">
       <button id="load-more" class="btn" style="display:none;">
@@ -121,7 +114,6 @@
     </div>
   </section>
 
-  <!-- MERCH E-SHOP SEKCE (skrytá dle isShopActive) -->
   <section id="shop" style="display:none;">
     <h2>Merch & Tisk</h2>
     <p class="lead">Limitovaná série streetwearu a fine-art tisků doručovaných přes <strong>Zásilkovnu (Z-BOX)</strong>. Kliknutím na produkt otevřeš kompletní detail s galerií a lupou.</p>
@@ -148,7 +140,7 @@
       <div class="price-card">
         <h3>Reportáž</h3>
         <div class="price">od 6 000 Kč</div>
-        <p>Dokumentární a reportážní zachycení tvé akce, eventu nebo lifestyle projektu s důrazem na syrovou atmosféru. Odevzdání minimálně 50 upravených fotek.</p>
+        <p>Dokumentární a reportážní zachycení tvé akce, eventu nebo lifestyle projektu s důrazem na atmosféru. Odevzdání minimálně 50 upravených fotek.</p>
       </div>
       <div class="price-card">
         <h3>Videotvorba</h3>
@@ -163,7 +155,6 @@
     </div>
   </section>
 
-  <!-- POPTÁVKOVÝ FORMULÁŘ NA SLUŽBY -->
   <section id="kontakt">
     <h2>Poptávka služeb</h2>
     <p class="lead">Máš zájem o focení, video nebo dlouhodobou spolupráci? Napiš mi a probereme termín i realizaci.</p>
@@ -231,7 +222,6 @@
     <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
     <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn nav-shop" style="display:none;">Odstoupení od smlouvy</a>
     
-    <!-- Instagram ikona s tooltipem v patičce -->
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -240,7 +230,6 @@
       </svg>
     </a>
 
-    <!-- Zonerama ikona s tooltipem v patičce -->
     <a href="https://eu.zonerama.com/tonybrenx/1622074" target="_blank" rel="noopener" class="icon-social hover-zon" aria-label="Zonerama">
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M2 2h10v10H2V2zm10 0h10v10H12V2zM2 12h10v10H2V12z" fill="#00b4ed"></path>
@@ -255,13 +244,11 @@
   <div class="copyright">© 2026 Tony Brenx • Všechna práva vyhrazena</div>
 </footer>
 
-<!-- Plovoucí košík -->
 <button id="cart-floating-btn" style="display:none;" title="Otevřít košík" aria-label="Košík">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25c-.669 0-1.189-.578-1.119-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
   <span class="cart-badge" id="cart-count">0</span>
 </button>
 
-<!-- VLASTNÍ OVERLAY PRO KOŠÍK & OBJEDNÁVKU -->
 <div class="custom-modal-overlay" id="cart-modal">
   <div class="cart-content">
     <div class="cart-header">
@@ -369,7 +356,6 @@
   </div>
 </div>
 
-<!-- MODÁL PRO DETAILNÍ NÁHLED PRODUKTU S GALERIÍ A LOUPOU -->
 <div class="custom-modal-overlay" id="product-detail-modal">
   <div class="product-modal-content">
     <button class="close-cart" onclick="closeProductModal()" style="position:absolute;top:18px;right:18px;z-index:20;" aria-label="Zavřít">
@@ -410,7 +396,6 @@
   </div>
 </div>
 
-<!-- MODÁLNÍ OKNO PRO PRÁVNÍ DOKUMENTY A ODSTOUPENÍ OD SMLOUVY -->
 <div class="custom-modal-overlay" id="legal-modal" style="z-index: 100000;">
   <div class="cart-content" style="max-height: 84vh;">
     <div class="cart-header">
@@ -423,7 +408,6 @@
   </div>
 </div>
 
-<!-- Lightbox pro portfolio fotky -->
 <dialog id="lb">
   <button class="close-lb" id="close-lb" aria-label="Zavřít">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -441,7 +425,6 @@
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
 </button>
 
-<!-- Napojení logiky -->
 <script src="script.js"></script>
 </body>
 </html>
