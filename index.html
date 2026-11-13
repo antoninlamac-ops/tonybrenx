@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="cs" data-shop="off">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fotograf & kameraman Karlovarský kraj | Tony Brenx</title>
 <meta name="description" content="Profesionální fotograf a kameraman z Karlovarského kraje. Portréty, reportáže z eventů, street fotografie a dynamická videotvorba. Sokolov, Karlovy Vary, Cheb.">
 <meta name="theme-color" content="#0a0a0b">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="canonical" href="https://www.tonybrenx.cz/">
+<link rel="alternate" hreflang="cs" href="https://www.tonybrenx.cz/">
+<link rel="alternate" hreflang="en" href="https://www.tonybrenx.cz/en/">
+<link rel="alternate" hreflang="de" href="https://www.tonybrenx.cz/de/">
+<link rel="alternate" hreflang="x-default" href="https://www.tonybrenx.cz/">
 
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%230a0a0b'/><circle cx='50' cy='50' r='44' stroke='%23ff9500' stroke-width='4' fill='none'/><text x='50%' y='58%' text-anchor='middle' fill='%23f1f1f2' font-family='Arial, sans-serif' font-weight='900' font-size='38' letter-spacing='-1'>TB</text></svg>">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -37,13 +43,6 @@
 }
 </script>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FH4P3QX2RQ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-FH4P3QX2RQ');
-</script>
 </head>
 <body>
 <div class="bg-photo-layer"></div>
@@ -59,6 +58,8 @@
     <a href="#shop" class="nav-shop" style="display:none;">Merch / Shop</a>
     <a href="#cenik">Ceník</a>
     <a href="#kontakt">Poptávka</a>
+    <a href="/en/" hreflang="en" lang="en">EN</a>
+    <a href="/de/" hreflang="de" lang="de">DE</a>
     
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -207,7 +208,7 @@
 
         <button type="submit" id="form-submit-btn" class="btn" style="width:100%;margin-top:4px">Odeslat poptávku</button>
         <p class="gdpr-notice">
-          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky a kalkulace. Více v <a href="#" onclick="openLegalModal('privacy'); return false;" style="color:#ff9500;text-decoration:underline;">Zásadách zpracování osobních údajů</a>.
+          Odesláním formuláře bereš na vědomí, že zadané údaje slouží výhradně pro vyřízení tvé poptávky a kalkulace. Více v <a href="#" data-legal="privacy" class="legal-link">Zásadách zpracování osobních údajů</a>.
         </p>
         <div id="form-status" class="form-status"></div>
       </form>
@@ -218,9 +219,9 @@
 <footer>
   <div class="footer-links">
     <a href="#shop" style="color:#ff9500;display:none;" class="nav-shop">Merch Shop</a>
-    <a href="#" onclick="openLegalModal('terms'); return false;">Obchodní podmínky</a>
-    <a href="#" onclick="openLegalModal('privacy'); return false;">Ochrana soukromí (GDPR)</a>
-    <a href="#" onclick="openLegalModal('withdraw'); return false;" class="footer-withdraw-btn nav-shop" style="display:none;">Odstoupení od smlouvy</a>
+    <a href="#" data-legal="terms">Obchodní podmínky</a>
+    <a href="#" data-legal="privacy">Ochrana soukromí (GDPR)</a>
+    <a href="#" data-legal="withdraw" class="footer-withdraw-btn nav-shop" style="display:none;">Odstoupení od smlouvy</a>
     
     <a href="https://www.instagram.com/antonin_l_foto" target="_blank" rel="noopener" class="icon-social hover-ig" aria-label="Instagram">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -267,7 +268,7 @@
           <span>Zboží celkem:</span>
           <span id="cart-total-price">0 Kč</span>
         </div>
-        <button class="btn btn-primary" id="go-to-checkout-btn" style="width:100%" onclick="showCheckoutForm()">
+        <button class="btn btn-primary" id="go-to-checkout-btn" style="width:100%" data-action="checkout">
           Přejít k objednávce
         </button>
       </div>
@@ -308,9 +309,9 @@
           </div>
           <div class="form-group">
             <label for="order-shipping">Způsob dopravy</label>
-            <select id="order-shipping" name="shipping_method" class="form-control" onchange="handleModalShippingChange()">
-              <option value="Zásilkovna (Z-BOX / Výdejní místo) - 79 Kč" selected>Zásilkovna (+79 Kč)</option>
-              <option value="Osobní předání Sokolov - Zdarma">Osobní předání Sokolov (Zdarma)</option>
+            <select id="order-shipping" name="shipping_method" class="form-control">
+              <option value="zasilkovna" selected>Zásilkovna (+79 Kč)</option>
+              <option value="osobni">Osobní předání Sokolov (Zdarma)</option>
             </select>
           </div>
         </div>
@@ -326,7 +327,7 @@
         </div>
 
         <div id="modal-packeta-box" class="packeta-box">
-          <button type="button" class="btn-packeta" onclick="openPacketaWidget()">
+          <button type="button" class="btn-packeta" data-action="packeta">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
             Vybrat Z-BOX nebo pobočku Zásilkovny
           </button>
@@ -346,7 +347,7 @@
         </div>
 
         <div style="display:flex;gap:10px;margin-top:10px">
-          <button type="button" class="btn" style="flex:1" onclick="backToCartItems()">Zpět</button>
+          <button type="button" class="btn" style="flex:1" data-action="back-cart">Zpět</button>
           <button type="submit" id="order-submit-btn" class="btn btn-primary" style="flex:2">Dokončit a odeslat</button>
         </div>
 
@@ -358,7 +359,7 @@
 
 <div class="custom-modal-overlay" id="product-detail-modal">
   <div class="product-modal-content">
-    <button class="close-cart" onclick="closeProductModal()" style="position:absolute;top:18px;right:18px;z-index:20;" aria-label="Zavřít">
+    <button class="close-cart" data-action="close-product" style="position:absolute;top:18px;right:18px;z-index:20;" aria-label="Zavřít">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
     
@@ -367,11 +368,11 @@
         <button class="pm-zoom-btn" id="pm-toggle-zoom" title="Zvětšit / Zmenšit detail">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"/></svg>
         </button>
-        <button class="pm-nav-arrow prev" onclick="prevProductImage(event)" aria-label="Předchozí foto">
+        <button class="pm-nav-arrow prev" data-action="prev-product" aria-label="Předchozí foto">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
         </button>
-        <img id="pm-active-image" src="" alt="Detail produktu" draggable="false" oncontextmenu="return false;">
-        <button class="pm-nav-arrow next" onclick="nextProductImage(event)" aria-label="Další foto">
+        <img id="pm-active-image" src="" alt="Detail produktu" draggable="false">
+        <button class="pm-nav-arrow next" data-action="next-product" aria-label="Další foto">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
         </button>
       </div>
@@ -400,7 +401,7 @@
   <div class="cart-content" style="max-height: 84vh;">
     <div class="cart-header">
       <h3 id="legal-title">Informace</h3>
-      <button class="close-cart" onclick="closeLegalModal()" aria-label="Zavřít">
+      <button class="close-cart" data-action="close-legal" aria-label="Zavřít">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
@@ -424,6 +425,14 @@
 <button id="scroll-top" title="Zpět nahoru" aria-label="Zpět nahoru">
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.6" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5"/></svg>
 </button>
+
+<div id="consent-banner" class="consent-banner" role="region" aria-label="Souhlas s cookies" hidden>
+  <p>Měření návštěvnosti (Google Analytics) se spustí jen s tvým souhlasem. Bez něj se analytické cookies nenačtou. Více v <a href="#" data-legal="privacy">zásadách zpracování</a>.</p>
+  <div class="consent-actions">
+    <button type="button" class="btn" data-consent="rejected">Odmítnout</button>
+    <button type="button" class="btn btn-primary" data-consent="accepted">Přijmout</button>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>

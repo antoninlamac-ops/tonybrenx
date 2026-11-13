@@ -1,8 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.tonybrenx.cz/</loc>
+    <lastmod>2026-11-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://www.tonybrenx.cz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tonybrenx.cz/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.tonybrenx.cz/de/"/>
+  </url>
+  <url>
+    <loc>https://www.tonybrenx.cz/en/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://www.tonybrenx.cz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tonybrenx.cz/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.tonybrenx.cz/de/"/>
+  </url>
+  <url>
+    <loc>https://www.tonybrenx.cz/de/</loc>
+    <lastmod>2026-11-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="cs" href="https://www.tonybrenx.cz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.tonybrenx.cz/en/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.tonybrenx.cz/de/"/>
   </url>
 </urlset>
