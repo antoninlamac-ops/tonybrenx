@@ -184,18 +184,78 @@ function updateButtons() {
   if (hidePhotosBtn) hidePhotosBtn.style.display = currentLoadedCount > initialBatch ? 'inline-flex' : 'none';
 }
 
+// Popisy fotografií pro alt text (SEO a čtečky obrazovky). Osoby nejsou jmenovány.
+const PHOTO_ALT = {
+  1: "Žena v pruhovaném tričku se opírá o dřevěné zábradlí lavičky, tmavé pozadí",
+  2: "Muž s kulečníkovým tágem v květované košili se dívá do objektivu",
+  3: "Muž v klobouku a obleku s odznakem The Three Corners, světelný bokeh v pozadí",
+  4: "Kouř stoupá z ohně, dvě osoby v kapucích v zimním slunci, pohled zezadu",
+  5: "Starší muž s úsměvem vzhlíží u baru, před ním pivní sklenice a láhev",
+  6: "Sousoší soch na střeše betonové budovy pod zataženou oblohou",
+  7: "Ulice s graffiti na roletách a výlohách, černobílá street fotografie",
+  8: "Dva lidé s batohy fotografují kovovou věž na šedém nebi",
+  10: "Starší muž v čepici hraje na housle a dívá se směrem k fotografovi",
+  11: "Fasáda cihlové budovy s nápisem DOLPHIN HOUSE, pohled zdola",
+  12: "Dítě nalévá šumivé víno z láhve s nápisem FRIZZANTE do sklenice na tmavém pozadí",
+  13: "Houslista s brýlemi a klarinetista hrají pod markýzou v ulici",
+  14: "Ruka drží sklenici s rytím Víno z Čejkovic na rozmazaném pozadí",
+  15: "Siluety postav zahalených průhlednou fólií, černobílá fotografie z uliční série",
+  16: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
+  17: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
+  18: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
+  19: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
+  20: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
+  21: "Siluety zahalené průhlednou fólií, černobílá fotografie",
+  22: "Siluety zahalené průhlednou fólií, černobílá fotografie z uliční série",
+  23: "Siluety zahalené průhlednou fólií, černobílá fotografie",
+  24: "Rozmazaný portrét ženy za průhlednou fólií v tmavém tónu",
+  25: "Mladý muž sedí na kamenné zdi s velkou taškou, za ním klenutá budova",
+  26: "Muž si zakrývá obličej rukou na ulici, v pozadí výloha a policisté",
+  27: "Interiér obchodu v noci, na poličkách sklenice a zboží, nápis Vítejte v pasáži",
+  28: "Pražský hrad a Vltava v noci, dlouhá expozice",
+  29: "Detail muže s kulatými slunečními brýlemi držícího papírový kelímek kávy",
+  30: "Silueta sochy andělánka s křídly proti oblakům",
+  31: "Dřevěné pahýly ve tvaru rukou vyčnívají z trávy",
+  32: "Muž se dívá do telefonu na ulici, odraz v kaluži, cedule sanita-topení-plyn",
+  33: "Detail kliky dveří s malou hloubkou ostrosti",
+  34: "Mladá žena sedí v interiéru rychlého občerstvení s velkými oblouky",
+  35: "Kurýr na kole s doručovací brašnou v pohybu, rozmazané pozadí",
+  36: "Poštovní schránka s nápisem Berlin, za ní zaparkovaná auta",
+  37: "Betonový žlab vedoucí k kamenné zdi, černobílá architektura",
+  38: "Prosklený strop Sony Center v Berlíně s radiálním tvarem",
+  39: "Nákladní kolo s nápisem BERLIN na předním nosiči na kostkové dlažbě",
+  40: "Kus Berlínské zdi s graffiti symbolem míru, chodci a žena v šátku s telefonem",
+  41: "Ulice na Potsdamer Platz, rozmazané auto, žena čeká na zastávce autobusu",
+  42: "Muž stojí před graffiti na Berlínské zdi, žena kráčí kolem",
+  43: "Nástěnná malba Brother's Kiss s cyrilicí, žena jde kolem s kolem",
+  44: "Muž kráčí mezi betonovými stélami památníku v Berlíně",
+  45: "Černobílý umělecký snímek postavy v tmavém prostředí, světlo zdůrazňuje tvary",
+  46: "Černobílý portrét osoby v rozepnuté bílé košili proti tmavému pozadí",
+  47: "Muž v čepici u rolet pokrytých graffiti, černobílá street fotografie",
+  48: "Obchod MR SINGH'S se zavřenou roletou pokrytou graffiti, pohled z ulice",
+  49: "Dřevěné dveře s mosaznou schránkou a nápisem NO JUNK MAIL",
+  50: "Řada cihlových domů s bílým zábradlím, běžec na chodníku a rozmazaný cyklista v popředí",
+  51: "Malý pejsek na vodítku se dívá vzhůru na fotografa na žulové dlažbě",
+  52: "Cyklista na silnici podél nábřeží, v pozadí řada historických domů",
+  53: "Výloha knihkupectví The Library Project s knihami a odrazem lidí v okně",
+  54: "Žena v kšiltovce a mikině s nápisem KEEP WALKING fotografuje výlohu",
+  55: "Vertikální cedule s velkými písmeny proti světlé obloze, pohled zdola",
+};
+const PHOTO_ALT_DEFAULT = "Černobílá fotografie z ulice od Tony Brenx";
+
 function renderBatch(count) {
   if (!g) return;
   const next = photoIds.slice(currentLoadedCount, currentLoadedCount + count);
   next.forEach((id, idx) => {
+    const altText = PHOTO_ALT[id] || PHOTO_ALT_DEFAULT;
     const a = document.createElement('a');
     a.href = `img-web/foto-${id}.webp`;
-    a.setAttribute('aria-label', `Černobílá fotografie ${id}`);
+    a.setAttribute('aria-label', altText);
     a.style.animation = `revealPhoto 0.5s ease both ${idx * 0.04}s`;
-    
+
     const im = document.createElement('img');
     im.src = `img-web/foto-${id}.webp`;
-    im.alt = `Autorská černobílá fotografie z ulice a portrét od Tony Brenx - snímek ${id}`;
+    im.alt = altText;
     im.loading = 'lazy';
     im.draggable = false;
     
