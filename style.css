@@ -1,3 +1,6 @@
+/* Barlow Condensed (SIL OFL 1.1) – vlastní hosting, bez načítání z Google */
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:500;font-display:swap;src:url("/fonts/BarlowCondensed-Medium.woff") format("woff")}
+@font-face{font-family:"Barlow Condensed";font-style:normal;font-weight:700;font-display:swap;src:url("/fonts/BarlowCondensed-Bold.woff") format("woff")}
 :root{--bg:#0a0a0b;--text:#f1f1f2;--muted:#9a9ba2;--glass:rgba(18,20,24,.75);--edge:rgba(255,255,255,.12)}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
