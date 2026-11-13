@@ -2,8 +2,8 @@
 const isShopActive = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 👀 Tel
-  sendVisitNotification();
+  initConsent();
+  initInteractions();
 
   if (isShopActive) {
     const shopSec = document.getElementById('shop');
@@ -17,13 +17,101 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+/* ---------- Souhlas s cookies a analytika ----------
+   Analytika (GA) ani notifikace o návštěvě se nespustí, dokud návštěvník nepřijme. */
+const CONSENT_KEY = 'tb_consent';
+const GA_ID = 'G-FH4P3QX2RQ';
+const VISIT_PING_URL = 'https://script.google.com/macros/s/AKfycbxctDn8h7ZE472yJG_ppNO7Yy6fFOkoUBBvvPVzKR9EOHc_dJR7MAz0N6bf28fBX0fQvA/exec';
+
+function getConsent() {
+  try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+}
+
+function setConsent(value) {
+  try { localStorage.setItem(CONSENT_KEY, value); } catch (e) { /* tichá chyba */ }
+}
+
+function initConsent() {
+  const banner = document.getElementById('consent-banner');
+  const consent = getConsent();
+  if (consent === 'accepted') loadAnalytics();
+  if (!banner) return;
+  if (consent === null) banner.hidden = false;
+  banner.addEventListener('click', e => {
+    const btn = e.target.closest('[data-consent]');
+    if (!btn) return;
+    const value = btn.dataset.consent;
+    setConsent(value);
+    banner.hidden = true;
+    if (value === 'accepted') loadAnalytics();
+  });
+}
+
+function loadAnalytics() {
+  if (window.tbAnalyticsLoaded) return;
+  window.tbAnalyticsLoaded = true;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', GA_ID, { anonymize_ip: true });
+  sendVisitNotification();
+}
+
 function sendVisitNotification() {
   try {
     const img = new Image();
-    img.src = 'https://script.google.com/macros/s/AKfycbxctDn8h7ZE472yJG_ppNO7Yy6fFOkoUBBvvPVzKR9EOHc_dJR7MAz0N6bf28fBX0fQvA/exec?t=' + Date.now();
+    img.src = VISIT_PING_URL + '?t=' + Date.now();
   } catch (e) {
     // tichá chyba - notifikace nesmí nijak narušit chod webu
   }
+}
+
+/* ---------- Delegované události (nahrazují inline onclick kvůli CSP) ---------- */
+function initInteractions() {
+  document.addEventListener('click', e => {
+    const legal = e.target.closest('[data-legal]');
+    if (legal) {
+      e.preventDefault();
+      openLegalModal(legal.dataset.legal);
+      return;
+    }
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    switch (el.dataset.action) {
+      case 'checkout': showCheckoutForm(); break;
+      case 'back-cart': backToCartItems(); break;
+      case 'packeta': openPacketaWidget(); break;
+      case 'close-product': closeProductModal(); break;
+      case 'prev-product': prevProductImage(e); break;
+      case 'next-product': nextProductImage(e); break;
+      case 'close-legal': closeLegalModal(); break;
+      case 'remove-cart': removeFromCart(Number(el.dataset.index)); break;
+    }
+  });
+
+  document.addEventListener('submit', e => {
+    if (e.target.id === 'withdraw-form') handleWithdrawSubmit(e);
+  });
+
+  document.addEventListener('contextmenu', e => {
+    if (e.target.tagName === 'IMG') e.preventDefault();
+  });
+
+  const shipping = document.getElementById('order-shipping');
+  if (shipping) shipping.addEventListener('change', handleModalShippingChange);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function loadPacketaScriptIfNeeded() {
@@ -34,11 +122,11 @@ function loadPacketaScriptIfNeeded() {
   document.head.appendChild(s);
 }
 
-const pageLoadTime = Date.now();
-const MIN_HUMAN_FILL_TIME = 3000;
-
-function looksLikeBot() {
-  return (Date.now() - pageLoadTime) < MIN_HUMAN_FILL_TIME;
+// Honeypot: skryté pole _gotcha vyplní jen bot. Časová kontrola byla odstraněna,
+// protože zahazovala skutečné zprávy od rychlých uživatelů.
+function isHoneypotFilled(form) {
+  const hp = form.querySelector('input[name="_gotcha"]');
+  return !!(hp && hp.value);
 }
 
 function postWithTimeout(url, formData, timeoutMs = 15000) {
@@ -110,7 +198,6 @@ function renderBatch(count) {
     im.alt = `Autorská černobílá fotografie z ulice a portrét od Tony Brenx - snímek ${id}`;
     im.loading = 'lazy';
     im.draggable = false;
-    im.oncontextmenu = () => false;
     
     a.appendChild(im);
     g.appendChild(a);
@@ -409,7 +496,18 @@ function handleQuickBuy(prodId) {
   addToCart(prod.title, price, variant);
 }
 
-let cart = JSON.parse(localStorage.getItem('tb_cart')) || [];
+function loadCart() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem('tb_cart'));
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(i =>
+      i && typeof i.title === 'string' && typeof i.variant === 'string' &&
+      Number.isFinite(i.price) && Number.isFinite(i.qty) && i.qty > 0);
+  } catch (e) {
+    return [];
+  }
+}
+let cart = loadCart();
 const cartFloatingBtn = document.getElementById('cart-floating-btn');
 const cartModal = document.getElementById('cart-modal');
 const closeCartBtn = document.getElementById('close-cart-btn');
@@ -421,7 +519,7 @@ function openCartModal() { if (cartModal) cartModal.classList.add('open'); }
 function closeCartModal() { if (cartModal) cartModal.classList.remove('open'); }
 
 function updateCartUI() {
-  localStorage.setItem('tb_cart', JSON.stringify(cart));
+  try { localStorage.setItem('tb_cart', JSON.stringify(cart)); } catch (e) { /* tichá chyba */ }
   if (cartCount) cartCount.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
   
   if (!cartItemsContainer) return;
@@ -443,12 +541,12 @@ function updateCartUI() {
     div.className = 'cart-item';
     div.innerHTML = `
       <div>
-        <div class="cart-item-title">${item.title} (x${item.qty})</div>
-        <div class="cart-item-variant">${item.variant}</div>
+        <div class="cart-item-title">${escapeHtml(item.title)} (x${Number(item.qty)})</div>
+        <div class="cart-item-variant">${escapeHtml(item.variant)}</div>
       </div>
       <div style="display:flex;align-items:center;">
-        <span class="cart-item-price">${item.price * item.qty} Kč</span>
-        <button class="cart-remove-btn" onclick="removeFromCart(${index})" title="Odebrat">✕</button>
+        <span class="cart-item-price">${Number(item.price) * Number(item.qty)} Kč</span>
+        <button class="cart-remove-btn" data-action="remove-cart" data-index="${index}" title="Odebrat">✕</button>
       </div>
     `;
     cartItemsContainer.appendChild(div);
@@ -594,7 +692,7 @@ if (orderForm) {
 
     const data = new FormData(orderForm);
 
-    if (looksLikeBot()) {
+    if (isHoneypotFilled(orderForm)) {
       setTimeout(() => {
         if (orderStatus) {
           orderStatus.textContent = 'Objednávka byla úspěšně odeslána!';
@@ -655,7 +753,7 @@ if (contactForm) {
 
     const data = new FormData(contactForm);
 
-    if (looksLikeBot()) {
+    if (isHoneypotFilled(contactForm)) {
       setTimeout(() => {
         if (formStatus) {
           formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána.';
@@ -700,29 +798,45 @@ function openLegalModal(type) {
   if (type === 'terms') {
     title.textContent = 'Obchodní podmínky';
     body.innerHTML = `
-      <p style="background: rgba(255,149,0,0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,149,0,0.3); margin-bottom: 16px;">
-        <strong>Provozovatel:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Svatava 357 03.<br>
-        <strong>E-mail:</strong> antonin.lamac@gmail.com
+      <p class="legal-box">
+        <strong>Provozovatel:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, Svatava 357 03.<br>
+        <strong>Kontakt:</strong> antonin.lamac@gmail.com
       </p>
       <h4>1. Všeobecná ustanovení</h4>
-      <p>Tyto obchodní podmínky upravují práva a povinnosti při prodeji autorského merche a tisků.</p>
-      <h4 style="margin-top:14px;">2. Platba a dodání</h4>
-      <p>Platba probíhá bankovním převodem (splatnost 48 hodin). Doručení zajišťuje Zásilkovna.</p>
-      <h4 style="margin-top:14px; color:#ff4757;">3. Odstoupení od smlouvy</h4>
-      <p>Spotřebitel může odstoupit do 14 dnů od převzetí zboží (nevztahuje se na tisk na zakázku).</p>
+      <p>Tyto podmínky upravují prodej autorského merche a fine-art tisků přes tento web a vztahy mezi provozovatelem a kupujícím.</p>
+      <h4>2. Objednávka a cena</h4>
+      <p>Objednávka je odeslána vyplněním formuláře. Cena zboží a způsob dopravy jsou uvedeny v košíku před odesláním. Provozovatel potvrdí objednávku e-mailem.</p>
+      <h4>3. Platba a dodání</h4>
+      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
+      <h4>4. Odstoupení od smlouvy</h4>
+      <p>Spotřebitel může odstoupit od kupní smlouvy do 14 dnů od převzetí zboží. Formulář pro odstoupení je v zápatí webu. Výjimkou je zboží upravené podle přání zákazníka nebo zhotovené pro jeho osobu (např. tisk s vlastním výběrem fotografie).</p>
+      <h4>5. Reklamace a řešení sporů</h4>
+      <p>Vady uplatňujte e-mailem na adrese uvedené výše. Spotřebitel může také využít mimosoudní řešení sporů u České obchodní inspekce (adr.coi.cz).</p>
     `;
   } else if (type === 'privacy') {
     title.textContent = 'Ochrana soukromí (GDPR)';
     body.innerHTML = `
-      <p style="background: rgba(255,149,0,0.1); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,149,0,0.3); margin-bottom: 16px;">
-        Správce: Antonín Lamač, IČO: 87481235.
+      <p class="legal-box">
+        <strong>Správce:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, Svatava 357 03.<br>
+        <strong>Kontakt:</strong> antonin.lamac@gmail.com
       </p>
-      <p>Osobní údaje jsou zpracovávány výhradně za účelem vyřízení objednávky a doručení přes Zásilkovnu.</p>
+      <h4>1. Jaké údaje zpracovávám</h4>
+      <p>Z poptávkového formuláře jméno, e-mail, telefon a obsah zprávy. Z objednávky navíc jméno, e-mail, telefon, způsob dopravy a u Zásilkovny vybrané výdejní místo. Z formuláře pro odstoupení číslo objednávky, jméno, e-mail a číslo účtu pro vrácení peněz.</p>
+      <h4>2. Účely a právní základ</h4>
+      <p>Vyřízení poptávky nebo objednávky (plnění smlouvy nebo jednání o ní, čl. 6 odst. 1 písm. b) GDPR). Účetní a daňové povinnosti (čl. 6 odst. 1 písm. c). Ochrana webu před zneužitím formuláře (oprávněný zájem, čl. 6 odst. 1 písm. f). Měření návštěvnosti jen s tvým souhlasem (čl. 6 odst. 1 písm. a).</p>
+      <h4>3. Příjemci</h4>
+      <p>Formuláře jsou zpracovávány přes Google (Google Apps Script a Google Tabulky) a Zásilkovna s.r.o. pro doručení. Web je hostován na GitHub Pages. Měření návštěvnosti provozuje Google Analytics, a to jen po přijetí souhlasu.</p>
+      <h4>4. Doba uložení</h4>
+      <p>Poptávky nejdéle 1 rok od poslední komunikace. Objednávky a doklady po dobu stanovenou účetními a daňovými předpisy. Údaje k odstoupení po dobu nutnou k vyřízení a doložení. Údaje z analytiky podle nastavení Google Analytics.</p>
+      <h4>5. Cookies a úložiště prohlížeče</h4>
+      <p>Obsah košíku a tvoje volba souhlasu se ukládají do úložiště prohlížeče (localStorage). Jde o nezbytné údaje pro provoz webu. Analytické cookies Google se načtou až po přijetí souhlasu. Souhlas můžeš kdykoli odvolat vymazáním údajů webu v prohlížeči.</p>
+      <h4>6. Tvoje práva</h4>
+      <p>Máš právo na přístup k údajům, opravu, výmaz, omezení zpracování, přenositelnost a vznést námitku. Stížnost můžeš podat u Úřadu pro ochranu osobních údajů (uoou.cz).</p>
     `;
   } else if (type === 'withdraw') {
     title.textContent = 'Odstoupení od smlouvy';
     body.innerHTML = `
-      <form id="withdraw-form" onsubmit="handleWithdrawSubmit(event)">
+      <form id="withdraw-form">
         <div class="form-group"><label>Číslo objednávky (VS) *</label><input type="text" id="w-vs" class="form-control" required></div>
         <div class="form-group"><label>Jméno a příjmení *</label><input type="text" id="w-name" class="form-control" required></div>
         <div class="form-group"><label>E-mail *</label><input type="email" id="w-email" class="form-control" required></div>
