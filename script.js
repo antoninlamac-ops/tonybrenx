@@ -3,7 +3,17 @@
    Shop se zapíná atributem data-shop="on" na <html>. Český web má zatím shop vypnutý.
    Pro EN/DE se ceny a doprava zobrazují v EUR. */
 const PAGE_LANG = (document.documentElement.lang || 'cs').slice(0, 2);
-const isShopActive = document.documentElement.dataset.shop === 'on';
+// Skrytý náhled pro majitele: otevřete web s ?nahled=tb (vypnutí: ?nahled=off).
+// Zapne shop i platbu kartou jen v tomto prohlížeči, veřejnost vidí web beze změny.
+const PREVIEW = (() => {
+  try {
+    const q = new URLSearchParams(location.search).get('nahled');
+    if (q === 'tb') sessionStorage.setItem('tb_preview', '1');
+    if (q === 'off') sessionStorage.removeItem('tb_preview');
+    return sessionStorage.getItem('tb_preview') === '1';
+  } catch (e) { return false; }
+})();
+const isShopActive = document.documentElement.dataset.shop === 'on' || PREVIEW;
 
 const LANG_CONFIG = {
   cs: { locale: 'cs-CZ', currency: 'CZK', packetaCountry: 'cz', packetaLang: 'cs' },
@@ -14,8 +24,20 @@ const CFG = LANG_CONFIG[PAGE_LANG] || LANG_CONFIG.cs;
 const CUR = CFG.currency;
 const CART_KEY = 'tb_cart_' + CUR;
 
+// Platba kartou přes Stripe. Zapnout až po otestování testovací kartou.
+const STRIPE_ENABLED = PREVIEW; // pro všechny: změnit na true
+
 // Doprava (Zásilkovna). EUR hodnoty jsou ZATÍM ORIENTAČNÍ - potvrďte před spuštěním.
 const SHIPPING_FEE = { CZK: 79, EUR: 4.9 };
+
+// Předobjednávka. Dokud je enabled false nebo chybí datum, na webu se nic nezobrazí.
+// Před spuštěním doplňte: until (ISO datum s časovou zónou), productIds a discount.
+const PRESALE = {
+  enabled: false,
+  until: null, // DOPLNIT, např. '2027-01-15T10:00:00+01:00'
+  productIds: [], // DOPLNIT, např. ['m1']
+  discount: 0.1, // DOPLNIT, 10 % sleva
+};
 
 const moneyFmt = new Intl.NumberFormat(CFG.locale, {
   style: 'currency',
@@ -28,6 +50,12 @@ function formatMoney(amount) { return moneyFmt.format(amount); }
 document.addEventListener("DOMContentLoaded", () => {
   initConsent();
   initInteractions();
+  initPaymentChoice();
+  if (new URLSearchParams(location.search).get('platba') === 'ok') {
+    cart = [];
+    localStorage.removeItem(CART_KEY);
+    updateCartUI();
+  }
 
   if (isShopActive) {
     const shopSec = document.getElementById('shop');
@@ -38,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
       el.style.display = el.tagName === 'A' ? 'inline-flex' : '';
     });
     loadPacketaScriptIfNeeded();
+    initPresale();
   }
 });
 
@@ -55,6 +84,11 @@ const I18N = {
     sending: 'Odesílám...',
     submitOrder: 'Dokončit a odeslat',
     addToCart: 'Do košíku',
+    presaleBadge: 'Předobjednávka',
+    presaleTitle: 'Předobjednávka',
+    presaleEnds: 'Sleva končí za',
+    presaleOver: 'Předobjednávka skončila',
+    presaleShip: 'Zboží odesíláme po vydání. Předpokládaný termín doplníme.',
     orderOk: 'Objednávka byla úspěšně odeslána!',
     orderOkPay: 'Objednávka byla úspěšně odeslána! Instrukce k platbě dorazí do e-mailu.',
     orderErr: 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.',
@@ -187,6 +221,11 @@ const I18N = {
     sending: 'Sending...',
     submitOrder: 'Complete and send',
     addToCart: 'Add to cart',
+    presaleBadge: 'Pre-order',
+    presaleTitle: 'Pre-order',
+    presaleEnds: 'Pre-order discount ends in',
+    presaleOver: 'Pre-order has ended',
+    presaleShip: 'Items ship after release. Estimated date to be added.',
     orderOk: 'Your order has been sent!',
     orderOkPay: 'Your order has been sent! Payment instructions will arrive by email.',
     orderErr: 'A connection error occurred. Please write to antonin.lamac@gmail.com.',
@@ -319,6 +358,11 @@ const I18N = {
     sending: 'Wird gesendet...',
     submitOrder: 'Abschließen und senden',
     addToCart: 'In den Warenkorb',
+    presaleBadge: 'Vorbestellung',
+    presaleTitle: 'Vorbestellung',
+    presaleEnds: 'Vorbestellungsrabatt endet in',
+    presaleOver: 'Vorbestellung beendet',
+    presaleShip: 'Versand nach Erscheinen. Voraussichtlicher Termin wird ergänzt.',
     orderOk: 'Deine Bestellung wurde erfolgreich gesendet!',
     orderOkPay: 'Deine Bestellung wurde erfolgreich gesendet! Die Zahlungsanweisung kommt per E-Mail.',
     orderErr: 'Es gab einen Verbindungsfehler. Bitte schreibe an antonin.lamac@gmail.com.',
@@ -481,10 +525,57 @@ const PRODUCT_IMAGES = {
   p4: ['/img-web/foto-50.webp', '/img-web/foto-51.webp'],
 };
 
+function initPresale() {
+  if (!presaleActive()) return;
+  const grid = document.getElementById('shop-grid-container');
+  if (!grid || document.getElementById('presale-banner')) return;
+  const box = document.createElement('div');
+  box.id = 'presale-banner';
+  box.className = 'presale-banner';
+  box.innerHTML = '<strong>' + escapeHtml(t('presaleTitle')) + '</strong><span id="presale-count"></span><small>' + escapeHtml(t('presaleShip')) + '</small>';
+  grid.parentNode.insertBefore(box, grid);
+  const end = Date.parse(PRESALE.until);
+  const out = document.getElementById('presale-count');
+  const timer = setInterval(tick, 1000);
+  function tick() {
+    const left = end - Date.now();
+    if (left <= 0) {
+      clearInterval(timer);
+      const b = document.getElementById('presale-banner');
+      if (b) b.remove();
+      renderShopGrid();
+      updateCartUI();
+      return;
+    }
+    const d = Math.floor(left / 864e5);
+    const h = Math.floor((left % 864e5) / 36e5);
+    const m = Math.floor((left % 36e5) / 6e4);
+    const sec = Math.floor((left % 6e4) / 1e3);
+    out.textContent = t('presaleEnds') + ' ' + d + ' d ' + h + ' h ' + m + ' m ' + sec + ' s';
+  }
+  tick();
+}
+
 function findProduct(id) { return PRODUCTS.find(p => p.id === id); }
 function productText(id) { return T.products[id] || I18N.cs.products[id]; }
 function variantLabel(key) { return T.variants[key] || key; }
 function variantPrice(variant) { return variant.prices[CUR]; }
+function presaleActive() {
+  return PRESALE.enabled && !!PRESALE.until && Date.now() < Date.parse(PRESALE.until);
+}
+function isPresaleProduct(prodId) {
+  return presaleActive() && PRESALE.productIds.includes(prodId);
+}
+function unitPrice(prod, variant) {
+  const base = variantPrice(variant);
+  return isPresaleProduct(prod.id) ? Math.round(base * (1 - PRESALE.discount)) : base;
+}
+function priceHtml(prod) {
+  const base = variantPrice(prod.variants[0]);
+  const now = unitPrice(prod, prod.variants[0]);
+  if (now === base) return formatMoney(base);
+  return `<s class="product-price-old">${formatMoney(base)}</s>${formatMoney(now)}`;
+}
 
 function escapeHtml(value) {
   return String(value)
@@ -725,14 +816,14 @@ function renderShopGrid() {
 
     card.innerHTML = `
       <div class="product-img-box">
-        <span class="product-badge">${escapeHtml(text.badge)}</span>
+        <span class="product-badge">${escapeHtml(isPresaleProduct(prod.id) ? t('presaleBadge') : text.badge)}</span>
         <img src="${PRODUCT_IMAGES[prod.id][0]}" alt="${escapeHtml(text.title)}" loading="lazy" draggable="false">
       </div>
       <div class="product-info">
         <h3 class="product-title">${escapeHtml(text.title)}</h3>
         <p class="product-desc">${escapeHtml(text.desc.substring(0, 75))}...</p>
         <div class="product-meta">
-          <span class="product-price">${formatMoney(prod.variants[0].prices[CUR])}</span>
+          <span class="product-price">${priceHtml(prod)}</span>
           ${selectHtml}
         </div>
         <button type="button" class="btn-buy">${escapeHtml(t('addToCart'))}</button>
@@ -959,7 +1050,7 @@ function cartLines() {
       title: productText(prod.id).title,
       variantLabel: variantLabel(variant.key),
       qty: item.qty,
-      unit: variantPrice(variant),
+      unit: unitPrice(prod, variant),
     };
   }).filter(Boolean);
 }
@@ -1099,6 +1190,40 @@ function openPacketaWidget() {
   }, { country: CFG.packetaCountry, language: CFG.packetaLang });
 }
 
+const PAY_TEXT = {
+  cs: { legend: 'Způsob platby', transfer: 'Bankovní převod', card: 'Platební karta' },
+  en: { legend: 'Payment method', transfer: 'Bank transfer', card: 'Card' },
+  de: { legend: 'Zahlungsart', transfer: 'Überweisung', card: 'Karte' },
+}[PAGE_LANG] || { legend: 'Způsob platby', transfer: 'Bankovní převod', card: 'Platební karta' };
+
+function getPayChoice() {
+  const c = document.querySelector('input[name=payment_choice]:checked');
+  return c ? c.value : 'transfer';
+}
+
+function initPaymentChoice() {
+  const form = document.getElementById('order-form');
+  if (!STRIPE_ENABLED || !form) return;
+  const box = document.createElement('fieldset');
+  box.className = 'pay-choice';
+  // CZ: převod předvolen, karta jako volba. EN/DE: pouze karta, dokud nebude EUR účet.
+  const isCz = PAGE_LANG === 'cs';
+  const transfer = isCz
+    ? '<label><input type="radio" name="payment_choice" value="transfer" checked> ' + PAY_TEXT.transfer + '</label> '
+    : '';
+  const card = '<label><input type="radio" name="payment_choice" value="card"' + (isCz ? '' : ' checked') + '> ' + PAY_TEXT.card + '</label>';
+  box.innerHTML = '<legend>' + PAY_TEXT.legend + '</legend>' + transfer + card;
+  const btn = document.getElementById('order-submit-btn');
+  if (btn) btn.parentNode.insertBefore(box, btn);
+}
+
+async function postOrder(data) {
+  if (!STRIPE_ENABLED) { await postWithTimeout(document.getElementById('order-form').action, data); return null; }
+  const res = await fetch(document.getElementById('order-form').action, { method: 'POST', body: data });
+  if (!res.ok) throw new Error('order failed');
+  return res.json();
+}
+
 const orderForm = document.getElementById('order-form');
 if (orderForm) {
   orderForm.addEventListener('submit', async (e) => {
@@ -1144,6 +1269,9 @@ if (orderForm) {
 
     const data = new FormData(orderForm);
     data.set('shipping_method', shippingLabel);
+    data.set('shipping_code', method);
+    data.set('items', JSON.stringify(cart.map(i => ({ pid: i.pid, variant: i.variant, qty: i.qty }))));
+    if (STRIPE_ENABLED && getPayChoice() === 'card') data.set('payment', 'card');
     data.set('language', PAGE_LANG);
     data.set('currency', CUR);
 
@@ -1167,7 +1295,8 @@ if (orderForm) {
     }
 
     try {
-      await postWithTimeout(orderForm.action, data);
+      const result = await postOrder(data);
+      if (result && result.status === 'redirect' && result.url) { window.location.href = result.url; return; }
       if (orderStatus) {
         orderStatus.textContent = t('orderOkPay');
         orderStatus.className = 'form-status success';
