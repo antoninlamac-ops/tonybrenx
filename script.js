@@ -1,5 +1,29 @@
-// HLAVNÍ PŘEPÍNAČ E-SHOPU (true = zapnuto, false = vypnuto)
-const isShopActive = false;
+/* ---------- Jazyk a měna stránky ----------
+   Jazyk se bere z atributu lang na <html> (cs / en / de).
+   Shop se zapíná atributem data-shop="on" na <html>. Český web má zatím shop vypnutý.
+   Pro EN/DE se ceny a doprava zobrazují v EUR. */
+const PAGE_LANG = (document.documentElement.lang || 'cs').slice(0, 2);
+const isShopActive = document.documentElement.dataset.shop === 'on';
+
+const LANG_CONFIG = {
+  cs: { locale: 'cs-CZ', currency: 'CZK', packetaCountry: 'cz', packetaLang: 'cs' },
+  en: { locale: 'en-GB', currency: 'EUR', packetaCountry: 'cz,sk,pl,de,at,hu', packetaLang: 'en' },
+  de: { locale: 'de-DE', currency: 'EUR', packetaCountry: 'cz,sk,pl,de,at,hu', packetaLang: 'de' },
+};
+const CFG = LANG_CONFIG[PAGE_LANG] || LANG_CONFIG.cs;
+const CUR = CFG.currency;
+const CART_KEY = 'tb_cart_' + CUR;
+
+// Doprava (Zásilkovna). EUR hodnoty jsou ZATÍM ORIENTAČNÍ - potvrďte před spuštěním.
+const SHIPPING_FEE = { CZK: 79, EUR: 4.9 };
+
+const moneyFmt = new Intl.NumberFormat(CFG.locale, {
+  style: 'currency',
+  currency: CUR,
+  minimumFractionDigits: CUR === 'CZK' ? 0 : 2,
+  maximumFractionDigits: CUR === 'CZK' ? 0 : 2,
+});
+function formatMoney(amount) { return moneyFmt.format(amount); }
 
 document.addEventListener("DOMContentLoaded", () => {
   initConsent();
@@ -16,6 +40,460 @@ document.addEventListener("DOMContentLoaded", () => {
     loadPacketaScriptIfNeeded();
   }
 });
+
+/* ---------- Texty podle jazyka ---------- */
+const I18N = {
+  cs: {
+    alertNoPacketa: 'Knihovna Zásilkovny se ještě nenačetla.',
+    alertPickPoint: 'Vyber prosím výdejní místo nebo Z-BOX Zásilkovny.',
+    cartEmpty: 'Košík je zatím prázdný.',
+    cartTotal: 'Zboží celkem:',
+    toCheckout: 'Přejít k objednávce',
+    remove: 'Odebrat',
+    cartTitle: 'Váš Košík',
+    checkoutTitle: 'Objednávka merche',
+    sending: 'Odesílám...',
+    submitOrder: 'Dokončit a odeslat',
+    addToCart: 'Do košíku',
+    orderOk: 'Objednávka byla úspěšně odeslána!',
+    orderOkPay: 'Objednávka byla úspěšně odeslána! Instrukce k platbě dorazí do e-mailu.',
+    orderErr: 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.',
+    contactOk: 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu.',
+    contactOkShort: 'Díky za poptávku! Zpráva byla odeslána.',
+    contactErr: 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.',
+    submitContact: 'Odeslat poptávku',
+    withdrawOk: 'Oznámení bylo úspěšně odesláno.',
+    withdrawErr: 'Došlo k chybě. Napiš na antonin.lamac@gmail.com.',
+    withdrawSubmit: 'Odeslat odstoupení',
+    withdrawTitle: 'Odstoupení od smlouvy',
+    withdrawLabels: { vs: 'Číslo objednávky (VS) *', name: 'Jméno a příjmení *', email: 'E-mail *', account: 'Číslo účtu pro vrácení peněz *' },
+    legalTitles: { terms: 'Obchodní podmínky', privacy: 'Ochrana soukromí (GDPR)' },
+    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', univ: 'Univerzální velikost (Nastavitelný snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
+    products: {
+      t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.' },
+      t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash úprava, syrový streetový vibe, limitovaná série. Každý kus má unikátní strukturu oprání.' },
+      t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Pevný límec, spadlá ramena a autorský print nočního města. Gramáž 220g.' },
+      m1: { badge: '[DOPLNIT]', title: '[DOPLNIT NÁZEV MIKINY]', desc: '[DOPLNIT POPIS MIKINY]' },
+      h1: { badge: '3D Výšivka', title: 'SnapBack „TB SIGNATURE“', desc: 'Klasický 6-panel střih, matná černá, zelený spodek kšiltu a precizní 3D výšivka loga Tony Brenx.' },
+      p1: { badge: 'Archival Matte', title: 'Poster „URBAN SHADOW“', desc: 'Černobílý kontrastní tisk ze sokolovských ulic. Hluboká černá barva na archivním matném papíře 250g.' },
+      p2: { badge: 'Fine-Art', title: 'Poster „NOCTURNAL DRIFT“', desc: 'Filmový frame z nočního natáčení s mlžnou atmosférou. Vysoké rozlišení a jemné analogové zrno.' },
+      p3: { badge: '310g Print', title: 'Poster „VINTAGE FLARE“', desc: 'Charakteristický swirl bokeh focený vintage sklem Helios 44-2 na plném full-frame snímači.' },
+      p4: { badge: 'Limitovaná Edice', title: 'Poster „REVÍR KRUŠNOHOŘÍ“', desc: 'Industriální krajina Krušných hor pod těžkými mraky. Ručně signováno autorem na rubu.' },
+    },
+    legal: {
+      terms: `
+      <p class="legal-box">
+        <strong>Provozovatel:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, Svatava 357 03.<br>
+        <strong>Kontakt:</strong> antonin.lamac@gmail.com
+      </p>
+      <h4>1. Všeobecná ustanovení</h4>
+      <p>Tyto podmínky upravují prodej autorského merche a fine-art tisků přes tento web a vztahy mezi provozovatelem a kupujícím.</p>
+      <h4>2. Objednávka a cena</h4>
+      <p>Objednávka je odeslána vyplněním formuláře. Cena zboží a způsob dopravy jsou uvedeny v košíku před odesláním. Provozovatel potvrdí objednávku e-mailem.</p>
+      <h4>3. Platba a dodání</h4>
+      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
+      <h4>4. Odstoupení od smlouvy</h4>
+      <p>Spotřebitel může odstoupit od kupní smlouvy do 14 dnů od převzetí zboží. Formulář pro odstoupení je v zápatí webu. Výjimkou je zboží upravené podle přání zákazníka nebo zhotovené pro jeho osobu (např. tisk s vlastním výběrem fotografie).</p>
+      <h4>5. Reklamace a řešení sporů</h4>
+      <p>Vady uplatňujte e-mailem na adrese uvedené výše. Spotřebitel může také využít mimosoudní řešení sporů u České obchodní inspekce (adr.coi.cz).</p>
+    `,
+      privacy: `
+      <p class="legal-box">
+        <strong>Správce:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, Svatava 357 03.<br>
+        <strong>Kontakt:</strong> antonin.lamac@gmail.com
+      </p>
+      <h4>1. Jaké údaje zpracovávám</h4>
+      <p>Z poptávkového formuláře jméno, e-mail, telefon a obsah zprávy. Z objednávky navíc jméno, e-mail, telefon, způsob dopravy a u Zásilkovny vybrané výdejní místo. Z formuláře pro odstoupení číslo objednávky, jméno, e-mail a číslo účtu pro vrácení peněz.</p>
+      <h4>2. Účely a právní základ</h4>
+      <p>Vyřízení poptávky nebo objednávky (plnění smlouvy nebo jednání o ní, čl. 6 odst. 1 písm. b) GDPR). Účetní a daňové povinnosti (čl. 6 odst. 1 písm. c). Ochrana webu před zneužitím formuláře (oprávněný zájem, čl. 6 odst. 1 písm. f). Měření návštěvnosti jen s tvým souhlasem (čl. 6 odst. 1 písm. a).</p>
+      <h4>3. Příjemci</h4>
+      <p>Formuláře jsou zpracovávány přes Google (Google Apps Script a Google Tabulky) a Zásilkovna s.r.o. pro doručení. Web je hostován na GitHub Pages. Měření návštěvnosti provozuje Google Analytics, a to jen po přijetí souhlasu.</p>
+      <h4>4. Doba uložení</h4>
+      <p>Poptávky nejdéle 1 rok od poslední komunikace. Objednávky a doklady po dobu stanovenou účetními a daňovými předpisy. Údaje k odstoupení po dobu nutnou k vyřízení a doložení. Údaje z analytiky podle nastavení Google Analytics.</p>
+      <h4>5. Cookies a úložiště prohlížeče</h4>
+      <p>Obsah košíku a tvoje volba souhlasu se ukládají do úložiště prohlížeče (localStorage). Jde o nezbytné údaje pro provoz webu. Analytické cookies Google se načtou až po přijetí souhlasu. Souhlas můžeš kdykoli odvolat vymazáním údajů webu v prohlížeči.</p>
+      <h4>6. Tvoje práva</h4>
+      <p>Máš právo na přístup k údajům, opravu, výmaz, omezení zpracování, přenositelnost a vznést námitku. Stížnost můžeš podat u Úřadu pro ochranu osobních údajů (uoou.cz).</p>
+    `,
+    },
+    alt: {
+      1: 'Žena v pruhovaném tričku se opírá o dřevěné zábradlí lavičky, tmavé pozadí',
+      2: 'Muž s kulečníkovým tágem v květované košili se dívá do objektivu',
+      3: 'Muž v klobouku a obleku s odznakem The Three Corners, světelný bokeh v pozadí',
+      4: 'Kouř stoupá z ohně, dvě osoby v kapucích v zimním slunci, pohled zezadu',
+      5: 'Starší muž s úsměvem vzhlíží u baru, před ním pivní sklenice a láhev',
+      6: 'Sousoší soch na střeše betonové budovy pod zataženou oblohou',
+      7: 'Ulice s graffiti na roletách a výlohách, černobílá street fotografie',
+      8: 'Dva lidé s batohy fotografují kovovou věž na šedém nebi',
+      10: 'Starší muž v čepici hraje na housle a dívá se směrem k fotografovi',
+      11: 'Fasáda cihlové budovy s nápisem DOLPHIN HOUSE, pohled zdola',
+      12: 'Dítě nalévá šumivé víno z láhve s nápisem FRIZZANTE do sklenice na tmavém pozadí',
+      13: 'Houslista s brýlemi a klarinetista hrají pod markýzou v ulici',
+      14: 'Ruka drží sklenici s rytím Víno z Čejkovic na rozmazaném pozadí',
+      15: 'Siluety postav zahalených průhlednou fólií, černobílá fotografie z uliční série',
+      16: 'Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série',
+      17: 'Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série',
+      18: 'Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série',
+      19: 'Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série',
+      20: 'Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série',
+      21: 'Siluety zahalené průhlednou fólií, černobílá fotografie',
+      22: 'Siluety zahalené průhlednou fólií, černobílá fotografie z uliční série',
+      23: 'Siluety zahalené průhlednou fólií, černobílá fotografie',
+      24: 'Rozmazaný portrét ženy za průhlednou fólií v tmavém tónu',
+      25: 'Mladý muž sedí na kamenné zdi s velkou taškou, za ním klenutá budova',
+      26: 'Muž si zakrývá obličej rukou na ulici, v pozadí výloha a policisté',
+      27: 'Interiér obchodu v noci, na poličkách sklenice a zboží, nápis Vítejte v pasáži',
+      28: 'Pražský hrad a Vltava v noci, dlouhá expozice',
+      29: 'Detail muže s kulatými slunečními brýlemi držícího papírový kelímek kávy',
+      30: 'Silueta sochy andělánka s křídly proti oblakům',
+      31: 'Dřevěné pahýly ve tvaru rukou vyčnívají z trávy',
+      32: 'Muž se dívá do telefonu na ulici, odraz v kaluži, cedule sanita-topení-plyn',
+      33: 'Detail kliky dveří s malou hloubkou ostrosti',
+      34: 'Mladá žena sedí v interiéru rychlého občerstvení s velkými oblouky',
+      35: 'Kurýr na kole s doručovací brašnou v pohybu, rozmazané pozadí',
+      36: 'Poštovní schránka s nápisem Berlin, za ní zaparkovaná auta',
+      37: 'Betonový žlab vedoucí k kamenné zdi, černobílá architektura',
+      38: 'Prosklený strop Sony Center v Berlíně s radiálním tvarem',
+      39: 'Nákladní kolo s nápisem BERLIN na předním nosiči na kostkové dlažbě',
+      40: 'Kus Berlínské zdi s graffiti symbolem míru, chodci a žena v šátku s telefonem',
+      41: 'Ulice na Potsdamer Platz, rozmazané auto, žena čeká na zastávce autobusu',
+      42: 'Muž stojí před graffiti na Berlínské zdi, žena kráčí kolem',
+      43: 'Nástěnná malba Brother\'s Kiss s cyrilicí, žena jde kolem s kolem',
+      44: 'Muž kráčí mezi betonovými stélami památníku v Berlíně',
+      45: 'Černobílý umělecký snímek postavy v tmavém prostředí, světlo zdůrazňuje tvary',
+      46: 'Černobílý portrét osoby v rozepnuté bílé košili proti tmavému pozadí',
+      47: 'Muž v čepici u rolet pokrytých graffiti, černobílá street fotografie',
+      48: 'Obchod MR SINGH\'S se zavřenou roletou pokrytou graffiti, pohled z ulice',
+      49: 'Dřevěné dveře s mosaznou schránkou a nápisem NO JUNK MAIL',
+      50: 'Řada cihlových domů s bílým zábradlím, běžec na chodníku a rozmazaný cyklista v popředí',
+      51: 'Malý pejsek na vodítku se dívá vzhůru na fotografa na žulové dlažbě',
+      52: 'Cyklista na silnici podél nábřeží, v pozadí řada historických domů',
+      53: 'Výloha knihkupectví The Library Project s knihami a odrazem lidí v okně',
+      54: 'Žena v kšiltovce a mikině s nápisem KEEP WALKING fotografuje výlohu',
+      55: 'Vertikální cedule s velkými písmeny proti světlé obloze, pohled zdola',
+    },
+    altDefault: 'Černobílá fotografie z ulice od Tony Brenx',
+  },
+
+  en: {
+    alertNoPacketa: 'The Packeta library has not loaded yet.',
+    alertPickPoint: 'Please choose a pickup point or a Packeta Z-BOX.',
+    cartEmpty: 'Your cart is empty.',
+    cartTotal: 'Goods total:',
+    toCheckout: 'Go to checkout',
+    remove: 'Remove',
+    cartTitle: 'Your cart',
+    checkoutTitle: 'Merch order',
+    sending: 'Sending...',
+    submitOrder: 'Complete and send',
+    addToCart: 'Add to cart',
+    orderOk: 'Your order has been sent!',
+    orderOkPay: 'Your order has been sent! Payment instructions will arrive by email.',
+    orderErr: 'A connection error occurred. Please write to antonin.lamac@gmail.com.',
+    contactOk: 'Thank you for your enquiry! It has been sent, I will get back to you soon.',
+    contactOkShort: 'Thank you for your enquiry! It has been sent.',
+    contactErr: 'A connection error occurred. Please write to antonin.lamac@gmail.com.',
+    submitContact: 'Send enquiry',
+    withdrawOk: 'Your withdrawal notice has been sent.',
+    withdrawErr: 'An error occurred. Please write to antonin.lamac@gmail.com.',
+    withdrawSubmit: 'Send withdrawal notice',
+    withdrawTitle: 'Withdrawal from contract',
+    withdrawLabels: { vs: 'Order number (VS) *', name: 'Full name *', email: 'Email *', account: 'Bank account (IBAN) for refund *' },
+    legalTitles: { terms: 'Terms and conditions', privacy: 'Privacy (GDPR)' },
+    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', univ: 'One size (adjustable snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
+    products: {
+      t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized cut made from premium heavyweight 100% cotton (240 g/m²). Black-and-white screen print built to last. Made for everyday street wear.' },
+      t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash finish, raw street vibe, limited series. Every piece has its own unique wash pattern.' },
+      t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Structured collar, dropped shoulders and an original print of the night city. 220 g/m².' },
+      m1: { badge: '[TO FILL]', title: '[TO FILL HOODIE NAME]', desc: '[TO FILL HOODIE DESCRIPTION]' },
+      h1: { badge: '3D Embroidery', title: 'SnapBack „TB SIGNATURE“', desc: 'Classic 6-panel cut in matte black, green underside of the peak and a precise 3D embroidery of the Tony Brenx logo.' },
+      p1: { badge: 'Archival Matte', title: 'Poster „URBAN SHADOW“', desc: 'Black-and-white high-contrast print from the streets of Sokolov. Deep black on archival matte 250 g paper.' },
+      p2: { badge: 'Fine-Art', title: 'Poster „NOCTURNAL DRIFT“', desc: 'Film frame from a night shoot with a misty atmosphere. High resolution and fine analogue grain.' },
+      p3: { badge: '310g Print', title: 'Poster „VINTAGE FLARE“', desc: 'Characteristic swirl bokeh shot with a vintage Helios 44-2 lens on a full-frame sensor.' },
+      p4: { badge: 'Limited Edition', title: 'Poster „REVÍR KRUŠNOHOŘÍ“', desc: 'Industrial landscape of the Ore Mountains under heavy clouds. Hand-signed by the artist on the back.' },
+    },
+    legal: {
+      terms: `
+      <p class="legal-box">
+        <strong>Operator:</strong> Antonín Lamač (Tony Brenx), Company ID (IČO): 87481235, Palackého 364, 357 03 Svatava, Czech Republic.<br>
+        <strong>Contact:</strong> antonin.lamac@gmail.com
+      </p>
+      <h4>1. General provisions</h4>
+      <p>These terms govern the sale of merchandise and fine-art prints through this website and the relationship between the operator and the buyer.</p>
+      <h4>2. Order and price</h4>
+      <p>An order is placed by completing the form. Prices in EUR and the shipping method are shown in the cart before the order is sent. The seller is not a VAT payer, so the prices shown are final. The operator confirms the order by email.</p>
+      <h4>3. Payment and delivery</h4>
+      <p>Payment is made by bank transfer in EUR. Payment details are sent by email and payment is due within 48 hours of sending the order. Delivery is by Packeta to a pickup point, or by personal pickup in Sokolov.</p>
+      <h4>4. Withdrawal from contract</h4>
+      <p>A consumer may withdraw from the purchase contract within 14 days of receiving the goods. The withdrawal form is in the footer of the website. This does not apply to goods made to the customer's specification or made for the customer personally (e.g. a print of a photo chosen by the customer).</p>
+      <h4>5. Complaints and dispute resolution</h4>
+      <p>Send complaints by email to the address above. Consumers may also use out-of-court dispute resolution with the Czech Trade Inspection Authority (ČOI, adr.coi.cz).</p>
+    `,
+      privacy: `
+      <p class="legal-box">
+        <strong>Controller:</strong> Antonín Lamač (Tony Brenx), Company ID (IČO): 87481235, Palackého 364, 357 03 Svatava, Czech Republic.<br>
+        <strong>Contact:</strong> antonin.lamac@gmail.com
+      </p>
+      <h4>1. Data I process</h4>
+      <p>From an order: name, email, phone, the chosen shipping method and, for Packeta, the selected pickup point. From the withdrawal form: order number, name, email and the bank account for the refund.</p>
+      <h4>2. Purposes and legal basis</h4>
+      <p>Handling an order (performance of a contract or steps before concluding it, Art. 6(1)(b) GDPR). Accounting and tax obligations (Art. 6(1)(c)). Protecting the website against form abuse (legitimate interest, Art. 6(1)(f)). Visitor measurement only with your consent (Art. 6(1)(a)).</p>
+      <h4>3. Recipients</h4>
+      <p>Forms are processed through Google (Google Apps Script and Google Sheets) and Zásilkovna s.r.o. for delivery. The website is hosted on GitHub Pages. Visitor measurement is provided by Google Analytics, and only after you give consent.</p>
+      <h4>4. Retention</h4>
+      <p>Orders and accounting documents are kept for the period required by accounting and tax rules. Withdrawal data is kept for as long as needed to process and document it. Analytics data follows the Google Analytics settings.</p>
+      <h4>5. Cookies and browser storage</h4>
+      <p>Cart contents and your consent choice are stored in the browser's local storage. This data is necessary for the website to work. Google Analytics cookies load only after you accept. You can withdraw consent at any time by clearing the website data in your browser.</p>
+      <h4>6. Your rights</h4>
+      <p>You have the right of access, rectification, erasure, restriction of processing, data portability and to object. You may lodge a complaint with the Czech Office for Personal Data Protection (uoou.cz).</p>
+    `,
+    },
+    alt: {
+      1: 'Woman in a striped top leaning on a wooden bench rail, dark background',
+      2: 'Man holding a pool cue in a floral shirt, looking into the camera',
+      3: 'Man in a hat and suit with a The Three Corners badge, light bokeh in the background',
+      4: 'Smoke rising from a fire, two people in hoods in winter sunlight, seen from behind',
+      5: 'Older man smiling upwards at a bar, beer glass and bottle in front of him',
+      6: 'Group of sculptures on top of a concrete building under an overcast sky',
+      7: 'Street with graffiti on shutters and shop windows, black-and-white street photography',
+      8: 'Two people with backpacks photographing a metal tower against a grey sky',
+      10: 'Older man in a cap playing the violin, looking towards the photographer',
+      11: 'Brick building facade with the sign DOLPHIN HOUSE, seen from below',
+      12: 'Child pouring sparkling wine from a bottle labelled FRIZZANTE into a glass on a dark background',
+      13: 'Violinist with glasses and a clarinet player performing under an awning in the street',
+      14: 'Hand holding a glass engraved Víno z Čejkovic against a blurred background',
+      15: 'Silhouettes of people wrapped in clear plastic sheeting, black-and-white street series',
+      16: 'Figures wrapped in clear plastic sheeting, black-and-white street series',
+      17: 'Figures wrapped in clear plastic sheeting, black-and-white street series',
+      18: 'Figures wrapped in clear plastic sheeting, black-and-white street series',
+      19: 'Figures wrapped in clear plastic sheeting, black-and-white street series',
+      20: 'Figures wrapped in clear plastic sheeting, black-and-white street series',
+      21: 'Silhouettes wrapped in clear plastic sheeting, black-and-white photograph',
+      22: 'Silhouettes wrapped in clear plastic sheeting, black-and-white street series',
+      23: 'Silhouettes wrapped in clear plastic sheeting, black-and-white photograph',
+      24: 'Blurred portrait of a woman behind clear plastic film, dark tone',
+      25: 'Young man sitting on a stone wall with a large bag, an arched building behind him',
+      26: 'Man covering his face with his hand in the street, shop window and police officers in the background',
+      27: 'Shop interior at night, shelves with jars and products, sign reading Welcome to the arcade',
+      28: 'Prague Castle and the Vltava river at night, long exposure',
+      29: 'Close-up of a man in round sunglasses holding a paper coffee cup',
+      30: 'Silhouette of an angel statue with wings against clouds',
+      31: 'Wooden stumps shaped like hands sticking out of the grass',
+      32: 'Man looking at his phone in the street, reflected in a puddle, sign sanita-topení-plyn',
+      33: 'Close-up of a door handle with shallow depth of field',
+      34: 'Young woman sitting inside a fast-food restaurant with large arches',
+      35: 'Courier on a bicycle with a delivery bag in motion, blurred background',
+      36: 'Post box labelled Berlin, with parked cars behind it',
+      37: 'Concrete channel leading to a stone wall, black-and-white architecture',
+      38: 'Glass ceiling of the Sony Center in Berlin with a radial structure',
+      39: 'Cargo bike with BERLIN on the front rack on cobblestones',
+      40: 'Piece of the Berlin Wall with peace-symbol graffiti, pedestrians and a woman in a headscarf looking at her phone',
+      41: 'Street at Potsdamer Platz, blurred car, woman waiting at a bus stop',
+      42: 'Man standing in front of graffiti on the Berlin Wall, a woman walking past',
+      43: 'Brother\'s Kiss mural with Cyrillic lettering, woman walking past with a bicycle',
+      44: 'Man walking between the concrete stelae of a memorial in Berlin',
+      45: 'Black-and-white artistic image of a figure in a dark setting, light emphasising the forms',
+      46: 'Black-and-white portrait of a person in an open white shirt against a dark background',
+      47: 'Man in a cap in front of shutters covered in graffiti, black-and-white street photography',
+      48: 'Shop MR SINGH\'S with a closed shutter covered in graffiti, view from the street',
+      49: 'Wooden door with a brass letterbox and the sign NO JUNK MAIL',
+      50: 'Row of brick houses with a white railing, a jogger on the pavement and a blurred cyclist in the foreground',
+      51: 'Small dog on a leash looking up at the photographer on granite paving',
+      52: 'Cyclist on the road along the embankment, a row of historic houses behind',
+      53: 'Window of The Library Project bookshop with books and reflections of people in the glass',
+      54: 'Woman in a cap and sweatshirt with KEEP WALKING photographing a shop window',
+      55: 'Vertical sign with large letters against a bright sky, seen from below',
+    },
+    altDefault: 'Black-and-white street photograph by Tony Brenx',
+  },
+
+  de: {
+    alertNoPacketa: 'Die Packeta-Bibliothek wurde noch nicht geladen.',
+    alertPickPoint: 'Bitte wähle eine Abholstelle oder eine Packeta Z-BOX aus.',
+    cartEmpty: 'Dein Warenkorb ist noch leer.',
+    cartTotal: 'Warenwert gesamt:',
+    toCheckout: 'Zur Bestellung',
+    remove: 'Entfernen',
+    cartTitle: 'Dein Warenkorb',
+    checkoutTitle: 'Merch-Bestellung',
+    sending: 'Wird gesendet...',
+    submitOrder: 'Abschließen und senden',
+    addToCart: 'In den Warenkorb',
+    orderOk: 'Deine Bestellung wurde erfolgreich gesendet!',
+    orderOkPay: 'Deine Bestellung wurde erfolgreich gesendet! Die Zahlungsanweisung kommt per E-Mail.',
+    orderErr: 'Es gab einen Verbindungsfehler. Bitte schreibe an antonin.lamac@gmail.com.',
+    contactOk: 'Danke für deine Anfrage! Sie wurde gesendet, ich melde mich bald bei dir.',
+    contactOkShort: 'Danke für deine Anfrage! Sie wurde gesendet.',
+    contactErr: 'Es gab einen Verbindungsfehler. Bitte schreibe an antonin.lamac@gmail.com.',
+    submitContact: 'Anfrage senden',
+    withdrawOk: 'Deine Widerrufserklärung wurde gesendet.',
+    withdrawErr: 'Es ist ein Fehler aufgetreten. Bitte schreibe an antonin.lamac@gmail.com.',
+    withdrawSubmit: 'Widerruf senden',
+    withdrawTitle: 'Widerruf vom Vertrag',
+    withdrawLabels: { vs: 'Bestellnummer (VS) *', name: 'Vor- und Nachname *', email: 'E-Mail *', account: 'Bankkonto (IBAN) für die Rückzahlung *' },
+    legalTitles: { terms: 'Allgemeine Geschäftsbedingungen', privacy: 'Datenschutz (DSGVO)' },
+    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', univ: 'Einheitsgröße (verstellbarer Snap)', A3: 'A3 (30 x 42 cm)', A2: 'A2 (42 x 59 cm)' },
+    products: {
+      t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized-Schnitt aus hochwertiger schwerer 100 % Baumwolle (240 g/m²). Schwarz-weißer Siebdruck mit hoher Haltbarkeit. Für den täglichen Streetwear-Look gemacht.' },
+      t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage-Acid-Wash-Veredelung, roher Streetwear-Vibe, limitierte Serie. Jedes Stück hat eine einzigartige Waschstruktur.' },
+      t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Fester Kragen, tiefe Schultern und ein eigener Print einer nächtlichen Stadt. 220 g/m².' },
+      m1: { badge: '[ZU ERGÄNZEN]', title: '[NAME DER MIKINA ERGÄNZEN]', desc: '[BESCHREIBUNG DER MIKINA ERGÄNZEN]' },
+      h1: { badge: '3D-Stickerei', title: 'SnapBack „TB SIGNATURE“', desc: 'Klassischer 6-Panel-Schnitt in mattem Schwarz, grüne Unterseite des Schirms und präzise 3D-Stickerei des Tony-Brenx-Logos.' },
+      p1: { badge: 'Archival Matte', title: 'Poster „URBAN SHADOW“', desc: 'Schwarz-weißer kontrastreicher Druck aus den Straßen von Sokolov. Tiefes Schwarz auf archivfestem Mattpapier mit 250 g.' },
+      p2: { badge: 'Fine-Art', title: 'Poster „NOCTURNAL DRIFT“', desc: 'Filmframe aus einer Nachtaufnahme mit nebliger Atmosphäre. Hohe Auflösung und feines analoges Korn.' },
+      p3: { badge: '310g Print', title: 'Poster „VINTAGE FLARE“', desc: 'Charakteristisches Swirl-Bokeh, aufgenommen mit dem Vintage-Objektiv Helios 44-2 auf einem Vollformatsensor.' },
+      p4: { badge: 'Limitierte Edition', title: 'Poster „REVÍR KRUŠNOHOŘÍ“', desc: 'Industrielandschaft des Erzgebirges unter schweren Wolken. Auf der Rückseite vom Künstler handsigniert.' },
+    },
+    legal: {
+      terms: `
+      <p class="legal-box">
+        <strong>Betreiber:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, 357 03 Svatava, Tschechien.<br>
+        <strong>Kontakt:</strong> antonin.lamac@gmail.com
+      </p>
+      <h4>1. Allgemeines</h4>
+      <p>Diese Bedingungen regeln den Verkauf von Merchandise und Fine-Art-Drucken über diese Website sowie das Verhältnis zwischen Betreiber und Käufer.</p>
+      <h4>2. Bestellung und Preis</h4>
+      <p>Die Bestellung erfolgt durch Ausfüllen des Formulars. Preise in Euro und die Versandart werden vor dem Absenden im Warenkorb angezeigt. Der Verkäufer ist nicht umsatzsteuerpflichtig; die angezeigten Preise sind Endpreise. Der Betreiber bestätigt die Bestellung per E-Mail.</p>
+      <h4>3. Zahlung und Lieferung</h4>
+      <p>Die Zahlung erfolgt per Banküberweisung in Euro. Die Zahlungsdaten werden per E-Mail gesendet; die Zahlung ist innerhalb von 48 Stunden nach dem Absenden der Bestellung fällig. Die Lieferung erfolgt mit Packeta an eine Abholstelle oder durch persönliche Abholung in Sokolov.</p>
+      <h4>4. Widerrufsrecht</h4>
+      <p>Verbraucher können innerhalb von 14 Tagen nach Erhalt der Ware vom Kaufvertrag zurücktreten. Das Widerrufsformular befindet sich in der Fußzeile der Website. Ausgenommen sind nach Kundenwunsch angefertigte Waren oder Waren, die persönlich für den Kunden hergestellt wurden (z. B. ein Druck mit einer vom Kunden gewählten Fotografie).</p>
+      <h4>5. Reklamation und Streitbeilegung</h4>
+      <p>Mängel bitte per E-Mail an die oben genannte Adresse melden. Verbraucher können außerdem die tschechische Handelsinspektion (ČOI, adr.coi.cz) zur außergerichtlichen Streitbeilegung kontaktieren.</p>
+    `,
+      privacy: `
+      <p class="legal-box">
+        <strong>Verantwortlicher:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, 357 03 Svatava, Tschechien.<br>
+        <strong>Kontakt:</strong> antonin.lamac@gmail.com
+      </p>
+      <h4>1. Welche Daten ich verarbeite</h4>
+      <p>Bei einer Bestellung: Name, E-Mail, Telefon, die gewählte Versandart und bei Packeta die ausgewählte Abholstelle. Über das Widerrufsformular: Bestellnummer, Name, E-Mail und das Bankkonto für die Rückzahlung.</p>
+      <h4>2. Zwecke und Rechtsgrundlage</h4>
+      <p>Abwicklung einer Bestellung (Erfüllung eines Vertrags oder vorvertragliche Maßnahmen, Art. 6 Abs. 1 lit. b DSGVO). Buchhaltungs- und Steuerpflichten (Art. 6 Abs. 1 lit. c). Schutz der Website vor Missbrauch des Formulars (berechtigtes Interesse, Art. 6 Abs. 1 lit. f). Reichweitenmessung nur mit deiner Einwilligung (Art. 6 Abs. 1 lit. a).</p>
+      <h4>3. Empfänger</h4>
+      <p>Formulare werden über Google (Google Apps Script und Google Tabellen) und die Zásilkovna s.r.o. für die Zustellung verarbeitet. Die Website wird auf GitHub Pages gehostet. Die Reichweitenmessung erfolgt über Google Analytics, und zwar erst nach deiner Einwilligung.</p>
+      <h4>4. Speicherdauer</h4>
+      <p>Bestellungen und Buchhaltungsbelege werden so lange aufbewahrt, wie es die Buchhaltungs- und Steuervorschriften verlangen. Widerrufsdaten werden so lange gespeichert, wie es für die Abwicklung und den Nachweis nötig ist. Analysedaten richten sich nach den Einstellungen von Google Analytics.</p>
+      <h4>5. Cookies und Browserspeicher</h4>
+      <p>Der Warenkorbinhalt und deine Einwilligungsentscheidung werden im lokalen Speicher deines Browsers (localStorage) abgelegt. Diese Daten sind für den Betrieb der Website notwendig. Google-Analytics-Cookies werden erst nach deiner Zustimmung geladen. Du kannst die Einwilligung jederzeit widerrufen, indem du die Website-Daten in deinem Browser löschst.</p>
+      <h4>6. Deine Rechte</h4>
+      <p>Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Beschwerden kannst du beim tschechischen Amt für den Schutz personenbezogener Daten (uoou.cz) einreichen.</p>
+    `,
+    },
+    alt: {
+      1: 'Frau im gestreiften Oberteil lehnt am Holzgeländer einer Bank, dunkler Hintergrund',
+      2: 'Mann mit Billardqueue im Blumenhemd, blickt in die Kamera',
+      3: 'Mann mit Hut und Anzug mit dem Abzeichen The Three Corners, Lichtbokeh im Hintergrund',
+      4: 'Rauch steigt von einem Feuer auf, zwei Personen mit Kapuzen im winterlichen Sonnenlicht, von hinten',
+      5: 'Älterer Mann lächelt nach oben an einer Bar, vor ihm ein Bierglas und eine Flasche',
+      6: 'Skulpturengruppe auf dem Dach eines Betongebäudes unter bedecktem Himmel',
+      7: 'Straße mit Graffiti auf Rollläden und Schaufenstern, Schwarz-Weiß-Streetfotografie',
+      8: 'Zwei Personen mit Rucksäcken fotografieren einen Metallturm vor grauem Himmel',
+      10: 'Älterer Mann mit Mütze spielt Geige und blickt zum Fotografen',
+      11: 'Fassade eines Backsteingebäudes mit der Aufschrift DOLPHIN HOUSE, Ansicht von unten',
+      12: 'Kind gießt Schaumwein aus einer Flasche mit der Aufschrift FRIZZANTE in ein Glas, dunkler Hintergrund',
+      13: 'Geiger mit Brille und Klarinettist spielen unter einer Markise auf der Straße',
+      14: 'Hand hält ein Glas mit der Gravur Víno z Čejkovic vor unscharfem Hintergrund',
+      15: 'Silhouetten von Personen in durchsichtiger Plastikfolie, Schwarz-Weiß-Straßenserie',
+      16: 'Figuren in durchsichtiger Plastikfolie, Schwarz-Weiß-Straßenserie',
+      17: 'Figuren in durchsichtiger Plastikfolie, Schwarz-Weiß-Straßenserie',
+      18: 'Figuren in durchsichtiger Plastikfolie, Schwarz-Weiß-Straßenserie',
+      19: 'Figuren in durchsichtiger Plastikfolie, Schwarz-Weiß-Straßenserie',
+      20: 'Figuren in durchsichtiger Plastikfolie, Schwarz-Weiß-Straßenserie',
+      21: 'Silhouetten in durchsichtiger Folie, Schwarz-Weiß-Fotografie',
+      22: 'Silhouetten in durchsichtiger Folie, Schwarz-Weiß-Straßenserie',
+      23: 'Silhouetten in durchsichtiger Folie, Schwarz-Weiß-Fotografie',
+      24: 'Unscharfes Porträt einer Frau hinter durchsichtiger Folie, dunkler Ton',
+      25: 'Junger Mann sitzt mit großer Tasche auf einer Steinmauer, dahinter ein Gebäude mit Torbogen',
+      26: 'Mann bedeckt sein Gesicht mit der Hand auf der Straße, im Hintergrund Schaufenster und Polizisten',
+      27: 'Ladeninneres bei Nacht, Regale mit Gläsern und Waren, Schild mit der Aufschrift Willkommen in der Passage',
+      28: 'Prager Burg und Moldau bei Nacht, Langzeitbelichtung',
+      29: 'Nahaufnahme eines Mannes mit runder Sonnenbrille, der einen Pappbecher Kaffee hält',
+      30: 'Silhouette einer Engelsstatue mit Flügeln vor Wolken',
+      31: 'Hölzerne Baumstümpfe in Form von Händen ragen aus dem Gras',
+      32: 'Mann schaut auf der Straße auf sein Handy, Spiegelung in einer Pfütze, Schild sanita-topení-plyn',
+      33: 'Nahaufnahme eines Türgriffs mit geringer Schärfentiefe',
+      34: 'Junge Frau sitzt in einem Schnellrestaurant mit großen Bögen',
+      35: 'Kurier auf dem Fahrrad mit Lieferrucksack in Bewegung, unscharfer Hintergrund',
+      36: 'Briefkasten mit der Aufschrift Berlin, dahinter parkende Autos',
+      37: 'Betonkanal führt zu einer Steinmauer, Schwarz-Weiß-Architektur',
+      38: 'Glasdach des Sony Centers in Berlin mit radialer Struktur',
+      39: 'Lastenrad mit der Aufschrift BERLIN am vorderen Gepäckträger auf Kopfsteinpflaster',
+      40: 'Stück der Berliner Mauer mit Friedenssymbol-Graffiti, Passanten und eine Frau mit Kopftuch am Handy',
+      41: 'Straße am Potsdamer Platz, verschwommenes Auto, Frau wartet an der Bushaltestelle',
+      42: 'Mann steht vor Graffiti an der Berliner Mauer, eine Frau geht vorbei',
+      43: 'Wandgemälde Brother\'s Kiss mit kyrillischer Schrift, Frau geht mit einem Fahrrad vorbei',
+      44: 'Mann geht zwischen den Betonstelen eines Denkmals in Berlin',
+      45: 'Schwarz-weiße künstlerische Aufnahme einer Figur im dunklen Raum, das Licht betont die Formen',
+      46: 'Schwarz-weißes Porträt einer Person mit offenem weißem Hemd vor dunklem Hintergrund',
+      47: 'Mann mit Mütze vor Rollläden voller Graffiti, Schwarz-Weiß-Streetfotografie',
+      48: 'Laden MR SINGH\'S mit geschlossenem, besprühtem Rollladen, Blick von der Straße',
+      49: 'Holztür mit Messingbriefkasten und dem Schild NO JUNK MAIL',
+      50: 'Reihe von Backsteinhäusern mit weißem Geländer, Jogger auf dem Gehweg und ein unscharfer Radfahrer im Vordergrund',
+      51: 'Kleiner Hund an der Leine schaut zum Fotografen auf, Granitpflaster',
+      52: 'Radfahrer auf der Straße entlang der Uferpromenade, dahinter eine Reihe historischer Häuser',
+      53: 'Schaufenster der Buchhandlung The Library Project mit Büchern und Spiegelungen von Menschen',
+      54: 'Frau mit Kappe und Sweatshirt mit KEEP WALKING fotografiert ein Schaufenster',
+      55: 'Vertikales Schild mit großen Buchstaben vor hellem Himmel, Ansicht von unten',
+    },
+    altDefault: 'Schwarz-weiße Streetfotografie von Tony Brenx',
+  },
+};
+
+const T = I18N[PAGE_LANG] || I18N.cs;
+function t(key) { return T[key]; }
+
+/* ---------- Katalog produktů (ceny v obou měnách) ----------
+   Ceny v EUR jsou ORIENTAČNÍ přepočtem (25 Kč/€, zaokrouhleno). Potvrďte je před spuštěním. */
+const PRODUCTS = [
+  { id: 't1', category: 'trika', variants: [
+      { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
+      { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } }] },
+  { id: 't2', category: 'trika', variants: [
+      { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
+      { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } }] },
+  { id: 't3', category: 'trika', variants: [
+      { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
+      { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } }] },
+  { id: 'm1', category: 'trika', variants: [
+      { key: 'S', prices: { CZK: 1390, EUR: 60 } }, { key: 'M', prices: { CZK: 1390, EUR: 60 } },
+      { key: 'L', prices: { CZK: 1390, EUR: 60 } }, { key: 'XL', prices: { CZK: 1390, EUR: 60 } }] },
+  { id: 'h1', category: 'headwear', variants: [
+      { key: 'univ', prices: { CZK: 590, EUR: 29 } }] },
+  { id: 'p1', category: 'postery', variants: [
+      { key: 'A3', prices: { CZK: 590, EUR: 24 } }, { key: 'A2', prices: { CZK: 840, EUR: 34 } }] },
+  { id: 'p2', category: 'postery', variants: [
+      { key: 'A3', prices: { CZK: 590, EUR: 24 } }, { key: 'A2', prices: { CZK: 840, EUR: 34 } }] },
+  { id: 'p3', category: 'postery', variants: [
+      { key: 'A3', prices: { CZK: 650, EUR: 26 } }, { key: 'A2', prices: { CZK: 900, EUR: 36 } }] },
+  { id: 'p4', category: 'postery', variants: [
+      { key: 'A3', prices: { CZK: 650, EUR: 26 } }, { key: 'A2', prices: { CZK: 900, EUR: 36 } }] },
+];
+const PRODUCT_IMAGES = {
+  t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
+  t2: ['/img-web/foto-5.webp', '/img-web/foto-6.webp', '/img-web/foto-7.webp'],
+  t3: ['/img-web/foto-12.webp', '/img-web/foto-13.webp', '/img-web/foto-14.webp'],
+  m1: ['/img-web/foto-1.webp'], // DOPLNIT: fotka mikiny
+  h1: ['/img-web/foto-20.webp', '/img-web/foto-21.webp'],
+  p1: ['/img-web/foto-25.webp', '/img-web/foto-26.webp'],
+  p2: ['/img-web/foto-33.webp', '/img-web/foto-34.webp'],
+  p3: ['/img-web/foto-42.webp', '/img-web/foto-43.webp'],
+  p4: ['/img-web/foto-50.webp', '/img-web/foto-51.webp'],
+};
+
+function findProduct(id) { return PRODUCTS.find(p => p.id === id); }
+function productText(id) { return T.products[id] || I18N.cs.products[id]; }
+function variantLabel(key) { return T.variants[key] || key; }
+function variantPrice(variant) { return variant.prices[CUR]; }
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 /* ---------- Souhlas s cookies a analytika ----------
    Analytika (GA) ani notifikace o návštěvě se nespustí, dokud návštěvník nepřijme. */
@@ -105,15 +583,6 @@ function initInteractions() {
   if (shipping) shipping.addEventListener('change', handleModalShippingChange);
 }
 
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
 function loadPacketaScriptIfNeeded() {
   if (window.Packeta || document.getElementById('packeta-widget-lib')) return;
   const s = document.createElement('script');
@@ -184,82 +653,23 @@ function updateButtons() {
   if (hidePhotosBtn) hidePhotosBtn.style.display = currentLoadedCount > initialBatch ? 'inline-flex' : 'none';
 }
 
-// Popisy fotografií pro alt text (SEO a čtečky obrazovky). Osoby nejsou jmenovány.
-const PHOTO_ALT = {
-  1: "Žena v pruhovaném tričku se opírá o dřevěné zábradlí lavičky, tmavé pozadí",
-  2: "Muž s kulečníkovým tágem v květované košili se dívá do objektivu",
-  3: "Muž v klobouku a obleku s odznakem The Three Corners, světelný bokeh v pozadí",
-  4: "Kouř stoupá z ohně, dvě osoby v kapucích v zimním slunci, pohled zezadu",
-  5: "Starší muž s úsměvem vzhlíží u baru, před ním pivní sklenice a láhev",
-  6: "Sousoší soch na střeše betonové budovy pod zataženou oblohou",
-  7: "Ulice s graffiti na roletách a výlohách, černobílá street fotografie",
-  8: "Dva lidé s batohy fotografují kovovou věž na šedém nebi",
-  10: "Starší muž v čepici hraje na housle a dívá se směrem k fotografovi",
-  11: "Fasáda cihlové budovy s nápisem DOLPHIN HOUSE, pohled zdola",
-  12: "Dítě nalévá šumivé víno z láhve s nápisem FRIZZANTE do sklenice na tmavém pozadí",
-  13: "Houslista s brýlemi a klarinetista hrají pod markýzou v ulici",
-  14: "Ruka drží sklenici s rytím Víno z Čejkovic na rozmazaném pozadí",
-  15: "Siluety postav zahalených průhlednou fólií, černobílá fotografie z uliční série",
-  16: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
-  17: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
-  18: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
-  19: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
-  20: "Postavy zahalené průhlednou fólií, černobílá fotografie z uliční série",
-  21: "Siluety zahalené průhlednou fólií, černobílá fotografie",
-  22: "Siluety zahalené průhlednou fólií, černobílá fotografie z uliční série",
-  23: "Siluety zahalené průhlednou fólií, černobílá fotografie",
-  24: "Rozmazaný portrét ženy za průhlednou fólií v tmavém tónu",
-  25: "Mladý muž sedí na kamenné zdi s velkou taškou, za ním klenutá budova",
-  26: "Muž si zakrývá obličej rukou na ulici, v pozadí výloha a policisté",
-  27: "Interiér obchodu v noci, na poličkách sklenice a zboží, nápis Vítejte v pasáži",
-  28: "Pražský hrad a Vltava v noci, dlouhá expozice",
-  29: "Detail muže s kulatými slunečními brýlemi držícího papírový kelímek kávy",
-  30: "Silueta sochy andělánka s křídly proti oblakům",
-  31: "Dřevěné pahýly ve tvaru rukou vyčnívají z trávy",
-  32: "Muž se dívá do telefonu na ulici, odraz v kaluži, cedule sanita-topení-plyn",
-  33: "Detail kliky dveří s malou hloubkou ostrosti",
-  34: "Mladá žena sedí v interiéru rychlého občerstvení s velkými oblouky",
-  35: "Kurýr na kole s doručovací brašnou v pohybu, rozmazané pozadí",
-  36: "Poštovní schránka s nápisem Berlin, za ní zaparkovaná auta",
-  37: "Betonový žlab vedoucí k kamenné zdi, černobílá architektura",
-  38: "Prosklený strop Sony Center v Berlíně s radiálním tvarem",
-  39: "Nákladní kolo s nápisem BERLIN na předním nosiči na kostkové dlažbě",
-  40: "Kus Berlínské zdi s graffiti symbolem míru, chodci a žena v šátku s telefonem",
-  41: "Ulice na Potsdamer Platz, rozmazané auto, žena čeká na zastávce autobusu",
-  42: "Muž stojí před graffiti na Berlínské zdi, žena kráčí kolem",
-  43: "Nástěnná malba Brother's Kiss s cyrilicí, žena jde kolem s kolem",
-  44: "Muž kráčí mezi betonovými stélami památníku v Berlíně",
-  45: "Černobílý umělecký snímek postavy v tmavém prostředí, světlo zdůrazňuje tvary",
-  46: "Černobílý portrét osoby v rozepnuté bílé košili proti tmavému pozadí",
-  47: "Muž v čepici u rolet pokrytých graffiti, černobílá street fotografie",
-  48: "Obchod MR SINGH'S se zavřenou roletou pokrytou graffiti, pohled z ulice",
-  49: "Dřevěné dveře s mosaznou schránkou a nápisem NO JUNK MAIL",
-  50: "Řada cihlových domů s bílým zábradlím, běžec na chodníku a rozmazaný cyklista v popředí",
-  51: "Malý pejsek na vodítku se dívá vzhůru na fotografa na žulové dlažbě",
-  52: "Cyklista na silnici podél nábřeží, v pozadí řada historických domů",
-  53: "Výloha knihkupectví The Library Project s knihami a odrazem lidí v okně",
-  54: "Žena v kšiltovce a mikině s nápisem KEEP WALKING fotografuje výlohu",
-  55: "Vertikální cedule s velkými písmeny proti světlé obloze, pohled zdola",
-};
-const PHOTO_ALT_DEFAULT = "Černobílá fotografie z ulice od Tony Brenx";
-
 function renderBatch(count) {
   if (!g) return;
   const next = photoIds.slice(currentLoadedCount, currentLoadedCount + count);
   next.forEach((id, idx) => {
-    const altText = PHOTO_ALT[id] || PHOTO_ALT_DEFAULT;
+    const altText = T.alt[id] || T.altDefault;
     const a = document.createElement('a');
-    a.href = `img-web/large/foto-${id}.webp`;
+    a.href = `/img-web/large/foto-${id}.webp`;
     a.setAttribute('aria-label', altText);
     a.style.animation = `revealPhoto 0.5s ease both ${idx * 0.04}s`;
 
     const im = document.createElement('img');
-    im.src = `img-web/thumb/foto-${id}.webp`;
+    im.src = `/img-web/thumb/foto-${id}.webp`;
     im.alt = altText;
     im.decoding = 'async';
     im.loading = 'lazy';
     im.draggable = false;
-    
+
     a.appendChild(im);
     g.appendChild(a);
   });
@@ -295,105 +705,64 @@ document.addEventListener('pointerdown', (e) => {
   if (!e.target.closest('.price-card')) priceCards.forEach(c => c.classList.remove('active-tap'));
 });
 
-if (isShopActive) {
-  const productsData = [
-    {
-      id: 't1', category: 'trika', badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', price: 890,
-      desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.',
-      images: ['img-web/foto-1.webp', 'img-web/foto-2.webp', 'img-web/foto-3.webp'],
-      variants: [{ name: 'S', price: 890 }, { name: 'M', price: 890 }, { name: 'L', price: 890 }, { name: 'XL', price: 890 }]
-    },
-    {
-      id: 't2', category: 'trika', badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', price: 950,
-      desc: 'Vintage acid wash úprava, syrový streetový vibe, limitovaná série. Každý kus má unikátní strukturu oprání.',
-      images: ['img-web/foto-5.webp', 'img-web/foto-6.webp', 'img-web/foto-7.webp'],
-      variants: [{ name: 'S', price: 950 }, { name: 'M', price: 950 }, { name: 'L', price: 950 }, { name: 'XL', price: 950 }]
-    },
-    {
-      id: 't3', category: 'trika', badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', price: 890,
-      desc: 'Pevný límec, spadlá ramena a autorský print nočního města. Gramáž 220g.',
-      images: ['img-web/foto-12.webp', 'img-web/foto-13.webp', 'img-web/foto-14.webp'],
-      variants: [{ name: 'S', price: 890 }, { name: 'M', price: 890 }, { name: 'L', price: 890 }, { name: 'XL', price: 890 }]
-    },
-    {
-      id: 'h1', category: 'headwear', badge: '3D Výšivka', title: 'SnapBack „TB SIGNATURE“', price: 790,
-      desc: 'Klasický 6-panel střih, matná černá, zelený spodek kšiltu a precizní 3D výšivka loga Tony Brenx.',
-      images: ['img-web/foto-20.webp', 'img-web/foto-21.webp'],
-      variants: [{ name: 'Univerzální velikost (Nastavitelný snap)', price: 790 }]
-    },
-    {
-      id: 'p1', category: 'postery', badge: 'Archival Matte', title: 'Poster „URBAN SHADOW“', price: 590,
-      desc: 'Černobílý kontrastní tisk ze sokolovských ulic. Hluboká černá barva na archivním matném papíře 250g.',
-      images: ['img-web/foto-25.webp', 'img-web/foto-26.webp'],
-      variants: [{ name: 'A3 (30x42 cm)', price: 590 }, { name: 'A2 (42x59 cm)', price: 840 }]
-    },
-    {
-      id: 'p2', category: 'postery', badge: 'Fine-Art', title: 'Poster „NOCTURNAL DRIFT“', price: 590,
-      desc: 'Filmový frame z nočního natáčení s mlžnou atmosférou. Vysoké rozlišení a jemné analogové zrno.',
-      images: ['img-web/foto-33.webp', 'img-web/foto-34.webp'],
-      variants: [{ name: 'A3 (30x42 cm)', price: 590 }, { name: 'A2 (42x59 cm)', price: 840 }]
-    },
-    {
-      id: 'p3', category: 'postery', badge: '310g Print', title: 'Poster „VINTAGE FLARE“', price: 650,
-      desc: 'Charakteristický swirl bokeh focený vintage sklem Helios 44-2 na plném full-frame snímači.',
-      images: ['img-web/foto-42.webp', 'img-web/foto-43.webp'],
-      variants: [{ name: 'A3 (30x42 cm)', price: 650 }, { name: 'A2 (42x59 cm)', price: 900 }]
-    },
-    {
-      id: 'p4', category: 'postery', badge: 'Limitovaná Edice', title: 'Poster „REVÍR KRUŠNOHOŘÍ“', price: 650,
-      desc: 'Industriální krajina Krušných hor pod těžkými mraky. Ručně signováno autorem na rubu.',
-      images: ['img-web/foto-50.webp', 'img-web/foto-51.webp'],
-      variants: [{ name: 'A3 (30x42 cm)', price: 650 }, { name: 'A2 (42x59 cm)', price: 900 }]
-    }
-  ];
-
+/* ---------- Shop: výpis produktů ---------- */
+function renderShopGrid() {
   const shopGrid = document.getElementById('shop-grid-container');
-  if (shopGrid) {
-    function renderShopGrid() {
-      shopGrid.innerHTML = '';
-      productsData.forEach(prod => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.dataset.category = prod.category;
-        card.onclick = (e) => {
-          if (!e.target.closest('button') && !e.target.closest('select')) {
-            openProductModal(prod.id);
-          }
-        };
+  if (!shopGrid) return;
+  shopGrid.innerHTML = '';
+  PRODUCTS.forEach(prod => {
+    const text = productText(prod.id);
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.dataset.category = prod.category;
+    card.dataset.pid = prod.id;
 
-        let selectHtml = '';
-        if (prod.variants.length > 1) {
-          selectHtml = `<select class="product-select" id="quick-opt-${prod.id}" onclick="event.stopPropagation()">
-            ${prod.variants.map((v, i) => `<option value="${v.name}" ${i===1?'selected':''}>${v.name}</option>`).join('')}
-          </select>`;
-        }
+    const selectHtml = prod.variants.length > 1
+      ? `<select class="product-select" aria-label="${escapeHtml(text.title)}">
+          ${prod.variants.map((v, i) => `<option value="${escapeHtml(v.key)}" ${i === 1 ? 'selected' : ''}>${escapeHtml(variantLabel(v.key))}</option>`).join('')}
+        </select>`
+      : '';
 
-        card.innerHTML = `
-          <div class="product-img-box">
-            <span class="product-badge">${prod.badge}</span>
-            <img src="${prod.images[0]}" alt="${prod.title}" loading="lazy" draggable="false" oncontextmenu="return false;">
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">${prod.title}</h3>
-            <p class="product-desc">${prod.desc.substring(0, 75)}...</p>
-            <div class="product-meta">
-              <span class="product-price">${prod.price} Kč</span>
-              ${selectHtml}
-            </div>
-            <button class="btn-buy" onclick="event.stopPropagation(); handleQuickBuy('${prod.id}')">
-              Do košíku
-            </button>
-          </div>
-        `;
-        shopGrid.appendChild(card);
-      });
+    card.innerHTML = `
+      <div class="product-img-box">
+        <span class="product-badge">${escapeHtml(text.badge)}</span>
+        <img src="${PRODUCT_IMAGES[prod.id][0]}" alt="${escapeHtml(text.title)}" loading="lazy" draggable="false">
+      </div>
+      <div class="product-info">
+        <h3 class="product-title">${escapeHtml(text.title)}</h3>
+        <p class="product-desc">${escapeHtml(text.desc.substring(0, 75))}...</p>
+        <div class="product-meta">
+          <span class="product-price">${formatMoney(prod.variants[0].prices[CUR])}</span>
+          ${selectHtml}
+        </div>
+        <button type="button" class="btn-buy">${escapeHtml(t('addToCart'))}</button>
+      </div>
+    `;
+    shopGrid.appendChild(card);
+  });
+}
+
+function initShopGrid() {
+  const shopGrid = document.getElementById('shop-grid-container');
+  if (!shopGrid) return;
+  renderShopGrid();
+
+  // Delegace událostí místo inline onclick (kvůli CSP)
+  shopGrid.addEventListener('click', e => {
+    const card = e.target.closest('.product-card');
+    if (!card) return;
+    if (e.target.closest('select')) return;
+    if (e.target.closest('.btn-buy')) {
+      const select = card.querySelector('.product-select');
+      handleQuickBuy(card.dataset.pid, select ? select.value : null);
+      return;
     }
-    renderShopGrid();
-  }
+    openProductModal(card.dataset.pid);
+  });
 
   function updateFilterCounts() {
-    const counts = { all: productsData.length };
-    productsData.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
+    const counts = { all: PRODUCTS.length };
+    PRODUCTS.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
     document.querySelectorAll('.shop-filter-btn').forEach(btn => {
       const f = btn.dataset.filter;
       const label = btn.textContent.replace(/\s*\(\d+\)\s*$/, '').trim();
@@ -414,7 +783,9 @@ if (isShopActive) {
     });
   });
 }
+if (isShopActive) initShopGrid();
 
+/* ---------- Detail produktu ---------- */
 let currentProduct = null;
 let currentProdImgIndex = 0;
 const prodModal = document.getElementById('product-detail-modal');
@@ -430,22 +801,25 @@ const pmAddToCartBtn = document.getElementById('pm-add-to-cart-btn');
 
 function openProductModal(productId) {
   if (!isShopActive) return;
-  currentProduct = productsData.find(p => p.id === productId);
+  currentProduct = findProduct(productId);
   if (!currentProduct) return;
+  const text = productText(productId);
 
   currentProdImgIndex = 0;
   resetZoom();
 
-  if (pmBadge) pmBadge.textContent = currentProduct.badge;
-  if (pmTitle) pmTitle.textContent = currentProduct.title;
-  if (pmPrice) pmPrice.textContent = currentProduct.price + ' Kč';
-  if (pmDesc) pmDesc.textContent = currentProduct.desc;
+  if (pmBadge) pmBadge.textContent = text.badge;
+  if (pmTitle) pmTitle.textContent = text.title;
+  if (pmDesc) pmDesc.textContent = text.desc;
+  if (pmPrice) pmPrice.textContent = formatMoney(currentProduct.variants[0].prices[CUR]);
 
   if (pmVariantSelect) {
-    pmVariantSelect.innerHTML = currentProduct.variants.map(v => `<option value="${v.name}" data-price="${v.price}">${v.name} (${v.price} Kč)</option>`).join('');
+    pmVariantSelect.innerHTML = currentProduct.variants.map(v =>
+      `<option value="${escapeHtml(v.key)}" data-price="${v.prices[CUR]}">${escapeHtml(variantLabel(v.key))} (${formatMoney(v.prices[CUR])})</option>`
+    ).join('');
     pmVariantSelect.onchange = () => {
       const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
-      if (pmPrice) pmPrice.textContent = selectedOpt.dataset.price + ' Kč';
+      if (pmPrice) pmPrice.textContent = formatMoney(Number(selectedOpt.dataset.price));
     };
   }
 
@@ -455,13 +829,15 @@ function openProductModal(productId) {
 
 function updateProductImageDisplay() {
   if (!pmActiveImg || !currentProduct) return;
-  pmActiveImg.src = currentProduct.images[currentProdImgIndex];
+  const images = PRODUCT_IMAGES[currentProduct.id];
+  pmActiveImg.src = images[currentProdImgIndex];
+  pmActiveImg.alt = productText(currentProduct.id).title;
   if (pmThumbsBox) {
     pmThumbsBox.innerHTML = '';
-    currentProduct.images.forEach((imgUrl, idx) => {
+    images.forEach((imgUrl, idx) => {
       const thumb = document.createElement('div');
       thumb.className = `pm-thumb ${idx === currentProdImgIndex ? 'active' : ''}`;
-      thumb.innerHTML = `<img src="${imgUrl}" alt="thumb" draggable="false" oncontextmenu="return false;">`;
+      thumb.innerHTML = `<img src="${imgUrl}" alt="" draggable="false">`;
       thumb.onclick = () => {
         currentProdImgIndex = idx;
         resetZoom();
@@ -475,14 +851,16 @@ function updateProductImageDisplay() {
 function prevProductImage(e) {
   if (e) e.stopPropagation();
   resetZoom();
-  currentProdImgIndex = (currentProdImgIndex - 1 + currentProduct.images.length) % currentProduct.images.length;
+  const n = PRODUCT_IMAGES[currentProduct.id].length;
+  currentProdImgIndex = (currentProdImgIndex - 1 + n) % n;
   updateProductImageDisplay();
 }
 
 function nextProductImage(e) {
   if (e) e.stopPropagation();
   resetZoom();
-  currentProdImgIndex = (currentProdImgIndex + 1) % currentProduct.images.length;
+  const n = PRODUCT_IMAGES[currentProduct.id].length;
+  currentProdImgIndex = (currentProdImgIndex + 1) % n;
   updateProductImageDisplay();
 }
 
@@ -536,34 +914,28 @@ if (pmZoomBox) {
 if (pmAddToCartBtn && pmVariantSelect) {
   pmAddToCartBtn.onclick = () => {
     const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
-    const variantName = selectedOpt.value;
-    const price = parseInt(selectedOpt.dataset.price);
-    addToCart(currentProduct.title, price, variantName);
+    addToCart(currentProduct.id, selectedOpt.value);
     closeProductModal();
   };
 }
 
-function handleQuickBuy(prodId) {
-  const prod = productsData.find(p => p.id === prodId);
+function handleQuickBuy(prodId, variantKey) {
+  const prod = findProduct(prodId);
   if (!prod) return;
-  let variant = prod.variants[0].name;
-  let price = prod.variants[0].price;
-  const selectElem = document.getElementById(`quick-opt-${prodId}`);
-  if (selectElem) {
-    variant = selectElem.value;
-    const vObj = prod.variants.find(v => v.name === variant);
-    if (vObj) price = vObj.price;
-  }
-  addToCart(prod.title, price, variant);
+  addToCart(prodId, variantKey || prod.variants[0].key);
 }
 
+/* ---------- Košík ---------- */
 function loadCart() {
   try {
-    const parsed = JSON.parse(localStorage.getItem('tb_cart'));
+    const parsed = JSON.parse(localStorage.getItem(CART_KEY));
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(i =>
-      i && typeof i.title === 'string' && typeof i.variant === 'string' &&
-      Number.isFinite(i.price) && Number.isFinite(i.qty) && i.qty > 0);
+    return parsed.filter(i => {
+      const prod = i && findProduct(i.pid);
+      return prod && typeof i.variant === 'string' &&
+        prod.variants.some(v => v.key === i.variant) &&
+        Number.isFinite(i.qty) && i.qty > 0;
+    }).map(i => ({ pid: i.pid, variant: i.variant, qty: Math.floor(i.qty) }));
   } catch (e) {
     return [];
   }
@@ -576,50 +948,67 @@ const cartCount = document.getElementById('cart-count');
 const cartItemsContainer = document.getElementById('cart-items-container');
 const cartTotalPrice = document.getElementById('cart-total-price');
 
+// Rozbalí položky košíku na názvy a ceny aktuální měny
+function cartLines() {
+  return cart.map(item => {
+    const prod = findProduct(item.pid);
+    const variant = prod && prod.variants.find(v => v.key === item.variant);
+    if (!prod || !variant) return null;
+    return {
+      index: null,
+      title: productText(prod.id).title,
+      variantLabel: variantLabel(variant.key),
+      qty: item.qty,
+      unit: variantPrice(variant),
+    };
+  }).filter(Boolean);
+}
+
+function goodsTotal() {
+  return cartLines().reduce((acc, line) => acc + line.unit * line.qty, 0);
+}
+
 function openCartModal() { if (cartModal) cartModal.classList.add('open'); }
 function closeCartModal() { if (cartModal) cartModal.classList.remove('open'); }
 
 function updateCartUI() {
-  try { localStorage.setItem('tb_cart', JSON.stringify(cart)); } catch (e) { /* tichá chyba */ }
+  try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) { /* tichá chyba */ }
   if (cartCount) cartCount.textContent = cart.reduce((acc, item) => acc + item.qty, 0);
-  
+
   if (!cartItemsContainer) return;
+  const checkoutBtn = document.getElementById('go-to-checkout-btn');
   if (cart.length === 0) {
-    cartItemsContainer.innerHTML = '<div class="cart-empty-text">Košík je zatím prázdný.</div>';
-    if (cartTotalPrice) cartTotalPrice.textContent = '0 Kč';
-    const checkoutBtn = document.getElementById('go-to-checkout-btn');
+    cartItemsContainer.innerHTML = `<div class="cart-empty-text">${escapeHtml(t('cartEmpty'))}</div>`;
+    if (cartTotalPrice) cartTotalPrice.textContent = formatMoney(0);
     if (checkoutBtn) checkoutBtn.style.display = 'none';
     return;
   }
 
-  const checkoutBtn = document.getElementById('go-to-checkout-btn');
   if (checkoutBtn) checkoutBtn.style.display = 'block';
   cartItemsContainer.innerHTML = '';
-  let sum = 0;
-  cart.forEach((item, index) => {
-    sum += item.price * item.qty;
+  cartLines().forEach((line, index) => {
     const div = document.createElement('div');
     div.className = 'cart-item';
     div.innerHTML = `
       <div>
-        <div class="cart-item-title">${escapeHtml(item.title)} (x${Number(item.qty)})</div>
-        <div class="cart-item-variant">${escapeHtml(item.variant)}</div>
+        <div class="cart-item-title">${escapeHtml(line.title)} (x${line.qty})</div>
+        <div class="cart-item-variant">${escapeHtml(line.variantLabel)}</div>
       </div>
       <div style="display:flex;align-items:center;">
-        <span class="cart-item-price">${Number(item.price) * Number(item.qty)} Kč</span>
-        <button class="cart-remove-btn" data-action="remove-cart" data-index="${index}" title="Odebrat">✕</button>
+        <span class="cart-item-price">${formatMoney(line.unit * line.qty)}</span>
+        <button type="button" class="cart-remove-btn" data-action="remove-cart" data-index="${index}" title="${escapeHtml(t('remove'))}">✕</button>
       </div>
     `;
     cartItemsContainer.appendChild(div);
   });
-  if (cartTotalPrice) cartTotalPrice.textContent = sum.toLocaleString('cs-CZ') + ' Kč';
+  if (cartTotalPrice) cartTotalPrice.textContent = formatMoney(goodsTotal());
   updateCheckoutTotal();
 }
 
-function addToCart(title, price, variant) {
-  const existing = cart.find(i => i.title === title && i.variant === variant);
+function addToCart(productId, variantKey) {
+  const existing = cart.find(i => i.pid === productId && i.variant === variantKey);
   if (existing) existing.qty += 1;
-  else cart.push({ title, price, variant, qty: 1 });
+  else cart.push({ pid: productId, variant: variantKey, qty: 1 });
   updateCartUI();
   backToCartItems();
   openCartModal();
@@ -650,7 +1039,7 @@ function showCheckoutForm() {
   const modalTitle = document.getElementById('cart-modal-title');
   if (viewItems) viewItems.style.display = 'none';
   if (viewCheckout) viewCheckout.style.display = 'block';
-  if (modalTitle) modalTitle.textContent = 'Objednávka merche';
+  if (modalTitle) modalTitle.textContent = t('checkoutTitle');
   updateCheckoutTotal();
 }
 
@@ -660,27 +1049,29 @@ function backToCartItems() {
   const modalTitle = document.getElementById('cart-modal-title');
   if (viewItems) viewItems.style.display = 'block';
   if (viewCheckout) viewCheckout.style.display = 'none';
-  if (modalTitle) modalTitle.textContent = 'Váš Košík';
+  if (modalTitle) modalTitle.textContent = t('cartTitle');
+}
+
+// Hodnoty způsobu dopravy jsou stabilní kódy, text je v jazyku stránky
+function currentShippingCode() {
+  const shippingElem = document.getElementById('order-shipping');
+  return shippingElem ? shippingElem.value : 'zasilkovna';
 }
 
 function handleModalShippingChange() {
-  const shippingElem = document.getElementById('order-shipping');
-  if (!shippingElem) return;
-  const method = shippingElem.value;
   const box = document.getElementById('modal-packeta-box');
-  if (box) box.style.display = method.includes('Zásilkovna') ? 'flex' : 'none';
+  if (box) box.style.display = currentShippingCode() === 'zasilkovna' ? 'flex' : 'none';
   updateCheckoutTotal();
 }
 
+function shippingCost() {
+  return currentShippingCode() === 'zasilkovna' ? SHIPPING_FEE[CUR] : 0;
+}
+
 function updateCheckoutTotal() {
-  const shippingElem = document.getElementById('order-shipping');
   const finalPriceElem = document.getElementById('order-final-price');
-  if (!shippingElem || !finalPriceElem) return;
-  const method = shippingElem.value;
-  const shippingCost = method.includes('Zásilkovna') ? 79 : 0;
-  const goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-  const total = goodsSum + shippingCost;
-  finalPriceElem.textContent = total.toLocaleString('cs-CZ') + ' Kč';
+  if (!finalPriceElem) return;
+  finalPriceElem.textContent = formatMoney(goodsTotal() + shippingCost());
 }
 updateCartUI();
 
@@ -689,7 +1080,7 @@ const packetaApiKey = 'f277c2daae06a692';
 
 function openPacketaWidget() {
   if (typeof Packeta === 'undefined' || !Packeta.Widget) {
-    alert('Knihovna Zásilkovny se ještě nenačetla.');
+    alert(t('alertNoPacketa'));
     return;
   }
   Packeta.Widget.pick(packetaApiKey, (point) => {
@@ -699,42 +1090,42 @@ function openPacketaWidget() {
       const pointName = document.getElementById('packeta-point-name');
       if (pointId) pointId.value = point.id;
       if (pointName) pointName.value = `${point.name}, ${point.street || ''}, ${point.city || ''} (${point.zip || ''})`;
-      
+
       const display = document.getElementById('modal-packeta-display');
       const placeName = document.getElementById('modal-packeta-place-name');
       if (display) display.style.display = 'block';
       if (placeName) placeName.textContent = `${point.name} (${point.city || ''})`;
     }
-  }, { country: 'cz', language: 'cs' });
+  }, { country: CFG.packetaCountry, language: CFG.packetaLang });
 }
 
 const orderForm = document.getElementById('order-form');
 if (orderForm) {
   orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const shippingElem = document.getElementById('order-shipping');
-    const method = shippingElem ? shippingElem.value : '';
-    if (method.includes('Zásilkovna') && !selectedPacketaPoint) {
-      alert('Vyber prosím výdejní místo nebo Z-BOX Zásilkovny.');
+    const method = currentShippingCode();
+    if (method === 'zasilkovna' && !selectedPacketaPoint) {
+      alert(t('alertPickPoint'));
       openPacketaWidget();
       return;
     }
 
-    const shippingCost = method.includes('Zásilkovna') ? 79 : 0;
-    const goodsSum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-    const total = goodsSum + shippingCost;
+    const total = goodsTotal() + shippingCost();
     const noteElem = document.getElementById('order-note');
     const note = noteElem ? noteElem.value : '';
+    const shippingElem = document.getElementById('order-shipping');
+    const shippingLabel = shippingElem && shippingElem.selectedOptions[0] ? shippingElem.selectedOptions[0].textContent.trim() : method;
 
+    // Souhrn pro majitele shopu je vždy v češtině (interní e-mail)
     let summary = 'OBJEDNÁVKA MERCHE:\n\n';
-    cart.forEach(item => {
-      summary += `• ${item.title} [${item.variant}] - ${item.qty} ks (${item.price * item.qty} Kč)\n`;
+    cartLines().forEach(line => {
+      summary += `• ${line.title} [${line.variantLabel}] - ${line.qty} ks (${formatMoney(line.unit * line.qty)})\n`;
     });
-    summary += `\nDoprava: ${method}\nPlatba: Bankovní převod\n`;
+    summary += `\nJazyk webu: ${PAGE_LANG.toUpperCase()}, měna: ${CUR}\nDoprava: ${shippingLabel}\nPlatba: Bankovní převod\n`;
     if (selectedPacketaPoint) {
       summary += `Pobočka / Z-BOX: ${selectedPacketaPoint.name}, ${selectedPacketaPoint.street}, ${selectedPacketaPoint.city} [ID: ${selectedPacketaPoint.id}]\n`;
     }
-    summary += `Celková cena: ${total} Kč\n`;
+    summary += `Celková cena: ${formatMoney(total)}\n`;
     if (note) summary += `Poznámka: ${note}\n`;
 
     const summaryField = document.getElementById('order-summary-field');
@@ -744,7 +1135,7 @@ if (orderForm) {
     const orderStatus = document.getElementById('order-status');
     if (orderSubmitBtn) {
       orderSubmitBtn.disabled = true;
-      orderSubmitBtn.textContent = 'Odesílám...';
+      orderSubmitBtn.textContent = t('sending');
     }
     if (orderStatus) {
       orderStatus.className = 'form-status';
@@ -752,11 +1143,14 @@ if (orderForm) {
     }
 
     const data = new FormData(orderForm);
+    data.set('shipping_method', shippingLabel);
+    data.set('language', PAGE_LANG);
+    data.set('currency', CUR);
 
     if (isHoneypotFilled(orderForm)) {
       setTimeout(() => {
         if (orderStatus) {
-          orderStatus.textContent = 'Objednávka byla úspěšně odeslána!';
+          orderStatus.textContent = t('orderOk');
           orderStatus.className = 'form-status success';
         }
         cart = [];
@@ -765,7 +1159,7 @@ if (orderForm) {
         updateCartUI();
         if (orderSubmitBtn) {
           orderSubmitBtn.disabled = false;
-          orderSubmitBtn.textContent = 'Dokončit a odeslat';
+          orderSubmitBtn.textContent = t('submitOrder');
         }
         setTimeout(() => { closeCartModal(); backToCartItems(); }, 3500);
       }, 600);
@@ -775,7 +1169,7 @@ if (orderForm) {
     try {
       await postWithTimeout(orderForm.action, data);
       if (orderStatus) {
-        orderStatus.textContent = 'Objednávka byla úspěšně odeslána! Instrukce k platbě dorazí do e-mailu.';
+        orderStatus.textContent = t('orderOkPay');
         orderStatus.className = 'form-status success';
       }
       cart = [];
@@ -785,13 +1179,13 @@ if (orderForm) {
       setTimeout(() => { closeCartModal(); backToCartItems(); }, 3500);
     } catch (err) {
       if (orderStatus) {
-        orderStatus.textContent = 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.';
+        orderStatus.textContent = t('orderErr');
         orderStatus.className = 'form-status error';
       }
     } finally {
       if (orderSubmitBtn) {
         orderSubmitBtn.disabled = false;
-        orderSubmitBtn.textContent = 'Dokončit a odeslat';
+        orderSubmitBtn.textContent = t('submitOrder');
       }
     }
   });
@@ -805,7 +1199,7 @@ if (contactForm) {
     const formStatus = document.getElementById('form-status');
     if (formSubmitBtn) {
       formSubmitBtn.disabled = true;
-      formSubmitBtn.textContent = 'Odesílám...';
+      formSubmitBtn.textContent = t('sending');
     }
     if (formStatus) {
       formStatus.className = 'form-status';
@@ -817,13 +1211,13 @@ if (contactForm) {
     if (isHoneypotFilled(contactForm)) {
       setTimeout(() => {
         if (formStatus) {
-          formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána.';
+          formStatus.textContent = t('contactOkShort');
           formStatus.className = 'form-status success';
         }
         contactForm.reset();
         if (formSubmitBtn) {
           formSubmitBtn.disabled = false;
-          formSubmitBtn.textContent = 'Odeslat poptávku';
+          formSubmitBtn.textContent = t('submitContact');
         }
       }, 600);
       return;
@@ -832,24 +1226,25 @@ if (contactForm) {
     try {
       await postWithTimeout(contactForm.action, data);
       if (formStatus) {
-        formStatus.textContent = 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu.';
+        formStatus.textContent = t('contactOk');
         formStatus.className = 'form-status success';
       }
       contactForm.reset();
     } catch (err) {
       if (formStatus) {
-        formStatus.textContent = 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.';
+        formStatus.textContent = t('contactErr');
         formStatus.className = 'form-status error';
       }
     } finally {
       if (formSubmitBtn) {
         formSubmitBtn.disabled = false;
-        formSubmitBtn.textContent = 'Odeslat poptávku';
+        formSubmitBtn.textContent = t('submitContact');
       }
     }
   });
 }
 
+/* ---------- Právní informace ---------- */
 function openLegalModal(type) {
   const modal = document.getElementById('legal-modal');
   const title = document.getElementById('legal-title');
@@ -857,52 +1252,21 @@ function openLegalModal(type) {
   if (!modal || !title || !body) return;
 
   if (type === 'terms') {
-    title.textContent = 'Obchodní podmínky';
-    body.innerHTML = `
-      <p class="legal-box">
-        <strong>Provozovatel:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, Svatava 357 03.<br>
-        <strong>Kontakt:</strong> antonin.lamac@gmail.com
-      </p>
-      <h4>1. Všeobecná ustanovení</h4>
-      <p>Tyto podmínky upravují prodej autorského merche a fine-art tisků přes tento web a vztahy mezi provozovatelem a kupujícím.</p>
-      <h4>2. Objednávka a cena</h4>
-      <p>Objednávka je odeslána vyplněním formuláře. Cena zboží a způsob dopravy jsou uvedeny v košíku před odesláním. Provozovatel potvrdí objednávku e-mailem.</p>
-      <h4>3. Platba a dodání</h4>
-      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
-      <h4>4. Odstoupení od smlouvy</h4>
-      <p>Spotřebitel může odstoupit od kupní smlouvy do 14 dnů od převzetí zboží. Formulář pro odstoupení je v zápatí webu. Výjimkou je zboží upravené podle přání zákazníka nebo zhotovené pro jeho osobu (např. tisk s vlastním výběrem fotografie).</p>
-      <h4>5. Reklamace a řešení sporů</h4>
-      <p>Vady uplatňujte e-mailem na adrese uvedené výše. Spotřebitel může také využít mimosoudní řešení sporů u České obchodní inspekce (adr.coi.cz).</p>
-    `;
+    title.textContent = T.legalTitles.terms;
+    body.innerHTML = T.legal.terms;
   } else if (type === 'privacy') {
-    title.textContent = 'Ochrana soukromí (GDPR)';
-    body.innerHTML = `
-      <p class="legal-box">
-        <strong>Správce:</strong> Antonín Lamač (Tony Brenx), IČO: 87481235, Palackého 364, Svatava 357 03.<br>
-        <strong>Kontakt:</strong> antonin.lamac@gmail.com
-      </p>
-      <h4>1. Jaké údaje zpracovávám</h4>
-      <p>Z poptávkového formuláře jméno, e-mail, telefon a obsah zprávy. Z objednávky navíc jméno, e-mail, telefon, způsob dopravy a u Zásilkovny vybrané výdejní místo. Z formuláře pro odstoupení číslo objednávky, jméno, e-mail a číslo účtu pro vrácení peněz.</p>
-      <h4>2. Účely a právní základ</h4>
-      <p>Vyřízení poptávky nebo objednávky (plnění smlouvy nebo jednání o ní, čl. 6 odst. 1 písm. b) GDPR). Účetní a daňové povinnosti (čl. 6 odst. 1 písm. c). Ochrana webu před zneužitím formuláře (oprávněný zájem, čl. 6 odst. 1 písm. f). Měření návštěvnosti jen s tvým souhlasem (čl. 6 odst. 1 písm. a).</p>
-      <h4>3. Příjemci</h4>
-      <p>Formuláře jsou zpracovávány přes Google (Google Apps Script a Google Tabulky) a Zásilkovna s.r.o. pro doručení. Web je hostován na GitHub Pages. Měření návštěvnosti provozuje Google Analytics, a to jen po přijetí souhlasu.</p>
-      <h4>4. Doba uložení</h4>
-      <p>Poptávky nejdéle 1 rok od poslední komunikace. Objednávky a doklady po dobu stanovenou účetními a daňovými předpisy. Údaje k odstoupení po dobu nutnou k vyřízení a doložení. Údaje z analytiky podle nastavení Google Analytics.</p>
-      <h4>5. Cookies a úložiště prohlížeče</h4>
-      <p>Obsah košíku a tvoje volba souhlasu se ukládají do úložiště prohlížeče (localStorage). Jde o nezbytné údaje pro provoz webu. Analytické cookies Google se načtou až po přijetí souhlasu. Souhlas můžeš kdykoli odvolat vymazáním údajů webu v prohlížeči.</p>
-      <h4>6. Tvoje práva</h4>
-      <p>Máš právo na přístup k údajům, opravu, výmaz, omezení zpracování, přenositelnost a vznést námitku. Stížnost můžeš podat u Úřadu pro ochranu osobních údajů (uoou.cz).</p>
-    `;
+    title.textContent = T.legalTitles.privacy;
+    body.innerHTML = T.legal.privacy;
   } else if (type === 'withdraw') {
-    title.textContent = 'Odstoupení od smlouvy';
+    const L = T.withdrawLabels;
+    title.textContent = T.withdrawTitle;
     body.innerHTML = `
       <form id="withdraw-form">
-        <div class="form-group"><label>Číslo objednávky (VS) *</label><input type="text" id="w-vs" class="form-control" required></div>
-        <div class="form-group"><label>Jméno a příjmení *</label><input type="text" id="w-name" class="form-control" required></div>
-        <div class="form-group"><label>E-mail *</label><input type="email" id="w-email" class="form-control" required></div>
-        <div class="form-group"><label>Číslo účtu pro vrácení peněz *</label><input type="text" id="w-account" class="form-control" required></div>
-        <button type="submit" id="w-btn" class="btn btn-primary" style="width:100%;margin-top:8px;">Odeslat odstoupení</button>
+        <div class="form-group"><label for="w-vs">${L.vs}</label><input type="text" id="w-vs" class="form-control" required></div>
+        <div class="form-group"><label for="w-name">${L.name}</label><input type="text" id="w-name" class="form-control" required></div>
+        <div class="form-group"><label for="w-email">${L.email}</label><input type="email" id="w-email" class="form-control" required></div>
+        <div class="form-group"><label for="w-account">${L.account}</label><input type="text" id="w-account" class="form-control" required></div>
+        <button type="submit" id="w-btn" class="btn btn-primary" style="width:100%;margin-top:8px;">${t('withdrawSubmit')}</button>
         <div id="w-status" class="form-status"></div>
       </form>
     `;
@@ -931,30 +1295,32 @@ async function handleWithdrawSubmit(e) {
   const btn = document.getElementById('w-btn');
   const status = document.getElementById('w-status');
 
-  if (btn) { btn.disabled = true; btn.textContent = 'Odesílám...'; }
+  if (btn) { btn.disabled = true; btn.textContent = t('sending'); }
 
+  // Interní zpráva pro majitele je v češtině
   const formData = new FormData();
   formData.append('form_type', 'Odstoupení od kupní smlouvy');
   formData.append('name', name);
   formData.append('email', email);
   formData.append('phone', 'Odstoupení 14 dnů');
   formData.append('service', 'Odstoupení od smlouvy');
+  formData.append('language', PAGE_LANG);
   formData.append('message', `ODSTOUPENÍ OD SMLOUVY:\nVS: ${vs}\nÚčet: ${account}`);
 
   try {
     await postWithTimeout("https://script.google.com/macros/s/AKfycbyZhN-nq-wOZnU4D_kKqqQviFWMmsy_kUMgXflZveLXj25asovkH-YaL9V7eWwiCcM9/exec", formData);
     if (status) {
-      status.textContent = 'Oznámení bylo úspěšně odesláno.';
+      status.textContent = t('withdrawOk');
       status.className = 'form-status success';
     }
     setTimeout(() => closeLegalModal(), 3500);
   } catch (err) {
     if (status) {
-      status.textContent = 'Došlo k chybě. Napiš na antonin.lamac@gmail.com.';
+      status.textContent = t('withdrawErr');
       status.className = 'form-status error';
     }
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = 'Odeslat odstoupení'; }
+    if (btn) { btn.disabled = false; btn.textContent = t('withdrawSubmit'); }
   }
 }
 
@@ -966,13 +1332,15 @@ window.addEventListener('scroll', () => {
 }, {passive:true});
 if (scrollTopBtn) scrollTopBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 
-const list = () => [...g.querySelectorAll('a')];
+/* ---------- Lightbox ---------- */
+const list = () => (g ? [...g.querySelectorAll('a')] : []);
 let cur = 0;
 function show(i) {
   const l = list();
   if (!l.length || !big) return;
   cur = (i + l.length) % l.length;
   big.src = l[cur].href;
+  big.alt = l[cur].getAttribute('aria-label') || T.altDefault;
 }
 
 if (g) {
