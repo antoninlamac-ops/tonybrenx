@@ -757,6 +757,8 @@ function renderBatch(count) {
 
     const im = document.createElement('img');
     im.src = `/img-web/thumb/foto-${id}.webp`;
+    im.srcset = `/img-web/thumb-s/foto-${id}.webp 300w, /img-web/thumb/foto-${id}.webp 450w`;
+    im.sizes = '(max-width: 600px) 46vw, 170px';
     im.alt = altText;
     im.decoding = 'async';
     im.loading = 'lazy';
