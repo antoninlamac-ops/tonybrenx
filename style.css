@@ -11,7 +11,7 @@ body{
 .bg-photo-layer{
   position:fixed;
   inset:-20px;
-  background-image:url('img-web/foto-53.webp');
+  background-image:url('img-web/bg.webp');
   background-size:cover;
   background-position:center center;
   filter:brightness(30%) contrast(105%) blur(14px);

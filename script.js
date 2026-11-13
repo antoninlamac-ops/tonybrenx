@@ -249,13 +249,14 @@ function renderBatch(count) {
   next.forEach((id, idx) => {
     const altText = PHOTO_ALT[id] || PHOTO_ALT_DEFAULT;
     const a = document.createElement('a');
-    a.href = `img-web/foto-${id}.webp`;
+    a.href = `img-web/large/foto-${id}.webp`;
     a.setAttribute('aria-label', altText);
     a.style.animation = `revealPhoto 0.5s ease both ${idx * 0.04}s`;
 
     const im = document.createElement('img');
-    im.src = `img-web/foto-${id}.webp`;
+    im.src = `img-web/thumb/foto-${id}.webp`;
     im.alt = altText;
+    im.decoding = 'async';
     im.loading = 'lazy';
     im.draggable = false;
     
