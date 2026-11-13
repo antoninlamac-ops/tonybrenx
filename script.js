@@ -5,7 +5,8 @@
 const PAGE_LANG = (document.documentElement.lang || 'cs').slice(0, 2);
 // Skrytý náhled pro majitele: otevřete web s ?nahled=tb (vypnutí: ?nahled=off).
 // Zapne shop i platbu kartou jen v tomto prohlížeči, veřejnost vidí web beze změny.
-const PREVIEW = (() => {
+const PREVIEW_ALLOWED = false; // náhled vypnutý; zapnout změnou na true
+const PREVIEW = PREVIEW_ALLOWED && (() => {
   try {
     const q = new URLSearchParams(location.search).get('nahled');
     if (q === 'tb') sessionStorage.setItem('tb_preview', '1');
