@@ -1,29 +1,38 @@
 # Vyhledávače i AI asistenti mohou web číst celý.
 User-agent: *
 Allow: /
+Disallow:
 
 User-agent: Googlebot
 Allow: /
+Disallow:
 
 User-agent: Bingbot
 Allow: /
+Disallow:
 
 User-agent: ClaudeBot
 Allow: /
+Disallow:
 
 User-agent: GPTBot
 Allow: /
+Disallow:
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow:
 
 User-agent: PerplexityBot
 Allow: /
+Disallow:
 
 User-agent: Google-Extended
 Allow: /
+Disallow:
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow:
 
 Sitemap: https://www.tonybrenx.cz/sitemap.xml
