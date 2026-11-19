@@ -37,8 +37,8 @@ const PRESALE = {
   enabled: true,
   until: '2026-12-06T23:59:00+01:00', // konec předobjednávky
   productIds: ['c1'],
-  // Pevná cena v předobjednávce (plná cena je v katalogu níže: 790 Kč / 40 €)
-  prices: { c1: { CZK: 590, EUR: 30 } },
+  // Pevná cena v předobjednávce (plná cena je v katalogu níže: 890 Kč / 45 €)
+  prices: { c1: { CZK: 690, EUR: 35 } },
   shipBy: { cs: '20. 12. 2026', en: '20 Dec 2026', de: '20.12.2026' }, // předpokládané odeslání
 };
 
@@ -115,7 +115,7 @@ const I18N = {
     legalTitles: { terms: 'Obchodní podmínky', privacy: 'Ochrana soukromí (GDPR)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Univerzální velikost (Nastavitelný snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
-      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Limitovaná edice 50 kusů. Barva černá, velikosti S až XXL. V předobjednávce za 590 Kč, potom za plnou cenu 790 Kč.' },
+      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Limitovaná edice 50 kusů. Barva černá, velikosti S až XXL. V předobjednávce za 690 Kč, potom za plnou cenu 890 Kč.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash úprava, syrový streetový vibe, limitovaná série. Každý kus má unikátní strukturu oprání.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Pevný límec, spadlá ramena a autorský print nočního města. Gramáž 220g.' },
@@ -516,9 +516,9 @@ function t(key) { return T[key]; }
    Ceny v EUR jsou ORIENTAČNÍ přepočtem (25 Kč/€, zaokrouhleno). Potvrďte je před spuštěním. */
 const PRODUCTS = [
   { id: 'c1', category: 'trika', variants: [
-      { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
-      { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } },
-      { key: 'XXL', prices: { CZK: 790, EUR: 40 } }] },
+      { key: 'S', prices: { CZK: 890, EUR: 45 } }, { key: 'M', prices: { CZK: 890, EUR: 45 } },
+      { key: 'L', prices: { CZK: 890, EUR: 45 } }, { key: 'XL', prices: { CZK: 890, EUR: 45 } },
+      { key: 'XXL', prices: { CZK: 890, EUR: 45 } }] },
   { id: 't1', category: 'trika', variants: [
       { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
       { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } }] },
