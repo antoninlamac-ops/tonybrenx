@@ -459,3 +459,11 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .product-img-box .product-video{width:100%;height:100%;object-fit:cover;display:block}
 .product-card:hover .product-flip-inner .flip-front{transform:none}
 .product-card:hover .product-flip-inner .flip-back{transform:rotateY(180deg)}
+.pay-choice{display:flex;flex-direction:column;gap:8px;border:0;padding:0;margin:0}
+.pay-opt{display:flex;gap:10px;align-items:flex-start;background:rgba(10,10,11,.6);border:1px solid var(--edge);padding:11px 14px;border-radius:10px;cursor:pointer}
+.pay-opt:has(input:checked){border-color:#ff9500}
+.pay-opt input{margin-top:3px;accent-color:#ff9500}
+.pay-opt span{display:flex;flex-direction:column;gap:2px}
+.pay-opt strong{color:#fff;font-size:.95rem}
+.pay-opt small{color:#b9bac0;font-size:.8rem}
+.pay-opt small{text-transform:none;letter-spacing:normal;font-weight:400}
