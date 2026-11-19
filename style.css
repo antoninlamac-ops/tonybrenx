@@ -429,3 +429,13 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
 /* Menší pozadí pro mobily (je rozmazané, vyšší rozlišení není vidět) */
 @media (max-width:900px){.bg-photo-layer{background-image:url('img-web/bg-m.webp')}}
+
+/* Parametry a velikosti v detailu produktu */
+#pm-specs{margin:0 0 16px}
+.pm-facts{margin:0 0 12px;padding-left:18px;color:#c8c9cf;font-size:.9rem;line-height:1.55}
+.pm-size-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:4px 0 6px}
+.pm-size-table caption{text-align:left;color:#ff9500;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.pm-size-table th,.pm-size-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:center}
+.pm-size-table thead th{color:#9a9ba2;font-weight:500}
+.pm-size-table tbody th{text-align:left;color:#f1f1f2}
+.pm-size-note{color:#9a9ba2;font-size:.78rem;margin:0}

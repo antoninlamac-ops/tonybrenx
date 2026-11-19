@@ -526,6 +526,34 @@ const PRODUCTS = [
   { id: 'p4', category: 'postery', variants: [
       { key: 'A3', prices: { CZK: 650, EUR: 26 } }, { key: 'A2', prices: { CZK: 900, EUR: 36 } }] },
 ];
+// Parametry a velikostní tabulka (cm): délka A, šířka C, rukáv H
+const PRODUCT_SPECS = {
+  c1: {
+    sizes: { S: [71, 50, 22], M: [73, 54, 22.5], L: [75, 58, 23], XL: [77, 62, 23.5], XXL: [79, 66, 24] },
+  },
+};
+const SPEC_TEXT = {
+  cs: { facts: ['100% česaná, prstencově předená bavlna, 220 g/m²', 'Volný unisex střih', 'Lem průkrčníku z žebrového úpletu', 'Praní na 40 °C, nebělit, nesušit v sušičce, žehlit na nízkou teplotu, nečistit chemicky'],
+        table: 'Velikosti (cm)', size: 'Velikost', a: 'Délka', c: 'Šířka', h: 'Rukáv', note: 'Šířka měřena v podpaží, tolerance ± 5 %.' },
+  en: { facts: ['100% combed ring-spun cotton, 220 g/m²', 'Relaxed unisex fit', 'Ribbed crew neck', 'Wash at 40 °C, do not bleach, do not tumble dry, iron on low, do not dry clean'],
+        table: 'Sizes (cm)', size: 'Size', a: 'Length', c: 'Width', h: 'Sleeve', note: 'Width measured at the armpits, tolerance ± 5%.' },
+  de: { facts: ['100 % gekämmte, ringgesponnene Baumwolle, 220 g/m²', 'Lockerer Unisex-Schnitt', 'Gerippter Rundhalsausschnitt', 'Waschen bei 40 °C, nicht bleichen, nicht im Trockner trocknen, bei niedriger Temperatur bügeln, nicht chemisch reinigen'],
+        table: 'Größen (cm)', size: 'Größe', a: 'Länge', c: 'Breite', h: 'Ärmel', note: 'Breite unter den Achseln gemessen, Toleranz ± 5 %.' },
+};
+function specsHtml(id) {
+  const spec = PRODUCT_SPECS[id];
+  if (!spec) return '';
+  const L = SPEC_TEXT[PAGE_LANG] || SPEC_TEXT.cs;
+  const num = n => String(n).replace('.', PAGE_LANG === 'en' ? '.' : ',');
+  const rows = Object.entries(spec.sizes).map(([k, v]) =>
+    `<tr><th>${escapeHtml(k)}</th><td>${num(v[0])}</td><td>${num(v[1])}</td><td>${num(v[2])}</td></tr>`).join('');
+  return `<ul class="pm-facts">${L.facts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+    <table class="pm-size-table"><caption>${escapeHtml(L.table)}</caption>
+      <thead><tr><th>${escapeHtml(L.size)}</th><th>${escapeHtml(L.a)}</th><th>${escapeHtml(L.c)}</th><th>${escapeHtml(L.h)}</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    <p class="pm-size-note">${escapeHtml(L.note)}</p>`;
+}
+
 const PRODUCT_IMAGES = {
   c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-mockup.webp', '/img-web/products/creative-chaos-photo.webp'],
   t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
@@ -922,7 +950,16 @@ function openProductModal(productId) {
 
   if (pmBadge) pmBadge.textContent = text.badge;
   if (pmTitle) pmTitle.textContent = text.title;
-  if (pmDesc) pmDesc.textContent = text.desc;
+  if (pmDesc) {
+    pmDesc.textContent = text.desc;
+    let box = document.getElementById('pm-specs');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'pm-specs';
+      pmDesc.insertAdjacentElement('afterend', box);
+    }
+    box.innerHTML = specsHtml(productId);
+  }
   if (pmPrice) pmPrice.innerHTML = priceHtml(currentProduct);
 
   if (pmVariantSelect) {
