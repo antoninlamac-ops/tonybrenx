@@ -500,3 +500,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .order-consent{display:flex;gap:10px;align-items:flex-start;margin:6px 0 4px;font-size:.85rem;line-height:1.5;color:#c8c9cf;text-transform:none;letter-spacing:normal;font-weight:400;cursor:pointer}
 .order-consent input{margin-top:3px;width:18px;height:18px;flex:0 0 18px;accent-color:#ff9500}
 .order-consent a{color:#ff9500}
+
+/* Přiblížení v náhledu přes celou obrazovku */
+.lb-content{overflow:hidden;cursor:zoom-in;touch-action:pan-y}
+.lb-content.zoomed{cursor:zoom-out;touch-action:none}
+.lb-content img{transition:transform .25s ease;will-change:transform}
