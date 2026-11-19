@@ -429,3 +429,33 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 
 /* Menší pozadí pro mobily (je rozmazané, vyšší rozlišení není vidět) */
 @media (max-width:900px){.bg-photo-layer{background-image:url('img-web/bg-m.webp')}}
+
+/* Parametry a velikosti v detailu produktu */
+#pm-specs{margin:0 0 16px}
+.pm-facts{margin:0 0 12px;padding-left:18px;color:#c8c9cf;font-size:.9rem;line-height:1.55}
+.pm-size-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:4px 0 6px}
+.pm-size-table caption{text-align:left;color:#ff9500;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.pm-size-table th,.pm-size-table td{padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:center}
+.pm-size-table thead th{color:#9a9ba2;font-weight:500}
+.pm-size-table tbody th{text-align:left;color:#f1f1f2}
+.pm-size-note{color:#9a9ba2;font-size:.78rem;margin:0}
+.pm-acc{border-top:1px solid rgba(255,255,255,.1)}
+.pm-acc:last-child{border-bottom:1px solid rgba(255,255,255,.1)}
+.pm-acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:11px 2px;color:#f1f1f2;font-size:.92rem;font-weight:600}
+.pm-acc summary::-webkit-details-marker{display:none}
+.pm-acc summary::after{content:'+';color:#ff9500;font-size:1.25rem;line-height:1;transition:transform .2s}
+.pm-acc[open] summary::after{transform:rotate(45deg)}
+.pm-acc summary:focus-visible{outline:2px solid #ff9500;outline-offset:2px;border-radius:4px}
+.pm-acc .pm-facts,.pm-acc .pm-size-note{margin-bottom:12px}
+
+/* Otočka trička na kartě (přední strana / záda) */
+.product-flip{width:100%;height:100%;perspective:1400px}
+.product-flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:tbFlip 9s ease-in-out infinite}
+.product-flip-inner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.product-flip-inner .flip-back{transform:rotateY(180deg)}
+.product-card:hover .product-flip-inner{animation-play-state:paused}
+@keyframes tbFlip{0%,35%{transform:rotateY(0)}50%,85%{transform:rotateY(180deg)}100%{transform:rotateY(360deg)}}
+@media (prefers-reduced-motion:reduce){.product-flip-inner{animation:none}}
+.product-img-box .product-video{width:100%;height:100%;object-fit:cover;display:block}
+.product-card:hover .product-flip-inner .flip-front{transform:none}
+.product-card:hover .product-flip-inner .flip-back{transform:rotateY(180deg)}
