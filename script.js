@@ -32,13 +32,18 @@ const STRIPE_ENABLED = PREVIEW; // pro všechny: změnit na true
 const SHIPPING_FEE = { CZK: 79, EUR: 4.9 };
 
 // Předobjednávka. Dokud je enabled false nebo chybí datum, na webu se nic nezobrazí.
-// Před spuštěním doplňte: until (ISO datum s časovou zónou), productIds a discount.
+// until = konec předobjednávky, productIds = produkty, prices = pevné ceny v předobjednávce.
 const PRESALE = {
-  enabled: false,
-  until: null, // DOPLNIT, např. '2027-01-15T10:00:00+01:00'
-  productIds: [], // DOPLNIT, např. ['m1']
-  discount: 0.1, // DOPLNIT, 10 % sleva
+  enabled: true,
+  until: '2026-12-06T23:59:00+01:00', // konec předobjednávky
+  productIds: ['c1'],
+  // Pevná cena v předobjednávce (plná cena je v katalogu níže: 790 Kč / 40 €)
+  prices: { c1: { CZK: 590, EUR: 30 } },
+  shipBy: { cs: '20. 12. 2026', en: '20 Dec 2026', de: '20.12.2026' }, // předpokládané odeslání
 };
+
+// Které produkty jsou v Kolekci vidět. Ostatní zůstávají v katalogu, ale schované.
+const SHOP_VISIBLE = ['c1'];
 
 const moneyFmt = new Intl.NumberFormat(CFG.locale, {
   style: 'currency',
@@ -60,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (isShopActive) {
     const shopSec = document.getElementById('shop');
-    if (shopSec) shopSec.style.display = '';
+    if (shopSec) shopSec.style.display = 'block';
     const cartBtn = document.getElementById('cart-floating-btn');
     if (cartBtn) cartBtn.style.display = 'flex';
     document.querySelectorAll('.nav-shop').forEach(el => {
@@ -87,9 +92,9 @@ const I18N = {
     addToCart: 'Do košíku',
     presaleBadge: 'Předobjednávka',
     presaleTitle: 'Předobjednávka',
-    presaleEnds: 'Sleva končí za',
+    presaleEnds: 'Předobjednávka končí za',
     presaleOver: 'Předobjednávka skončila',
-    presaleShip: 'Zboží odesíláme po vydání. Předpokládaný termín doplníme.',
+    presaleShip: 'Trička se tisknou až po skončení předobjednávky. Předpokládané odeslání do {date}.',
     orderOk: 'Objednávka byla úspěšně odeslána!',
     orderOkPay: 'Objednávka byla úspěšně odeslána! Instrukce k platbě dorazí do e-mailu.',
     orderErr: 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.',
@@ -103,8 +108,9 @@ const I18N = {
     withdrawTitle: 'Odstoupení od smlouvy',
     withdrawLabels: { vs: 'Číslo objednávky (VS) *', name: 'Jméno a příjmení *', email: 'E-mail *', account: 'Číslo účtu pro vrácení peněz *' },
     legalTitles: { terms: 'Obchodní podmínky', privacy: 'Ochrana soukromí (GDPR)' },
-    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', univ: 'Univerzální velikost (Nastavitelný snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
+    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Univerzální velikost (Nastavitelný snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
+      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Barva černá, velikosti S až XXL. V předobjednávce za 590 Kč, potom za plnou cenu 790 Kč.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash úprava, syrový streetový vibe, limitovaná série. Každý kus má unikátní strukturu oprání.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Pevný límec, spadlá ramena a autorský print nočního města. Gramáž 220g.' },
@@ -224,9 +230,9 @@ const I18N = {
     addToCart: 'Add to cart',
     presaleBadge: 'Pre-order',
     presaleTitle: 'Pre-order',
-    presaleEnds: 'Pre-order discount ends in',
+    presaleEnds: 'Pre-order ends in',
     presaleOver: 'Pre-order has ended',
-    presaleShip: 'Items ship after release. Estimated date to be added.',
+    presaleShip: 'Tees are printed after the pre-order closes. Estimated shipping by {date}.',
     orderOk: 'Your order has been sent!',
     orderOkPay: 'Your order has been sent! Payment instructions will arrive by email.',
     orderErr: 'A connection error occurred. Please write to antonin.lamac@gmail.com.',
@@ -240,8 +246,9 @@ const I18N = {
     withdrawTitle: 'Withdrawal from contract',
     withdrawLabels: { vs: 'Order number (VS) *', name: 'Full name *', email: 'Email *', account: 'Bank account (IBAN) for refund *' },
     legalTitles: { terms: 'Terms and conditions', privacy: 'Privacy (GDPR)' },
-    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', univ: 'One size (adjustable snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
+    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'One size (adjustable snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
+      c1: { badge: 'Pre-order', title: 'Tee „Creative Chaos“', desc: 'Unisex oversized tee with my street photo. I came across the Potraviny Štros shop window on Strossmayer Square in Prague while shooting street photos in winter. It caught my eye straight away, so I shot it and edited it under the name Creative Chaos. Black, sizes S to XXL.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized cut made from premium heavyweight 100% cotton (240 g/m²). Black-and-white screen print built to last. Made for everyday street wear.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash finish, raw street vibe, limited series. Every piece has its own unique wash pattern.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Structured collar, dropped shoulders and an original print of the night city. 220 g/m².' },
@@ -361,9 +368,9 @@ const I18N = {
     addToCart: 'In den Warenkorb',
     presaleBadge: 'Vorbestellung',
     presaleTitle: 'Vorbestellung',
-    presaleEnds: 'Vorbestellungsrabatt endet in',
+    presaleEnds: 'Vorbestellung endet in',
     presaleOver: 'Vorbestellung beendet',
-    presaleShip: 'Versand nach Erscheinen. Voraussichtlicher Termin wird ergänzt.',
+    presaleShip: 'Die Shirts werden nach Ende der Vorbestellung gedruckt. Voraussichtlicher Versand bis {date}.',
     orderOk: 'Deine Bestellung wurde erfolgreich gesendet!',
     orderOkPay: 'Deine Bestellung wurde erfolgreich gesendet! Die Zahlungsanweisung kommt per E-Mail.',
     orderErr: 'Es gab einen Verbindungsfehler. Bitte schreibe an antonin.lamac@gmail.com.',
@@ -377,8 +384,9 @@ const I18N = {
     withdrawTitle: 'Widerruf vom Vertrag',
     withdrawLabels: { vs: 'Bestellnummer (VS) *', name: 'Vor- und Nachname *', email: 'E-Mail *', account: 'Bankkonto (IBAN) für die Rückzahlung *' },
     legalTitles: { terms: 'Allgemeine Geschäftsbedingungen', privacy: 'Datenschutz (DSGVO)' },
-    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', univ: 'Einheitsgröße (verstellbarer Snap)', A3: 'A3 (30 x 42 cm)', A2: 'A2 (42 x 59 cm)' },
+    variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Einheitsgröße (verstellbarer Snap)', A3: 'A3 (30 x 42 cm)', A2: 'A2 (42 x 59 cm)' },
     products: {
+      c1: { badge: 'Vorbestellung', title: 'Tee „Creative Chaos“', desc: 'Unisex-Oversize-Shirt mit meinem Streetfoto. Auf das Schaufenster von Potraviny Štros am Strossmayer-Platz in Prag bin ich beim winterlichen Streetfotografieren gestoßen. Es hat mich sofort gepackt, also habe ich es fotografiert und unter dem Namen Creative Chaos bearbeitet. Schwarz, Größen S bis XXL.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized-Schnitt aus hochwertiger schwerer 100 % Baumwolle (240 g/m²). Schwarz-weißer Siebdruck mit hoher Haltbarkeit. Für den täglichen Streetwear-Look gemacht.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage-Acid-Wash-Veredelung, roher Streetwear-Vibe, limitierte Serie. Jedes Stück hat eine einzigartige Waschstruktur.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Fester Kragen, tiefe Schultern und ein eigener Print einer nächtlichen Stadt. 220 g/m².' },
@@ -491,6 +499,10 @@ function t(key) { return T[key]; }
 /* ---------- Katalog produktů (ceny v obou měnách) ----------
    Ceny v EUR jsou ORIENTAČNÍ přepočtem (25 Kč/€, zaokrouhleno). Potvrďte je před spuštěním. */
 const PRODUCTS = [
+  { id: 'c1', category: 'trika', variants: [
+      { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
+      { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } },
+      { key: 'XXL', prices: { CZK: 790, EUR: 40 } }] },
   { id: 't1', category: 'trika', variants: [
       { key: 'S', prices: { CZK: 790, EUR: 40 } }, { key: 'M', prices: { CZK: 790, EUR: 40 } },
       { key: 'L', prices: { CZK: 790, EUR: 40 } }, { key: 'XL', prices: { CZK: 790, EUR: 40 } }] },
@@ -515,6 +527,7 @@ const PRODUCTS = [
       { key: 'A3', prices: { CZK: 650, EUR: 26 } }, { key: 'A2', prices: { CZK: 900, EUR: 36 } }] },
 ];
 const PRODUCT_IMAGES = {
+  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-mockup.webp', '/img-web/products/creative-chaos-photo.webp'],
   t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
   t2: ['/img-web/foto-5.webp', '/img-web/foto-6.webp', '/img-web/foto-7.webp'],
   t3: ['/img-web/foto-12.webp', '/img-web/foto-13.webp', '/img-web/foto-14.webp'],
@@ -533,7 +546,7 @@ function initPresale() {
   const box = document.createElement('div');
   box.id = 'presale-banner';
   box.className = 'presale-banner';
-  box.innerHTML = '<strong>' + escapeHtml(t('presaleTitle')) + '</strong><span id="presale-count"></span><small>' + escapeHtml(t('presaleShip')) + '</small>';
+  box.innerHTML = '<strong>' + escapeHtml(t('presaleTitle')) + '</strong><span id="presale-count"></span><small>' + escapeHtml(t('presaleShip').replace('{date}', (PRESALE.shipBy && PRESALE.shipBy[PAGE_LANG]) || '')) + '</small>';
   grid.parentNode.insertBefore(box, grid);
   const end = Date.parse(PRESALE.until);
   const out = document.getElementById('presale-count');
@@ -569,7 +582,9 @@ function isPresaleProduct(prodId) {
 }
 function unitPrice(prod, variant) {
   const base = variantPrice(variant);
-  return isPresaleProduct(prod.id) ? Math.round(base * (1 - PRESALE.discount)) : base;
+  if (!isPresaleProduct(prod.id)) return base;
+  const fixed = PRESALE.prices && PRESALE.prices[prod.id] && PRESALE.prices[prod.id][CUR];
+  return fixed || base;
 }
 function priceHtml(prod) {
   const base = variantPrice(prod.variants[0]);
@@ -804,7 +819,7 @@ function renderShopGrid() {
   const shopGrid = document.getElementById('shop-grid-container');
   if (!shopGrid) return;
   shopGrid.innerHTML = '';
-  PRODUCTS.forEach(prod => {
+  PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id)).forEach(prod => {
     const text = productText(prod.id);
     const card = document.createElement('div');
     card.className = 'product-card';
@@ -840,6 +855,9 @@ function initShopGrid() {
   const shopGrid = document.getElementById('shop-grid-container');
   if (!shopGrid) return;
   renderShopGrid();
+  // Jeden produkt: filtry kategorií nemají smysl
+  const filters = document.querySelector('.shop-filters');
+  if (filters && SHOP_VISIBLE.length < 2) filters.style.display = 'none';
 
   // Delegace událostí místo inline onclick (kvůli CSP)
   shopGrid.addEventListener('click', e => {
@@ -905,11 +923,11 @@ function openProductModal(productId) {
   if (pmBadge) pmBadge.textContent = text.badge;
   if (pmTitle) pmTitle.textContent = text.title;
   if (pmDesc) pmDesc.textContent = text.desc;
-  if (pmPrice) pmPrice.textContent = formatMoney(currentProduct.variants[0].prices[CUR]);
+  if (pmPrice) pmPrice.innerHTML = priceHtml(currentProduct);
 
   if (pmVariantSelect) {
     pmVariantSelect.innerHTML = currentProduct.variants.map(v =>
-      `<option value="${escapeHtml(v.key)}" data-price="${v.prices[CUR]}">${escapeHtml(variantLabel(v.key))} (${formatMoney(v.prices[CUR])})</option>`
+      `<option value="${escapeHtml(v.key)}" data-price="${unitPrice(currentProduct, v)}">${escapeHtml(variantLabel(v.key))} (${formatMoney(unitPrice(currentProduct, v))})</option>`
     ).join('');
     pmVariantSelect.onchange = () => {
       const selectedOpt = pmVariantSelect.options[pmVariantSelect.selectedIndex];
@@ -1025,7 +1043,7 @@ function loadCart() {
     const parsed = JSON.parse(localStorage.getItem(CART_KEY));
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(i => {
-      const prod = i && findProduct(i.pid);
+      const prod = i && SHOP_VISIBLE.includes(i.pid) && findProduct(i.pid);
       return prod && typeof i.variant === 'string' &&
         prod.variants.some(v => v.key === i.variant) &&
         Number.isFinite(i.qty) && i.qty > 0;
