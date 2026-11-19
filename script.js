@@ -631,11 +631,11 @@ async function fetchStock() {
 
 // Větší verze pro zobrazení přes celou obrazovku (stejné pořadí jako PRODUCT_IMAGES)
 const PRODUCT_IMAGES_FULL = {
-  c1: ['/img-web/products/creative-chaos-front-full.webp', '/img-web/products/creative-chaos-back-full.webp', '/img-web/products/creative-chaos-photo.webp'],
+  c1: ['/img-web/products/creative-chaos-front-full.webp', '/img-web/products/creative-chaos-back-full.webp', '/img-web/products/creative-chaos-print.webp', '/img-web/products/creative-chaos-photo.webp'],
 };
 
 const PRODUCT_IMAGES = {
-  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-photo.webp'],
+  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-print-square.webp', '/img-web/products/creative-chaos-photo.webp'],
   t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
   t2: ['/img-web/foto-5.webp', '/img-web/foto-6.webp', '/img-web/foto-7.webp'],
   t3: ['/img-web/foto-12.webp', '/img-web/foto-13.webp', '/img-web/foto-14.webp'],
