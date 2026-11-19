@@ -495,3 +495,8 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .pf-buy{width:100%;margin-bottom:18px}
 .pf-buy:disabled{opacity:.5;cursor:not-allowed}
 @media (max-width:860px){.product-featured{grid-template-columns:1fr;gap:20px;padding:16px}.pf-title{font-size:1.8rem}.pf-thumb{width:64px;height:64px}}
+
+/* Souhlas s obchodními podmínkami v pokladně */
+.order-consent{display:flex;gap:10px;align-items:flex-start;margin:6px 0 4px;font-size:.85rem;line-height:1.5;color:#c8c9cf;text-transform:none;letter-spacing:normal;font-weight:400;cursor:pointer}
+.order-consent input{margin-top:3px;width:18px;height:18px;flex:0 0 18px;accent-color:#ff9500}
+.order-consent a{color:#ff9500}

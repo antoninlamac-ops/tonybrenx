@@ -26,7 +26,7 @@ const CUR = CFG.currency;
 const CART_KEY = 'tb_cart_' + CUR;
 
 // Platba kartou přes Stripe. Zapnout až po otestování testovací kartou.
-const STRIPE_ENABLED = true; // platba kartou přes Stripe; vypnout změnou na false
+const STRIPE_ENABLED = false; // platba kartou přes Stripe vypnutá (zapnout změnou na true)
 
 // Doprava (Zásilkovna). EUR hodnoty jsou ZATÍM ORIENTAČNÍ - potvrďte před spuštěním.
 const SHIPPING_FEE = { CZK: 79, EUR: 4.9 };
@@ -137,7 +137,8 @@ const I18N = {
       <h4>2. Objednávka a cena</h4>
       <p>Objednávka je odeslána vyplněním formuláře. Cena zboží a způsob dopravy jsou uvedeny v košíku před odesláním. Provozovatel potvrdí objednávku e-mailem.</p>
       <h4>3. Platba a dodání</h4>
-      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
+      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Při platbě ze zahraničí použijte IBAN CZ28 2010 0000 0022 0340 9972, BIC FIOBCZPPXXX; účet je vedený v Kč a případné poplatky banky plátce hradí kupující. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
+      <p><strong>Předobjednávka.</strong> U zboží v předobjednávce je předpokládaný termín odeslání uveden u produktu a v potvrzení objednávky. Zboží se vyrábí až po skončení předobjednávky.</p>
       <h4>4. Odstoupení od smlouvy</h4>
       <p>Spotřebitel může odstoupit od kupní smlouvy do 14 dnů od převzetí zboží. Formulář pro odstoupení je v zápatí webu. Výjimkou je zboží upravené podle přání zákazníka nebo zhotovené pro jeho osobu (např. tisk s vlastním výběrem fotografie).</p>
       <h4>5. Reklamace a řešení sporů</h4>
@@ -280,6 +281,7 @@ const I18N = {
       <p>An order is placed by completing the form. Prices in EUR and the shipping method are shown in the cart before the order is sent. The seller is not a VAT payer, so the prices shown are final. The operator confirms the order by email.</p>
       <h4>3. Payment and delivery</h4>
       <p>Payment is made by bank transfer in EUR. Payment details are sent by email and payment is due within 48 hours of sending the order. Delivery is by Packeta to a pickup point, or by personal pickup in Sokolov.</p>
+      <p><strong>Pre-order.</strong> For pre-order items the estimated shipping date is shown with the product and in the order confirmation. Items are produced after the pre-order closes.</p>
       <h4>4. Withdrawal from contract</h4>
       <p>A consumer may withdraw from the purchase contract within 14 days of receiving the goods. The withdrawal form is in the footer of the website. This does not apply to goods made to the customer's specification or made for the customer personally (e.g. a print of a photo chosen by the customer).</p>
       <h4>5. Complaints and dispute resolution</h4>
@@ -422,6 +424,7 @@ const I18N = {
       <p>Die Bestellung erfolgt durch Ausfüllen des Formulars. Preise in Euro und die Versandart werden vor dem Absenden im Warenkorb angezeigt. Der Verkäufer ist nicht umsatzsteuerpflichtig; die angezeigten Preise sind Endpreise. Der Betreiber bestätigt die Bestellung per E-Mail.</p>
       <h4>3. Zahlung und Lieferung</h4>
       <p>Die Zahlung erfolgt per Banküberweisung in Euro. Die Zahlungsdaten werden per E-Mail gesendet; die Zahlung ist innerhalb von 48 Stunden nach dem Absenden der Bestellung fällig. Die Lieferung erfolgt mit Packeta an eine Abholstelle oder durch persönliche Abholung in Sokolov.</p>
+      <p><strong>Vorbestellung.</strong> Bei vorbestellter Ware ist der voraussichtliche Versandtermin beim Produkt und in der Bestellbestätigung angegeben. Die Ware wird nach Ende der Vorbestellung hergestellt.</p>
       <h4>4. Widerrufsrecht</h4>
       <p>Verbraucher können innerhalb von 14 Tagen nach Erhalt der Ware vom Kaufvertrag zurücktreten. Das Widerrufsformular befindet sich in der Fußzeile der Website. Ausgenommen sind nach Kundenwunsch angefertigte Waren oder Waren, die persönlich für den Kunden hergestellt wurden (z. B. ein Druck mit einer vom Kunden gewählten Fotografie).</p>
       <h4>5. Reklamation und Streitbeilegung</h4>
