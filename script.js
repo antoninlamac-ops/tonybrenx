@@ -629,8 +629,13 @@ async function fetchStock() {
   }
 }
 
+// Větší verze pro zobrazení přes celou obrazovku (stejné pořadí jako PRODUCT_IMAGES)
+const PRODUCT_IMAGES_FULL = {
+  c1: ['/img-web/products/creative-chaos-front-full.webp', '/img-web/products/creative-chaos-back-full.webp', '/img-web/products/creative-chaos-photo.webp'],
+};
+
 const PRODUCT_IMAGES = {
-  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-mockup.webp', '/img-web/products/creative-chaos-photo.webp'],
+  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-photo.webp'],
   t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
   t2: ['/img-web/foto-5.webp', '/img-web/foto-6.webp', '/img-web/foto-7.webp'],
   t3: ['/img-web/foto-12.webp', '/img-web/foto-13.webp', '/img-web/foto-14.webp'],
@@ -1016,7 +1021,7 @@ function initShopGrid() {
       if (act === 'buy') addToCart(prod.id, featuredSize);
       if (act === 'open' && lb && typeof lb.showModal === 'function') {
         currentProduct = prod;
-        lbImages = PRODUCT_IMAGES[prod.id];
+        lbImages = PRODUCT_IMAGES_FULL[prod.id] || PRODUCT_IMAGES[prod.id];
         show(featuredImg);
         lb.showModal();
       }
@@ -1190,7 +1195,7 @@ if (pmZoomBox) {
     if (e.target.closest('.pm-nav-arrow') || e.target.closest('.pm-zoom-btn')) return;
     if (isZoomed) { toggleZoom(); return; }
     if (!currentProduct || !lb || typeof lb.showModal !== 'function') { toggleZoom(); return; }
-    lbImages = PRODUCT_IMAGES[currentProduct.id];
+    lbImages = PRODUCT_IMAGES_FULL[currentProduct.id] || PRODUCT_IMAGES[currentProduct.id];
     show(currentProdImgIndex);
     lb.showModal();
   });
