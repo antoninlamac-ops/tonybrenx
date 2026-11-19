@@ -26,7 +26,7 @@ const CUR = CFG.currency;
 const CART_KEY = 'tb_cart_' + CUR;
 
 // Platba kartou přes Stripe. Zapnout až po otestování testovací kartou.
-const STRIPE_ENABLED = true; // platba kartou přes Stripe; vypnout změnou na false
+const STRIPE_ENABLED = false; // platba kartou přes Stripe vypnutá (zapnout změnou na true)
 
 // Doprava (Zásilkovna). EUR hodnoty jsou ZATÍM ORIENTAČNÍ - potvrďte před spuštěním.
 const SHIPPING_FEE = { CZK: 79, EUR: 4.9 };
@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     loadPacketaScriptIfNeeded();
     initPresale();
+    fetchStock();
   }
 });
 
@@ -80,6 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
 const I18N = {
   cs: {
     alertNoPacketa: 'Knihovna Zásilkovny se ještě nenačetla.',
+    sizeLabel: 'Velikost',
+    stockSold: 'Prodáno {sold} z {limit} ks',
+    soldOut: 'Vyprodáno',
+    stockLeft: 'Zbývá už jen {n} ks.',
     alertPickPoint: 'Vyber prosím výdejní místo nebo Z-BOX Zásilkovny.',
     cartEmpty: 'Košík je zatím prázdný.',
     cartTotal: 'Zboží celkem:',
@@ -110,7 +115,7 @@ const I18N = {
     legalTitles: { terms: 'Obchodní podmínky', privacy: 'Ochrana soukromí (GDPR)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Univerzální velikost (Nastavitelný snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
-      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Barva černá, velikosti S až XXL. V předobjednávce za 590 Kč, potom za plnou cenu 790 Kč.' },
+      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Limitovaná edice 50 kusů. Barva černá, velikosti S až XXL. V předobjednávce za 590 Kč, potom za plnou cenu 790 Kč.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash úprava, syrový streetový vibe, limitovaná série. Každý kus má unikátní strukturu oprání.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Pevný límec, spadlá ramena a autorský print nočního města. Gramáž 220g.' },
@@ -132,7 +137,8 @@ const I18N = {
       <h4>2. Objednávka a cena</h4>
       <p>Objednávka je odeslána vyplněním formuláře. Cena zboží a způsob dopravy jsou uvedeny v košíku před odesláním. Provozovatel potvrdí objednávku e-mailem.</p>
       <h4>3. Platba a dodání</h4>
-      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
+      <p>Platba probíhá bankovním převodem. Instrukce s číslem účtu a variabilním symbolem přijdou do e-mailu. Splatnost je 48 hodin od odeslání objednávky. Při platbě ze zahraničí použijte IBAN CZ28 2010 0000 0022 0340 9972, BIC FIOBCZPPXXX; účet je vedený v Kč a případné poplatky banky plátce hradí kupující. Doručení zajišťuje Zásilkovna na výdejní místo, nebo je možné osobní předání v Sokolově.</p>
+      <p><strong>Předobjednávka.</strong> U zboží v předobjednávce je předpokládaný termín odeslání uveden u produktu a v potvrzení objednávky. Zboží se vyrábí až po skončení předobjednávky.</p>
       <h4>4. Odstoupení od smlouvy</h4>
       <p>Spotřebitel může odstoupit od kupní smlouvy do 14 dnů od převzetí zboží. Formulář pro odstoupení je v zápatí webu. Výjimkou je zboží upravené podle přání zákazníka nebo zhotovené pro jeho osobu (např. tisk s vlastním výběrem fotografie).</p>
       <h4>5. Reklamace a řešení sporů</h4>
@@ -218,6 +224,10 @@ const I18N = {
 
   en: {
     alertNoPacketa: 'The Packeta library has not loaded yet.',
+    sizeLabel: 'Size',
+    stockSold: '{sold} of {limit} sold',
+    soldOut: 'Sold out',
+    stockLeft: 'Only {n} left.',
     alertPickPoint: 'Please choose a pickup point or a Packeta Z-BOX.',
     cartEmpty: 'Your cart is empty.',
     cartTotal: 'Goods total:',
@@ -248,7 +258,7 @@ const I18N = {
     legalTitles: { terms: 'Terms and conditions', privacy: 'Privacy (GDPR)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'One size (adjustable snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
-      c1: { badge: 'Pre-order', title: 'Tee „Creative Chaos“', desc: 'Unisex oversized tee with my street photo. I came across the Potraviny Štros shop window on Strossmayer Square in Prague while shooting street photos in winter. It caught my eye straight away, so I shot it and edited it under the name Creative Chaos. Black, sizes S to XXL.' },
+      c1: { badge: 'Pre-order', title: 'Tee „Creative Chaos“', desc: 'Unisex oversized tee with my street photo. I came across the Potraviny Štros shop window on Strossmayer Square in Prague while shooting street photos in winter. It caught my eye straight away, so I shot it and edited it under the name Creative Chaos. Limited edition of 50. Black, sizes S to XXL.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized cut made from premium heavyweight 100% cotton (240 g/m²). Black-and-white screen print built to last. Made for everyday street wear.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash finish, raw street vibe, limited series. Every piece has its own unique wash pattern.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Structured collar, dropped shoulders and an original print of the night city. 220 g/m².' },
@@ -271,6 +281,7 @@ const I18N = {
       <p>An order is placed by completing the form. Prices in EUR and the shipping method are shown in the cart before the order is sent. The seller is not a VAT payer, so the prices shown are final. The operator confirms the order by email.</p>
       <h4>3. Payment and delivery</h4>
       <p>Payment is made by bank transfer in EUR. Payment details are sent by email and payment is due within 48 hours of sending the order. Delivery is by Packeta to a pickup point, or by personal pickup in Sokolov.</p>
+      <p><strong>Pre-order.</strong> For pre-order items the estimated shipping date is shown with the product and in the order confirmation. Items are produced after the pre-order closes.</p>
       <h4>4. Withdrawal from contract</h4>
       <p>A consumer may withdraw from the purchase contract within 14 days of receiving the goods. The withdrawal form is in the footer of the website. This does not apply to goods made to the customer's specification or made for the customer personally (e.g. a print of a photo chosen by the customer).</p>
       <h4>5. Complaints and dispute resolution</h4>
@@ -356,6 +367,10 @@ const I18N = {
 
   de: {
     alertNoPacketa: 'Die Packeta-Bibliothek wurde noch nicht geladen.',
+    sizeLabel: 'Größe',
+    stockSold: '{sold} von {limit} verkauft',
+    soldOut: 'Ausverkauft',
+    stockLeft: 'Nur noch {n} Stück.',
     alertPickPoint: 'Bitte wähle eine Abholstelle oder eine Packeta Z-BOX aus.',
     cartEmpty: 'Dein Warenkorb ist noch leer.',
     cartTotal: 'Warenwert gesamt:',
@@ -386,7 +401,7 @@ const I18N = {
     legalTitles: { terms: 'Allgemeine Geschäftsbedingungen', privacy: 'Datenschutz (DSGVO)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Einheitsgröße (verstellbarer Snap)', A3: 'A3 (30 x 42 cm)', A2: 'A2 (42 x 59 cm)' },
     products: {
-      c1: { badge: 'Vorbestellung', title: 'Tee „Creative Chaos“', desc: 'Unisex-Oversize-Shirt mit meinem Streetfoto. Auf das Schaufenster von Potraviny Štros am Strossmayer-Platz in Prag bin ich beim winterlichen Streetfotografieren gestoßen. Es hat mich sofort gepackt, also habe ich es fotografiert und unter dem Namen Creative Chaos bearbeitet. Schwarz, Größen S bis XXL.' },
+      c1: { badge: 'Vorbestellung', title: 'Tee „Creative Chaos“', desc: 'Unisex-Oversize-Shirt mit meinem Streetfoto. Auf das Schaufenster von Potraviny Štros am Strossmayer-Platz in Prag bin ich beim winterlichen Streetfotografieren gestoßen. Es hat mich sofort gepackt, also habe ich es fotografiert und unter dem Namen Creative Chaos bearbeitet. Limitierte Auflage von 50 Stück. Schwarz, Größen S bis XXL.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized-Schnitt aus hochwertiger schwerer 100 % Baumwolle (240 g/m²). Schwarz-weißer Siebdruck mit hoher Haltbarkeit. Für den täglichen Streetwear-Look gemacht.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage-Acid-Wash-Veredelung, roher Streetwear-Vibe, limitierte Serie. Jedes Stück hat eine einzigartige Waschstruktur.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Fester Kragen, tiefe Schultern und ein eigener Print einer nächtlichen Stadt. 220 g/m².' },
@@ -409,6 +424,7 @@ const I18N = {
       <p>Die Bestellung erfolgt durch Ausfüllen des Formulars. Preise in Euro und die Versandart werden vor dem Absenden im Warenkorb angezeigt. Der Verkäufer ist nicht umsatzsteuerpflichtig; die angezeigten Preise sind Endpreise. Der Betreiber bestätigt die Bestellung per E-Mail.</p>
       <h4>3. Zahlung und Lieferung</h4>
       <p>Die Zahlung erfolgt per Banküberweisung in Euro. Die Zahlungsdaten werden per E-Mail gesendet; die Zahlung ist innerhalb von 48 Stunden nach dem Absenden der Bestellung fällig. Die Lieferung erfolgt mit Packeta an eine Abholstelle oder durch persönliche Abholung in Sokolov.</p>
+      <p><strong>Vorbestellung.</strong> Bei vorbestellter Ware ist der voraussichtliche Versandtermin beim Produkt und in der Bestellbestätigung angegeben. Die Ware wird nach Ende der Vorbestellung hergestellt.</p>
       <h4>4. Widerrufsrecht</h4>
       <p>Verbraucher können innerhalb von 14 Tagen nach Erhalt der Ware vom Kaufvertrag zurücktreten. Das Widerrufsformular befindet sich in der Fußzeile der Website. Ausgenommen sind nach Kundenwunsch angefertigte Waren oder Waren, die persönlich für den Kunden hergestellt wurden (z. B. ein Druck mit einer vom Kunden gewählten Fotografie).</p>
       <h4>5. Reklamation und Streitbeilegung</h4>
@@ -576,6 +592,41 @@ function productMediaHtml(prod, title) {
       </div></div>`;
   }
   return `<img src="${PRODUCT_IMAGES[prod.id][0]}" alt="${escapeHtml(title)}" loading="lazy" draggable="false">`;
+}
+
+// Limitovaná edice: počet kusů. Prodané kusy počítá skript objednávek z tabulky.
+const STOCK_LIMIT = { c1: 50 };
+let STOCK_SOLD = {}; // { c1: 5 } po načtení ze serveru
+let STOCK_LOADED = false; // dokud se počet nenačte, počítadlo se neukazuje
+
+function stockSold(pid) { return STOCK_SOLD[pid] || 0; }
+function stockLeft(pid) {
+  if (!(pid in STOCK_LIMIT)) return Infinity;
+  return Math.max(0, STOCK_LIMIT[pid] - stockSold(pid));
+}
+function inCartQty(pid) { return cart.filter(i => i.pid === pid).reduce((a, i) => a + i.qty, 0); }
+function stockHtml(pid) {
+  if (!(pid in STOCK_LIMIT) || !STOCK_LOADED) return '';
+  const limit = STOCK_LIMIT[pid];
+  const sold = Math.min(stockSold(pid), limit);
+  const pct = Math.round(sold / limit * 100);
+  return `<div class="stock-box"><div class="stock-text">${escapeHtml(t('stockSold').replace('{sold}', sold).replace('{limit}', limit))}</div>
+    <div class="stock-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${limit}" aria-valuenow="${sold}"><span style="width:${pct}%"></span></div></div>`;
+}
+async function fetchStock() {
+  const form = document.getElementById('order-form');
+  if (!form || !form.action) return false;
+  try {
+    const res = await fetch(form.action + '?action=stock&t=' + Date.now());
+    const data = await res.json();
+    if (!data || !data.sold) return false;
+    STOCK_SOLD = data.sold;
+    STOCK_LOADED = true;
+    renderShopGrid();
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 const PRODUCT_IMAGES = {
@@ -867,10 +918,51 @@ document.addEventListener('pointerdown', (e) => {
 });
 
 /* ---------- Shop: výpis produktů ---------- */
+// Jediný produkt v Kolekci: velký detail přímo na stránce místo karty a okna
+let featuredImg = 0;
+let featuredSize = null;
+function renderFeatured(shopGrid, prod) {
+  const text = productText(prod.id);
+  const imgs = PRODUCT_IMAGES[prod.id];
+  featuredImg = Math.min(featuredImg, imgs.length - 1);
+  if (!featuredSize || !prod.variants.some(v => v.key === featuredSize)) {
+    featuredSize = (prod.variants[1] || prod.variants[0]).key;
+  }
+  const out = stockLeft(prod.id) <= 0;
+  shopGrid.classList.add('featured');
+  shopGrid.innerHTML = `
+    <div class="product-featured" data-pid="${escapeHtml(prod.id)}">
+      <div class="pf-gallery">
+        <button type="button" class="pf-main" data-pf="open" aria-label="${escapeHtml(text.title)}">
+          <span class="product-badge">${escapeHtml(isPresaleProduct(prod.id) ? t('presaleBadge') : text.badge)}</span>
+          <img src="${imgs[featuredImg]}" alt="${escapeHtml(text.title)}" draggable="false">
+        </button>
+        <div class="pf-thumbs">
+          ${imgs.map((src, i) => `<button type="button" class="pf-thumb${i === featuredImg ? ' on' : ''}" data-pf="thumb" data-i="${i}" aria-label="${i + 1}"><img src="${src}" alt="" loading="lazy" draggable="false"></button>`).join('')}
+        </div>
+      </div>
+      <div class="pf-info">
+        <h3 class="pf-title">${escapeHtml(text.title)}</h3>
+        <div class="pf-price">${priceHtml(prod)}</div>
+        <p class="pf-desc">${escapeHtml(text.desc)}</p>
+        ${stockHtml(prod.id)}
+        <div class="pf-size-label">${escapeHtml(t('sizeLabel'))}</div>
+        <div class="pf-sizes" role="radiogroup" aria-label="${escapeHtml(t('sizeLabel'))}">
+          ${prod.variants.map(v => `<button type="button" class="pf-size${v.key === featuredSize ? ' on' : ''}" data-pf="size" data-size="${escapeHtml(v.key)}" role="radio" aria-checked="${v.key === featuredSize}">${escapeHtml(variantLabel(v.key))}</button>`).join('')}
+        </div>
+        <button type="button" class="btn btn-primary pf-buy" data-pf="buy"${out ? ' disabled' : ''}>${escapeHtml(out ? t('soldOut') : t('addToCart'))}</button>
+        <div class="pf-specs">${specsHtml(prod.id)}</div>
+      </div>
+    </div>`;
+}
+
 function renderShopGrid() {
   const shopGrid = document.getElementById('shop-grid-container');
   if (!shopGrid) return;
   shopGrid.innerHTML = '';
+  shopGrid.classList.remove('featured');
+  const visible = PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id));
+  if (visible.length === 1) { renderFeatured(shopGrid, visible[0]); return; }
   PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id)).forEach(prod => {
     const text = productText(prod.id);
     const card = document.createElement('div');
@@ -896,7 +988,8 @@ function renderShopGrid() {
           <span class="product-price">${priceHtml(prod)}</span>
           ${selectHtml}
         </div>
-        <button type="button" class="btn-buy">${escapeHtml(t('addToCart'))}</button>
+        ${stockHtml(prod.id)}
+        <button type="button" class="btn-buy"${stockLeft(prod.id) <= 0 ? ' disabled' : ''}>${escapeHtml(stockLeft(prod.id) <= 0 ? t('soldOut') : t('addToCart'))}</button>
       </div>
     `;
     shopGrid.appendChild(card);
@@ -913,6 +1006,22 @@ function initShopGrid() {
 
   // Delegace událostí místo inline onclick (kvůli CSP)
   shopGrid.addEventListener('click', e => {
+    const pfEl = e.target.closest('[data-pf]');
+    const featured = e.target.closest('.product-featured');
+    if (pfEl && featured) {
+      const prod = findProduct(featured.dataset.pid);
+      const act = pfEl.dataset.pf;
+      if (act === 'thumb') { featuredImg = Number(pfEl.dataset.i) || 0; renderShopGrid(); }
+      if (act === 'size') { featuredSize = pfEl.dataset.size; renderShopGrid(); }
+      if (act === 'buy') addToCart(prod.id, featuredSize);
+      if (act === 'open' && lb && typeof lb.showModal === 'function') {
+        currentProduct = prod;
+        lbImages = PRODUCT_IMAGES[prod.id];
+        show(featuredImg);
+        lb.showModal();
+      }
+      return;
+    }
     const card = e.target.closest('.product-card');
     if (!card) return;
     if (e.target.closest('select')) return;
@@ -982,7 +1091,12 @@ function openProductModal(productId) {
       box.id = 'pm-specs';
       pmDesc.insertAdjacentElement('afterend', box);
     }
-    box.innerHTML = specsHtml(productId);
+    box.innerHTML = stockHtml(productId) + specsHtml(productId);
+    if (pmAddToCartBtn) {
+      const out = stockLeft(productId) <= 0;
+      pmAddToCartBtn.disabled = out;
+      pmAddToCartBtn.textContent = out ? t('soldOut') : t('addToCart');
+    }
   }
   if (pmPrice) pmPrice.innerHTML = priceHtml(currentProduct);
 
@@ -1071,9 +1185,14 @@ if (toggleZoomBtn) {
   });
 }
 if (pmZoomBox) {
+  // Klik na fotku: celý obrázek přes celou obrazovku (lupa zůstává na tlačítku)
   pmZoomBox.addEventListener('click', (e) => {
     if (e.target.closest('.pm-nav-arrow') || e.target.closest('.pm-zoom-btn')) return;
-    toggleZoom();
+    if (isZoomed) { toggleZoom(); return; }
+    if (!currentProduct || !lb || typeof lb.showModal !== 'function') { toggleZoom(); return; }
+    lbImages = PRODUCT_IMAGES[currentProduct.id];
+    show(currentProdImgIndex);
+    lb.showModal();
   });
   pmZoomBox.addEventListener('mousemove', (e) => {
     if (!isZoomed || !pmActiveImg) return;
@@ -1179,6 +1298,11 @@ function updateCartUI() {
 }
 
 function addToCart(productId, variantKey) {
+  const left = stockLeft(productId) - inCartQty(productId);
+  if (left <= 0) {
+    alert(stockLeft(productId) <= 0 ? t('soldOut') : t('stockLeft').replace('{n}', stockLeft(productId)));
+    return;
+  }
   const existing = cart.find(i => i.pid === productId && i.variant === variantKey);
   if (existing) existing.qty += 1;
   else cart.push({ pid: productId, variant: variantKey, qty: 1 });
@@ -1323,6 +1447,14 @@ const orderForm = document.getElementById('order-form');
 if (orderForm) {
   orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (Object.keys(STOCK_LIMIT).some(pid => inCartQty(pid) > 0)) {
+      await fetchStock();
+      const over = Object.keys(STOCK_LIMIT).find(pid => inCartQty(pid) > stockLeft(pid));
+      if (over) {
+        alert(stockLeft(over) <= 0 ? t('soldOut') : t('stockLeft').replace('{n}', stockLeft(over)));
+        return;
+      }
+    }
     const method = currentShippingCode();
     if (method === 'zasilkovna' && !selectedPacketaPoint) {
       alert(t('alertPickPoint'));
@@ -1564,7 +1696,14 @@ if (scrollTopBtn) scrollTopBtn.addEventListener('click', () => window.scrollTo({
 /* ---------- Lightbox ---------- */
 const list = () => (g ? [...g.querySelectorAll('a')] : []);
 let cur = 0;
+let lbImages = null; // fotky produktu, když je lightbox otevřený z detailu produktu
 function show(i) {
+  if (lbImages && big) {
+    cur = (i + lbImages.length) % lbImages.length;
+    big.src = lbImages[cur];
+    big.alt = currentProduct ? productText(currentProduct.id).title : T.altDefault;
+    return;
+  }
   const l = list();
   if (!l.length || !big) return;
   cur = (i + l.length) % l.length;
@@ -1577,6 +1716,7 @@ if (g) {
     const a = e.target.closest('a');
     if(!a) return;
     e.preventDefault();
+    lbImages = null;
     show(list().indexOf(a));
     if (lb && typeof lb.showModal === 'function') lb.showModal();
   });
@@ -1589,6 +1729,7 @@ if (nextBtn) nextBtn.onclick = e => { e.stopPropagation(); show(cur+1); };
 if (closeBtn) closeBtn.onclick = e => { e.stopPropagation(); if (lb) lb.close(); };
 if (lb) {
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('close', () => { lbImages = null; });
   lb.addEventListener('keydown', e => {
     if(e.key === 'ArrowLeft') show(cur-1);
     if(e.key === 'ArrowRight') show(cur+1);

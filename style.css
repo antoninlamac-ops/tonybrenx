@@ -467,3 +467,36 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .pay-opt strong{color:#fff;font-size:.95rem}
 .pay-opt small{color:#b9bac0;font-size:.8rem}
 .pay-opt small{text-transform:none;letter-spacing:normal;font-weight:400}
+
+/* Počítadlo limitované edice */
+.stock-box{margin:2px 0 12px}
+.stock-text{font-size:.8rem;color:#c8c9cf;margin-bottom:5px}
+.stock-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.stock-bar span{display:block;height:100%;background:#ff9500;border-radius:99px;transition:width .6s ease}
+.btn-buy:disabled,#pm-add-to-cart-btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* Jediný produkt: velký detail přímo na stránce */
+#shop-grid-container.featured{display:block}
+.product-featured{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:36px;align-items:start;background:rgba(14,15,19,.72);border:1px solid var(--edge);border-radius:18px;padding:24px}
+.pf-main{position:relative;display:block;width:100%;aspect-ratio:1/1;padding:0;border:1px solid var(--edge);border-radius:14px;overflow:hidden;background:#0d0e12;cursor:zoom-in}
+.pf-main img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-main .product-badge{position:absolute;top:12px;left:12px;z-index:2}
+.pf-thumbs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.pf-thumb{width:76px;height:76px;padding:0;border:1px solid var(--edge);border-radius:10px;overflow:hidden;background:#0d0e12;cursor:pointer;opacity:.65}
+.pf-thumb.on,.pf-thumb:hover{opacity:1;border-color:#ff9500}
+.pf-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-title{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-size:2.2rem;line-height:1.05;text-transform:uppercase;margin:4px 0 10px}
+.pf-price{font-family:"Barlow Condensed","Arial Narrow",sans-serif;font-size:1.8rem;font-weight:700;color:#ff9500;margin-bottom:14px}
+.pf-desc{color:#c8c9cf;line-height:1.65;margin:0 0 16px}
+.pf-size-label{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#9a9ba2;margin:4px 0 8px}
+.pf-sizes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.pf-size{min-width:54px;padding:10px 14px;border-radius:10px;border:1px solid var(--edge);background:rgba(10,10,11,.6);color:#f1f1f2;font-weight:700;cursor:pointer}
+.pf-size.on{border-color:#ff9500;color:#ff9500}
+.pf-buy{width:100%;margin-bottom:18px}
+.pf-buy:disabled{opacity:.5;cursor:not-allowed}
+@media (max-width:860px){.product-featured{grid-template-columns:1fr;gap:20px;padding:16px}.pf-title{font-size:1.8rem}.pf-thumb{width:64px;height:64px}}
+
+/* Souhlas s obchodními podmínkami v pokladně */
+.order-consent{display:flex;gap:10px;align-items:flex-start;margin:6px 0 4px;font-size:.85rem;line-height:1.5;color:#c8c9cf;text-transform:none;letter-spacing:normal;font-weight:400;cursor:pointer}
+.order-consent input{margin-top:3px;width:18px;height:18px;flex:0 0 18px;accent-color:#ff9500}
+.order-consent a{color:#ff9500}
