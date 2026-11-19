@@ -81,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 const I18N = {
   cs: {
     alertNoPacketa: 'Knihovna Zásilkovny se ještě nenačetla.',
+    sizeLabel: 'Velikost',
     stockSold: 'Prodáno {sold} z {limit} ks',
     soldOut: 'Vyprodáno',
     stockLeft: 'Zbývá už jen {n} ks.',
@@ -222,6 +223,7 @@ const I18N = {
 
   en: {
     alertNoPacketa: 'The Packeta library has not loaded yet.',
+    sizeLabel: 'Size',
     stockSold: '{sold} of {limit} sold',
     soldOut: 'Sold out',
     stockLeft: 'Only {n} left.',
@@ -363,6 +365,7 @@ const I18N = {
 
   de: {
     alertNoPacketa: 'Die Packeta-Bibliothek wurde noch nicht geladen.',
+    sizeLabel: 'Größe',
     stockSold: '{sold} von {limit} verkauft',
     soldOut: 'Ausverkauft',
     stockLeft: 'Nur noch {n} Stück.',
@@ -912,10 +915,51 @@ document.addEventListener('pointerdown', (e) => {
 });
 
 /* ---------- Shop: výpis produktů ---------- */
+// Jediný produkt v Kolekci: velký detail přímo na stránce místo karty a okna
+let featuredImg = 0;
+let featuredSize = null;
+function renderFeatured(shopGrid, prod) {
+  const text = productText(prod.id);
+  const imgs = PRODUCT_IMAGES[prod.id];
+  featuredImg = Math.min(featuredImg, imgs.length - 1);
+  if (!featuredSize || !prod.variants.some(v => v.key === featuredSize)) {
+    featuredSize = (prod.variants[1] || prod.variants[0]).key;
+  }
+  const out = stockLeft(prod.id) <= 0;
+  shopGrid.classList.add('featured');
+  shopGrid.innerHTML = `
+    <div class="product-featured" data-pid="${escapeHtml(prod.id)}">
+      <div class="pf-gallery">
+        <button type="button" class="pf-main" data-pf="open" aria-label="${escapeHtml(text.title)}">
+          <span class="product-badge">${escapeHtml(isPresaleProduct(prod.id) ? t('presaleBadge') : text.badge)}</span>
+          <img src="${imgs[featuredImg]}" alt="${escapeHtml(text.title)}" draggable="false">
+        </button>
+        <div class="pf-thumbs">
+          ${imgs.map((src, i) => `<button type="button" class="pf-thumb${i === featuredImg ? ' on' : ''}" data-pf="thumb" data-i="${i}" aria-label="${i + 1}"><img src="${src}" alt="" loading="lazy" draggable="false"></button>`).join('')}
+        </div>
+      </div>
+      <div class="pf-info">
+        <h3 class="pf-title">${escapeHtml(text.title)}</h3>
+        <div class="pf-price">${priceHtml(prod)}</div>
+        <p class="pf-desc">${escapeHtml(text.desc)}</p>
+        ${stockHtml(prod.id)}
+        <div class="pf-size-label">${escapeHtml(t('sizeLabel'))}</div>
+        <div class="pf-sizes" role="radiogroup" aria-label="${escapeHtml(t('sizeLabel'))}">
+          ${prod.variants.map(v => `<button type="button" class="pf-size${v.key === featuredSize ? ' on' : ''}" data-pf="size" data-size="${escapeHtml(v.key)}" role="radio" aria-checked="${v.key === featuredSize}">${escapeHtml(variantLabel(v.key))}</button>`).join('')}
+        </div>
+        <button type="button" class="btn btn-primary pf-buy" data-pf="buy"${out ? ' disabled' : ''}>${escapeHtml(out ? t('soldOut') : t('addToCart'))}</button>
+        <div class="pf-specs">${specsHtml(prod.id)}</div>
+      </div>
+    </div>`;
+}
+
 function renderShopGrid() {
   const shopGrid = document.getElementById('shop-grid-container');
   if (!shopGrid) return;
   shopGrid.innerHTML = '';
+  shopGrid.classList.remove('featured');
+  const visible = PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id));
+  if (visible.length === 1) { renderFeatured(shopGrid, visible[0]); return; }
   PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id)).forEach(prod => {
     const text = productText(prod.id);
     const card = document.createElement('div');
@@ -959,6 +1003,22 @@ function initShopGrid() {
 
   // Delegace událostí místo inline onclick (kvůli CSP)
   shopGrid.addEventListener('click', e => {
+    const pfEl = e.target.closest('[data-pf]');
+    const featured = e.target.closest('.product-featured');
+    if (pfEl && featured) {
+      const prod = findProduct(featured.dataset.pid);
+      const act = pfEl.dataset.pf;
+      if (act === 'thumb') { featuredImg = Number(pfEl.dataset.i) || 0; renderShopGrid(); }
+      if (act === 'size') { featuredSize = pfEl.dataset.size; renderShopGrid(); }
+      if (act === 'buy') addToCart(prod.id, featuredSize);
+      if (act === 'open' && lb && typeof lb.showModal === 'function') {
+        currentProduct = prod;
+        lbImages = PRODUCT_IMAGES[prod.id];
+        show(featuredImg);
+        lb.showModal();
+      }
+      return;
+    }
     const card = e.target.closest('.product-card');
     if (!card) return;
     if (e.target.closest('select')) return;
