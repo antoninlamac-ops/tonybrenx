@@ -26,7 +26,7 @@ const CUR = CFG.currency;
 const CART_KEY = 'tb_cart_' + CUR;
 
 // Platba kartou přes Stripe. Zapnout až po otestování testovací kartou.
-const STRIPE_ENABLED = PREVIEW; // pro všechny: změnit na true
+const STRIPE_ENABLED = true; // platba kartou přes Stripe; vypnout změnou na false
 
 // Doprava (Zásilkovna). EUR hodnoty jsou ZATÍM ORIENTAČNÍ - potvrďte před spuštěním.
 const SHIPPING_FEE = { CZK: 79, EUR: 4.9 };
@@ -1273,9 +1273,9 @@ function openPacketaWidget() {
 }
 
 const PAY_TEXT = {
-  cs: { legend: 'Způsob platby', transfer: 'Bankovní převod', card: 'Platební karta' },
-  en: { legend: 'Payment method', transfer: 'Bank transfer', card: 'Card' },
-  de: { legend: 'Zahlungsart', transfer: 'Überweisung', card: 'Karte' },
+  cs: { legend: 'Způsob platby', transfer: 'Bankovní převod', card: 'Platební karta', transferNote: 'Číslo účtu a VS přijdou e-mailem, splatnost 48 h.', cardNote: 'Zaplatíte hned na zabezpečené stránce Stripe.' },
+  en: { legend: 'Payment method', transfer: 'Bank transfer', card: 'Card', transferNote: 'Account details arrive by e-mail, due within 48 h.', cardNote: 'Pay right away on the secure Stripe page.' },
+  de: { legend: 'Zahlungsart', transfer: 'Überweisung', card: 'Karte', transferNote: 'Kontodaten kommen per E-Mail, fällig innerhalb von 48 h.', cardNote: 'Sofort auf der sicheren Stripe-Seite bezahlen.' },
 }[PAGE_LANG] || { legend: 'Způsob platby', transfer: 'Bankovní převod', card: 'Platební karta' };
 
 function getPayChoice() {
@@ -1286,21 +1286,34 @@ function getPayChoice() {
 function initPaymentChoice() {
   const form = document.getElementById('order-form');
   if (!STRIPE_ENABLED || !form) return;
-  const box = document.createElement('fieldset');
-  box.className = 'pay-choice';
-  // CZ: převod předvolen, karta jako volba. EN/DE: pouze karta, dokud nebude EUR účet.
+  const hidden = form.querySelector('input[name=payment_method]');
+  const group = hidden && hidden.closest('.form-group');
+  // CZ: převod i karta (převod předvolen). EN/DE: jen karta, dokud nebude EUR účet.
   const isCz = PAGE_LANG === 'cs';
-  const transfer = isCz
-    ? '<label><input type="radio" name="payment_choice" value="transfer" checked> ' + PAY_TEXT.transfer + '</label> '
-    : '';
-  const card = '<label><input type="radio" name="payment_choice" value="card"' + (isCz ? '' : ' checked') + '> ' + PAY_TEXT.card + '</label>';
-  box.innerHTML = '<legend>' + PAY_TEXT.legend + '</legend>' + transfer + card;
-  const btn = document.getElementById('order-submit-btn');
-  if (btn) btn.parentNode.insertBefore(box, btn);
+  const opts = [];
+  if (isCz) opts.push(['transfer', PAY_TEXT.transfer, PAY_TEXT.transferNote]);
+  opts.push(['card', PAY_TEXT.card, PAY_TEXT.cardNote]);
+  const box = document.createElement('div');
+  box.className = 'pay-choice';
+  box.setAttribute('role', 'radiogroup');
+  box.innerHTML = opts.map(([v, label, note], i) =>
+    `<label class="pay-opt"><input type="radio" name="payment_choice" value="${v}"${i === 0 ? ' checked' : ''}>
+      <span><strong>${escapeHtml(label)}</strong><small>${escapeHtml(note)}</small></span></label>`).join('');
+  if (group) {
+    [...group.children].forEach(el => { if (el.tagName !== 'LABEL' && el !== hidden) el.remove(); });
+    group.insertBefore(box, hidden);
+  } else {
+    const btn = document.getElementById('order-submit-btn');
+    if (btn) btn.parentNode.insertBefore(box, btn);
+  }
+  box.addEventListener('change', () => {
+    if (hidden) hidden.value = getPayChoice() === 'card' ? 'Karta (Stripe)' : 'Bankovní převod (platnost 48h)';
+  });
 }
 
 async function postOrder(data) {
-  if (!STRIPE_ENABLED) { await postWithTimeout(document.getElementById('order-form').action, data); return null; }
+  // Převod beze změny (jako dosud); jen karta čte odpověď kvůli přesměrování na Stripe
+  if (!STRIPE_ENABLED || data.get('payment') !== 'card') { await postWithTimeout(document.getElementById('order-form').action, data); return null; }
   const res = await fetch(document.getElementById('order-form').action, { method: 'POST', body: data });
   if (!res.ok) throw new Error('order failed');
   return res.json();
@@ -1328,7 +1341,7 @@ if (orderForm) {
     cartLines().forEach(line => {
       summary += `• ${line.title} [${line.variantLabel}] - ${line.qty} ks (${formatMoney(line.unit * line.qty)})\n`;
     });
-    summary += `\nJazyk webu: ${PAGE_LANG.toUpperCase()}, měna: ${CUR}\nDoprava: ${shippingLabel}\nPlatba: Bankovní převod\n`;
+    summary += `\nJazyk webu: ${PAGE_LANG.toUpperCase()}, měna: ${CUR}\nDoprava: ${shippingLabel}\nPlatba: ${STRIPE_ENABLED && getPayChoice() === 'card' ? 'Karta (Stripe)' : 'Bankovní převod'}\n`;
     if (selectedPacketaPoint) {
       summary += `Pobočka / Z-BOX: ${selectedPacketaPoint.name}, ${selectedPacketaPoint.street}, ${selectedPacketaPoint.city} [ID: ${selectedPacketaPoint.id}]\n`;
     }
@@ -1379,6 +1392,11 @@ if (orderForm) {
     try {
       const result = await postOrder(data);
       if (result && result.status === 'redirect' && result.url) { window.location.href = result.url; return; }
+      if (data.get('payment') === 'card') {
+        // Platba kartou se nevytvořila: nic nemazat, ukázat chybu
+        if (result && result.status === 'soldout') { fetchStock(); alert(t('soldOut')); }
+        throw new Error('card payment not created');
+      }
       if (orderStatus) {
         orderStatus.textContent = t('orderOkPay');
         orderStatus.className = 'form-status success';
