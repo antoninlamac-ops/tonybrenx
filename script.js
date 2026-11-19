@@ -1122,9 +1122,14 @@ if (toggleZoomBtn) {
   });
 }
 if (pmZoomBox) {
+  // Klik na fotku: celý obrázek přes celou obrazovku (lupa zůstává na tlačítku)
   pmZoomBox.addEventListener('click', (e) => {
     if (e.target.closest('.pm-nav-arrow') || e.target.closest('.pm-zoom-btn')) return;
-    toggleZoom();
+    if (isZoomed) { toggleZoom(); return; }
+    if (!currentProduct || !lb || typeof lb.showModal !== 'function') { toggleZoom(); return; }
+    lbImages = PRODUCT_IMAGES[currentProduct.id];
+    show(currentProdImgIndex);
+    lb.showModal();
   });
   pmZoomBox.addEventListener('mousemove', (e) => {
     if (!isZoomed || !pmActiveImg) return;
@@ -1610,7 +1615,14 @@ if (scrollTopBtn) scrollTopBtn.addEventListener('click', () => window.scrollTo({
 /* ---------- Lightbox ---------- */
 const list = () => (g ? [...g.querySelectorAll('a')] : []);
 let cur = 0;
+let lbImages = null; // fotky produktu, když je lightbox otevřený z detailu produktu
 function show(i) {
+  if (lbImages && big) {
+    cur = (i + lbImages.length) % lbImages.length;
+    big.src = lbImages[cur];
+    big.alt = currentProduct ? productText(currentProduct.id).title : T.altDefault;
+    return;
+  }
   const l = list();
   if (!l.length || !big) return;
   cur = (i + l.length) % l.length;
@@ -1623,6 +1635,7 @@ if (g) {
     const a = e.target.closest('a');
     if(!a) return;
     e.preventDefault();
+    lbImages = null;
     show(list().indexOf(a));
     if (lb && typeof lb.showModal === 'function') lb.showModal();
   });
@@ -1635,6 +1648,7 @@ if (nextBtn) nextBtn.onclick = e => { e.stopPropagation(); show(cur+1); };
 if (closeBtn) closeBtn.onclick = e => { e.stopPropagation(); if (lb) lb.close(); };
 if (lb) {
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('close', () => { lbImages = null; });
   lb.addEventListener('keydown', e => {
     if(e.key === 'ArrowLeft') show(cur-1);
     if(e.key === 'ArrowRight') show(cur+1);
