@@ -467,3 +467,10 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .pay-opt strong{color:#fff;font-size:.95rem}
 .pay-opt small{color:#b9bac0;font-size:.8rem}
 .pay-opt small{text-transform:none;letter-spacing:normal;font-weight:400}
+
+/* Počítadlo limitované edice */
+.stock-box{margin:2px 0 12px}
+.stock-text{font-size:.8rem;color:#c8c9cf;margin-bottom:5px}
+.stock-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+.stock-bar span{display:block;height:100%;background:#ff9500;border-radius:99px;transition:width .6s ease}
+.btn-buy:disabled,#pm-add-to-cart-btn:disabled{opacity:.5;cursor:not-allowed}
