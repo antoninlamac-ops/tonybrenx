@@ -558,6 +558,26 @@ function specsHtml(id) {
     </details>`;
 }
 
+// Karta produktu: otočka přední strana / záda, nebo video (má přednost).
+// Video: krátká smyčka bez zvuku, čtverec, MP4 do ~2 MB, např. '/img-web/products/creative-chaos.mp4'
+const PRODUCT_FLIP = { c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp'] };
+const PRODUCT_VIDEOS = { c1: null };
+
+function productMediaHtml(prod, title) {
+  const video = PRODUCT_VIDEOS[prod.id];
+  if (video) {
+    return `<video class="product-video" src="${video}" poster="${PRODUCT_IMAGES[prod.id][0]}" autoplay muted loop playsinline preload="metadata" aria-label="${escapeHtml(title)}"></video>`;
+  }
+  const flip = PRODUCT_FLIP[prod.id];
+  if (flip) {
+    return `<div class="product-flip"><div class="product-flip-inner">
+        <img class="flip-front" src="${flip[0]}" alt="${escapeHtml(title)}" loading="lazy" draggable="false">
+        <img class="flip-back" src="${flip[1]}" alt="" aria-hidden="true" loading="lazy" draggable="false">
+      </div></div>`;
+  }
+  return `<img src="${PRODUCT_IMAGES[prod.id][0]}" alt="${escapeHtml(title)}" loading="lazy" draggable="false">`;
+}
+
 const PRODUCT_IMAGES = {
   c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-mockup.webp', '/img-web/products/creative-chaos-photo.webp'],
   t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
@@ -867,7 +887,7 @@ function renderShopGrid() {
     card.innerHTML = `
       <div class="product-img-box">
         <span class="product-badge">${escapeHtml(isPresaleProduct(prod.id) ? t('presaleBadge') : text.badge)}</span>
-        <img src="${PRODUCT_IMAGES[prod.id][0]}" alt="${escapeHtml(text.title)}" loading="lazy" draggable="false">
+        ${productMediaHtml(prod, text.title)}
       </div>
       <div class="product-info">
         <h3 class="product-title">${escapeHtml(text.title)}</h3>
