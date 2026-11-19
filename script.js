@@ -534,11 +534,11 @@ const PRODUCT_SPECS = {
 };
 const SPEC_TEXT = {
   cs: { facts: ['100% česaná, prstencově předená bavlna, 220 g/m²', 'Volný unisex střih', 'Lem průkrčníku z žebrového úpletu', 'Praní na 40 °C, nebělit, nesušit v sušičce, žehlit na nízkou teplotu, nečistit chemicky'],
-        table: 'Velikosti (cm)', size: 'Velikost', a: 'Délka', c: 'Šířka', h: 'Rukáv', note: 'Šířka měřena v podpaží, tolerance ± 5 %.' },
+        care: 'Materiál a péče', table: 'Tabulka velikostí (cm)', size: 'Velikost', a: 'Délka', c: 'Šířka', h: 'Rukáv', note: 'Šířka měřena v podpaží, tolerance ± 5 %.' },
   en: { facts: ['100% combed ring-spun cotton, 220 g/m²', 'Relaxed unisex fit', 'Ribbed crew neck', 'Wash at 40 °C, do not bleach, do not tumble dry, iron on low, do not dry clean'],
-        table: 'Sizes (cm)', size: 'Size', a: 'Length', c: 'Width', h: 'Sleeve', note: 'Width measured at the armpits, tolerance ± 5%.' },
+        care: 'Material and care', table: 'Sizes (cm)', size: 'Size', a: 'Length', c: 'Width', h: 'Sleeve', note: 'Width measured at the armpits, tolerance ± 5%.' },
   de: { facts: ['100 % gekämmte, ringgesponnene Baumwolle, 220 g/m²', 'Lockerer Unisex-Schnitt', 'Gerippter Rundhalsausschnitt', 'Waschen bei 40 °C, nicht bleichen, nicht im Trockner trocknen, bei niedriger Temperatur bügeln, nicht chemisch reinigen'],
-        table: 'Größen (cm)', size: 'Größe', a: 'Länge', c: 'Breite', h: 'Ärmel', note: 'Breite unter den Achseln gemessen, Toleranz ± 5 %.' },
+        care: 'Material und Pflege', table: 'Größen (cm)', size: 'Größe', a: 'Länge', c: 'Breite', h: 'Ärmel', note: 'Breite unter den Achseln gemessen, Toleranz ± 5 %.' },
 };
 function specsHtml(id) {
   const spec = PRODUCT_SPECS[id];
@@ -547,11 +547,15 @@ function specsHtml(id) {
   const num = n => String(n).replace('.', PAGE_LANG === 'en' ? '.' : ',');
   const rows = Object.entries(spec.sizes).map(([k, v]) =>
     `<tr><th>${escapeHtml(k)}</th><td>${num(v[0])}</td><td>${num(v[1])}</td><td>${num(v[2])}</td></tr>`).join('');
-  return `<ul class="pm-facts">${L.facts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
-    <table class="pm-size-table"><caption>${escapeHtml(L.table)}</caption>
-      <thead><tr><th>${escapeHtml(L.size)}</th><th>${escapeHtml(L.a)}</th><th>${escapeHtml(L.c)}</th><th>${escapeHtml(L.h)}</th></tr></thead>
-      <tbody>${rows}</tbody></table>
-    <p class="pm-size-note">${escapeHtml(L.note)}</p>`;
+  return `<details class="pm-acc"><summary>${escapeHtml(L.care)}</summary>
+      <ul class="pm-facts">${L.facts.map(f => `<li>${escapeHtml(f)}</li>`).join('')}</ul>
+    </details>
+    <details class="pm-acc"><summary>${escapeHtml(L.table)}</summary>
+      <table class="pm-size-table">
+        <thead><tr><th>${escapeHtml(L.size)}</th><th>${escapeHtml(L.a)}</th><th>${escapeHtml(L.c)}</th><th>${escapeHtml(L.h)}</th></tr></thead>
+        <tbody>${rows}</tbody></table>
+      <p class="pm-size-note">${escapeHtml(L.note)}</p>
+    </details>`;
 }
 
 const PRODUCT_IMAGES = {

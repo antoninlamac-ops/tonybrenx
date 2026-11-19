@@ -439,3 +439,11 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .pm-size-table thead th{color:#9a9ba2;font-weight:500}
 .pm-size-table tbody th{text-align:left;color:#f1f1f2}
 .pm-size-note{color:#9a9ba2;font-size:.78rem;margin:0}
+.pm-acc{border-top:1px solid rgba(255,255,255,.1)}
+.pm-acc:last-child{border-bottom:1px solid rgba(255,255,255,.1)}
+.pm-acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:11px 2px;color:#f1f1f2;font-size:.92rem;font-weight:600}
+.pm-acc summary::-webkit-details-marker{display:none}
+.pm-acc summary::after{content:'+';color:#ff9500;font-size:1.25rem;line-height:1;transition:transform .2s}
+.pm-acc[open] summary::after{transform:rotate(45deg)}
+.pm-acc summary:focus-visible{outline:2px solid #ff9500;outline-offset:2px;border-radius:4px}
+.pm-acc .pm-facts,.pm-acc .pm-size-note{margin-bottom:12px}
