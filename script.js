@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     loadPacketaScriptIfNeeded();
     initPresale();
+    fetchStock();
   }
 });
 
@@ -80,6 +81,9 @@ document.addEventListener("DOMContentLoaded", () => {
 const I18N = {
   cs: {
     alertNoPacketa: 'Knihovna Zásilkovny se ještě nenačetla.',
+    stockSold: 'Prodáno {sold} z {limit} ks',
+    soldOut: 'Vyprodáno',
+    stockLeft: 'Zbývá už jen {n} ks.',
     alertPickPoint: 'Vyber prosím výdejní místo nebo Z-BOX Zásilkovny.',
     cartEmpty: 'Košík je zatím prázdný.',
     cartTotal: 'Zboží celkem:',
@@ -110,7 +114,7 @@ const I18N = {
     legalTitles: { terms: 'Obchodní podmínky', privacy: 'Ochrana soukromí (GDPR)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Univerzální velikost (Nastavitelný snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
-      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Barva černá, velikosti S až XXL. V předobjednávce za 590 Kč, potom za plnou cenu 790 Kč.' },
+      c1: { badge: 'Předobjednávka', title: 'Tee „Creative Chaos“', desc: 'Unisex oversize triko s mojí street fotkou. Výlohu Potravin Štros na Strossmayerově náměstí v Praze jsem potkal při zimním focení street fotek, chytla mě na první pohled, tak jsem ji vyfotil a upravil pod názvem Creative Chaos. Limitovaná edice 50 kusů. Barva černá, velikosti S až XXL. V předobjednávce za 590 Kč, potom za plnou cenu 790 Kč.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized střih z prémiové těžké 100% bavlny (240 g/m²). Černobílý sítotisk s vysokou trvanlivostí. Vyrobeno pro každodenní street nošení.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash úprava, syrový streetový vibe, limitovaná série. Každý kus má unikátní strukturu oprání.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Pevný límec, spadlá ramena a autorský print nočního města. Gramáž 220g.' },
@@ -218,6 +222,9 @@ const I18N = {
 
   en: {
     alertNoPacketa: 'The Packeta library has not loaded yet.',
+    stockSold: '{sold} of {limit} sold',
+    soldOut: 'Sold out',
+    stockLeft: 'Only {n} left.',
     alertPickPoint: 'Please choose a pickup point or a Packeta Z-BOX.',
     cartEmpty: 'Your cart is empty.',
     cartTotal: 'Goods total:',
@@ -248,7 +255,7 @@ const I18N = {
     legalTitles: { terms: 'Terms and conditions', privacy: 'Privacy (GDPR)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'One size (adjustable snap)', A3: 'A3 (30x42 cm)', A2: 'A2 (42x59 cm)' },
     products: {
-      c1: { badge: 'Pre-order', title: 'Tee „Creative Chaos“', desc: 'Unisex oversized tee with my street photo. I came across the Potraviny Štros shop window on Strossmayer Square in Prague while shooting street photos in winter. It caught my eye straight away, so I shot it and edited it under the name Creative Chaos. Black, sizes S to XXL.' },
+      c1: { badge: 'Pre-order', title: 'Tee „Creative Chaos“', desc: 'Unisex oversized tee with my street photo. I came across the Potraviny Štros shop window on Strossmayer Square in Prague while shooting street photos in winter. It caught my eye straight away, so I shot it and edited it under the name Creative Chaos. Limited edition of 50. Black, sizes S to XXL.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized cut made from premium heavyweight 100% cotton (240 g/m²). Black-and-white screen print built to last. Made for everyday street wear.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage acid wash finish, raw street vibe, limited series. Every piece has its own unique wash pattern.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Structured collar, dropped shoulders and an original print of the night city. 220 g/m².' },
@@ -356,6 +363,9 @@ const I18N = {
 
   de: {
     alertNoPacketa: 'Die Packeta-Bibliothek wurde noch nicht geladen.',
+    stockSold: '{sold} von {limit} verkauft',
+    soldOut: 'Ausverkauft',
+    stockLeft: 'Nur noch {n} Stück.',
     alertPickPoint: 'Bitte wähle eine Abholstelle oder eine Packeta Z-BOX aus.',
     cartEmpty: 'Dein Warenkorb ist noch leer.',
     cartTotal: 'Warenwert gesamt:',
@@ -386,7 +396,7 @@ const I18N = {
     legalTitles: { terms: 'Allgemeine Geschäftsbedingungen', privacy: 'Datenschutz (DSGVO)' },
     variants: { S: 'S', M: 'M', L: 'L', XL: 'XL', XXL: 'XXL', univ: 'Einheitsgröße (verstellbarer Snap)', A3: 'A3 (30 x 42 cm)', A2: 'A2 (42 x 59 cm)' },
     products: {
-      c1: { badge: 'Vorbestellung', title: 'Tee „Creative Chaos“', desc: 'Unisex-Oversize-Shirt mit meinem Streetfoto. Auf das Schaufenster von Potraviny Štros am Strossmayer-Platz in Prag bin ich beim winterlichen Streetfotografieren gestoßen. Es hat mich sofort gepackt, also habe ich es fotografiert und unter dem Namen Creative Chaos bearbeitet. Schwarz, Größen S bis XXL.' },
+      c1: { badge: 'Vorbestellung', title: 'Tee „Creative Chaos“', desc: 'Unisex-Oversize-Shirt mit meinem Streetfoto. Auf das Schaufenster von Potraviny Štros am Strossmayer-Platz in Prag bin ich beim winterlichen Streetfotografieren gestoßen. Es hat mich sofort gepackt, also habe ich es fotografiert und unter dem Namen Creative Chaos bearbeitet. Limitierte Auflage von 50 Stück. Schwarz, Größen S bis XXL.' },
       t1: { badge: 'Heavy 240g', title: 'Tee „REVÍR“ Black', desc: 'Oversized-Schnitt aus hochwertiger schwerer 100 % Baumwolle (240 g/m²). Schwarz-weißer Siebdruck mit hoher Haltbarkeit. Für den täglichen Streetwear-Look gemacht.' },
       t2: { badge: 'Acid Wash', title: 'Tee „BROKEN PLACE“', desc: 'Vintage-Acid-Wash-Veredelung, roher Streetwear-Vibe, limitierte Serie. Jedes Stück hat eine einzigartige Waschstruktur.' },
       t3: { badge: 'Boxy Fit', title: 'Tee „RAW ATMOSPHERE“', desc: 'Fester Kragen, tiefe Schultern und ein eigener Print einer nächtlichen Stadt. 220 g/m².' },
@@ -576,6 +586,41 @@ function productMediaHtml(prod, title) {
       </div></div>`;
   }
   return `<img src="${PRODUCT_IMAGES[prod.id][0]}" alt="${escapeHtml(title)}" loading="lazy" draggable="false">`;
+}
+
+// Limitovaná edice: počet kusů. Prodané kusy počítá skript objednávek z tabulky.
+const STOCK_LIMIT = { c1: 50 };
+let STOCK_SOLD = {}; // { c1: 5 } po načtení ze serveru
+let STOCK_LOADED = false; // dokud se počet nenačte, počítadlo se neukazuje
+
+function stockSold(pid) { return STOCK_SOLD[pid] || 0; }
+function stockLeft(pid) {
+  if (!(pid in STOCK_LIMIT)) return Infinity;
+  return Math.max(0, STOCK_LIMIT[pid] - stockSold(pid));
+}
+function inCartQty(pid) { return cart.filter(i => i.pid === pid).reduce((a, i) => a + i.qty, 0); }
+function stockHtml(pid) {
+  if (!(pid in STOCK_LIMIT) || !STOCK_LOADED) return '';
+  const limit = STOCK_LIMIT[pid];
+  const sold = Math.min(stockSold(pid), limit);
+  const pct = Math.round(sold / limit * 100);
+  return `<div class="stock-box"><div class="stock-text">${escapeHtml(t('stockSold').replace('{sold}', sold).replace('{limit}', limit))}</div>
+    <div class="stock-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${limit}" aria-valuenow="${sold}"><span style="width:${pct}%"></span></div></div>`;
+}
+async function fetchStock() {
+  const form = document.getElementById('order-form');
+  if (!form || !form.action) return false;
+  try {
+    const res = await fetch(form.action + '?action=stock&t=' + Date.now());
+    const data = await res.json();
+    if (!data || !data.sold) return false;
+    STOCK_SOLD = data.sold;
+    STOCK_LOADED = true;
+    renderShopGrid();
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
 const PRODUCT_IMAGES = {
@@ -896,7 +941,8 @@ function renderShopGrid() {
           <span class="product-price">${priceHtml(prod)}</span>
           ${selectHtml}
         </div>
-        <button type="button" class="btn-buy">${escapeHtml(t('addToCart'))}</button>
+        ${stockHtml(prod.id)}
+        <button type="button" class="btn-buy"${stockLeft(prod.id) <= 0 ? ' disabled' : ''}>${escapeHtml(stockLeft(prod.id) <= 0 ? t('soldOut') : t('addToCart'))}</button>
       </div>
     `;
     shopGrid.appendChild(card);
@@ -982,7 +1028,12 @@ function openProductModal(productId) {
       box.id = 'pm-specs';
       pmDesc.insertAdjacentElement('afterend', box);
     }
-    box.innerHTML = specsHtml(productId);
+    box.innerHTML = stockHtml(productId) + specsHtml(productId);
+    if (pmAddToCartBtn) {
+      const out = stockLeft(productId) <= 0;
+      pmAddToCartBtn.disabled = out;
+      pmAddToCartBtn.textContent = out ? t('soldOut') : t('addToCart');
+    }
   }
   if (pmPrice) pmPrice.innerHTML = priceHtml(currentProduct);
 
@@ -1179,6 +1230,11 @@ function updateCartUI() {
 }
 
 function addToCart(productId, variantKey) {
+  const left = stockLeft(productId) - inCartQty(productId);
+  if (left <= 0) {
+    alert(stockLeft(productId) <= 0 ? t('soldOut') : t('stockLeft').replace('{n}', stockLeft(productId)));
+    return;
+  }
   const existing = cart.find(i => i.pid === productId && i.variant === variantKey);
   if (existing) existing.qty += 1;
   else cart.push({ pid: productId, variant: variantKey, qty: 1 });
@@ -1310,6 +1366,14 @@ const orderForm = document.getElementById('order-form');
 if (orderForm) {
   orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (Object.keys(STOCK_LIMIT).some(pid => inCartQty(pid) > 0)) {
+      await fetchStock();
+      const over = Object.keys(STOCK_LIMIT).find(pid => inCartQty(pid) > stockLeft(pid));
+      if (over) {
+        alert(stockLeft(over) <= 0 ? t('soldOut') : t('stockLeft').replace('{n}', stockLeft(over)));
+        return;
+      }
+    }
     const method = currentShippingCode();
     if (method === 'zasilkovna' && !selectedPacketaPoint) {
       alert(t('alertPickPoint'));
