@@ -631,11 +631,11 @@ async function fetchStock() {
 
 // Větší verze pro zobrazení přes celou obrazovku (stejné pořadí jako PRODUCT_IMAGES)
 const PRODUCT_IMAGES_FULL = {
-  c1: ['/img-web/products/creative-chaos-front-full.webp', '/img-web/products/creative-chaos-back-full.webp', '/img-web/products/creative-chaos-photo.webp'],
+  c1: ['/img-web/products/creative-chaos-front-full.webp', '/img-web/products/creative-chaos-back-full.webp', '/img-web/products/creative-chaos-print.webp', '/img-web/products/creative-chaos-photo.webp'],
 };
 
 const PRODUCT_IMAGES = {
-  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-photo.webp'],
+  c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-print-square.webp', '/img-web/products/creative-chaos-photo.webp'],
   t1: ['/img-web/foto-1.webp', '/img-web/foto-2.webp', '/img-web/foto-3.webp'],
   t2: ['/img-web/foto-5.webp', '/img-web/foto-6.webp', '/img-web/foto-7.webp'],
   t3: ['/img-web/foto-12.webp', '/img-web/foto-13.webp', '/img-web/foto-14.webp'],
@@ -1702,7 +1702,34 @@ if (scrollTopBtn) scrollTopBtn.addEventListener('click', () => window.scrollTo({
 const list = () => (g ? [...g.querySelectorAll('a')] : []);
 let cur = 0;
 let lbImages = null; // fotky produktu, když je lightbox otevřený z detailu produktu
+// Přiblížení v náhledu přes celou obrazovku: klik/klepnutí přiblíží, pohyb posouvá, kolečko mění míru
+const lbBox = document.querySelector('#lb .lb-content');
+let lbScale = 1;
+function lbSetOrigin(clientX, clientY) {
+  if (!lbBox || !big) return;
+  const r = lbBox.getBoundingClientRect();
+  const x = Math.min(100, Math.max(0, (clientX - r.left) / r.width * 100));
+  const y = Math.min(100, Math.max(0, (clientY - r.top) / r.height * 100));
+  big.style.transformOrigin = `${x}% ${y}%`;
+}
+function lbZoom(scale, e) {
+  lbScale = Math.min(5, Math.max(1, scale));
+  if (!big || !lbBox) return;
+  if (e) lbSetOrigin(e.clientX, e.clientY);
+  big.style.transform = lbScale > 1 ? `scale(${lbScale})` : '';
+  lbBox.classList.toggle('zoomed', lbScale > 1);
+}
+if (lbBox) {
+  lbBox.addEventListener('click', e => { e.stopPropagation(); lbZoom(lbScale > 1 ? 1 : 2.5, e); });
+  lbBox.addEventListener('mousemove', e => { if (lbScale > 1) lbSetOrigin(e.clientX, e.clientY); });
+  lbBox.addEventListener('wheel', e => { e.preventDefault(); lbZoom(lbScale * (e.deltaY < 0 ? 1.25 : 0.8), e); }, { passive: false });
+  lbBox.addEventListener('touchmove', e => {
+    if (lbScale > 1 && e.touches.length === 1) { e.preventDefault(); lbSetOrigin(e.touches[0].clientX, e.touches[0].clientY); }
+  }, { passive: false });
+}
+
 function show(i) {
+  lbZoom(1);
   if (lbImages && big) {
     cur = (i + lbImages.length) % lbImages.length;
     big.src = lbImages[cur];
@@ -1734,7 +1761,7 @@ if (nextBtn) nextBtn.onclick = e => { e.stopPropagation(); show(cur+1); };
 if (closeBtn) closeBtn.onclick = e => { e.stopPropagation(); if (lb) lb.close(); };
 if (lb) {
   lb.addEventListener('click', e => { if (e.target === lb) lb.close(); });
-  lb.addEventListener('close', () => { lbImages = null; });
+  lb.addEventListener('close', () => { lbImages = null; lbZoom(1); });
   lb.addEventListener('keydown', e => {
     if(e.key === 'ArrowLeft') show(cur-1);
     if(e.key === 'ArrowRight') show(cur+1);
