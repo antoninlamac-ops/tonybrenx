@@ -611,7 +611,7 @@ function stockHtml(pid) {
   const sold = Math.min(stockSold(pid), limit);
   const pct = Math.round(sold / limit * 100);
   return `<div class="stock-box"><div class="stock-text">${escapeHtml(t('stockSold').replace('{sold}', sold).replace('{limit}', limit))}</div>
-    <div class="stock-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${limit}" aria-valuenow="${sold}"><span style="width:${pct}%"></span></div></div>`;
+    <div class="stock-bar" role="progressbar" aria-label="${escapeHtml(t('stockSold').replace('{sold}', sold).replace('{limit}', limit))}" aria-valuemin="0" aria-valuemax="${limit}" aria-valuenow="${sold}"><span style="transform:scaleX(${pct / 100})"></span></div></div>`;
 }
 async function fetchStock() {
   const form = document.getElementById('order-form');
@@ -633,6 +633,9 @@ async function fetchStock() {
 const PRODUCT_IMAGES_FULL = {
   c1: ['/img-web/products/creative-chaos-front-full.webp', '/img-web/products/creative-chaos-back-full.webp', '/img-web/products/creative-chaos-print.webp', '/img-web/products/creative-chaos-photo.webp'],
 };
+
+// Menší verze: -thumb (200 px) pro náhledy, -600 pro mobil. Odvozené z názvu souboru.
+function imgVariant(src, suffix) { return src.replace(/\.webp$/, suffix + '.webp'); }
 
 const PRODUCT_IMAGES = {
   c1: ['/img-web/products/creative-chaos-front.webp', '/img-web/products/creative-chaos-back.webp', '/img-web/products/creative-chaos-print-square.webp', '/img-web/products/creative-chaos-photo.webp'],
@@ -940,10 +943,10 @@ function renderFeatured(shopGrid, prod) {
       <div class="pf-gallery">
         <button type="button" class="pf-main" data-pf="open" aria-label="${escapeHtml(text.title)}">
           <span class="product-badge">${escapeHtml(isPresaleProduct(prod.id) ? t('presaleBadge') : text.badge)}</span>
-          <img src="${imgs[featuredImg]}" alt="${escapeHtml(text.title)}" draggable="false">
+          <img src="${imgs[featuredImg]}" srcset="${imgVariant(imgs[featuredImg], '-600')} 600w, ${imgs[featuredImg]} 1200w" sizes="(max-width: 860px) 92vw, 520px" width="1200" height="1200" alt="${escapeHtml(text.title)}" draggable="false">
         </button>
         <div class="pf-thumbs">
-          ${imgs.map((src, i) => `<button type="button" class="pf-thumb${i === featuredImg ? ' on' : ''}" data-pf="thumb" data-i="${i}" aria-label="${i + 1}"><img src="${src}" alt="" loading="lazy" draggable="false"></button>`).join('')}
+          ${imgs.map((src, i) => `<button type="button" class="pf-thumb${i === featuredImg ? ' on' : ''}" data-pf="thumb" data-i="${i}" aria-label="${i + 1}"><img src="${imgVariant(src, '-thumb')}" width="200" height="200" alt="" loading="lazy" draggable="false"></button>`).join('')}
         </div>
       </div>
       <div class="pf-info">
