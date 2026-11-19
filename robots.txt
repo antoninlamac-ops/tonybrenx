@@ -35,4 +35,4 @@ User-agent: Applebot-Extended
 Allow: /
 Disallow:
 
-Sitemap: https://www.tonybrenx.cz/sitemap.xml
+Sitemap: https://tonybrenx.cz/sitemap.xml
