@@ -505,3 +505,17 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .lb-content{overflow:hidden;cursor:zoom-in;touch-action:pan-y}
 .lb-content.zoomed{cursor:zoom-out;touch-action:none}
 .lb-content img{transition:transform .25s ease;will-change:transform}
+
+/* Potvrzení odeslané objednávky */
+.order-done{text-align:center;padding:10px 4px 4px}
+.order-done-icon{width:68px;height:68px;margin:4px auto 14px;border-radius:50%;background:rgba(46,204,113,.14);border:1px solid rgba(46,204,113,.55);color:#2ecc71;display:flex;align-items:center;justify-content:center;animation:tbPop .45s ease-out}
+.order-done-icon svg{width:36px;height:36px}
+@keyframes tbPop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.order-done-icon{animation:none}}
+.order-done-title{font-family:"Barlow Condensed","Arial Narrow",sans-serif;text-transform:uppercase;font-size:1.7rem;color:#fff;margin:0 0 14px}
+.order-done-lines{list-style:none;margin:0 0 16px;padding:12px 14px;text-align:left;background:rgba(10,10,11,.6);border:1px solid var(--edge);border-radius:12px;font-size:.92rem;color:#c8c9cf}
+.order-done-lines li{display:flex;justify-content:space-between;gap:12px;padding:4px 0}
+.order-done-total{border-top:1px solid rgba(255,255,255,.1);margin-top:6px;padding-top:8px !important;color:#ff9500;font-weight:700}
+.order-done p{color:#c8c9cf;line-height:1.55;margin:0 0 10px;font-size:.92rem}
+.order-done-note{color:#9a9ba2 !important;font-size:.85rem !important}
+.order-done-close{width:100%;margin-top:6px}
