@@ -82,6 +82,8 @@ const I18N = {
   cs: {
     alertNoPacketa: 'Knihovna Zásilkovny se ještě nenačetla.',
     sizeLabel: 'Velikost',
+    shareLabel: 'Sdílet produkt',
+    shareCopied: 'Odkaz na produkt zkopírován',
     stockSold: 'Prodáno {sold} z {limit} ks',
     soldOut: 'Vyprodáno',
     stockLeft: 'Zbývá už jen {n} ks.',
@@ -231,6 +233,8 @@ const I18N = {
   en: {
     alertNoPacketa: 'The Packeta library has not loaded yet.',
     sizeLabel: 'Size',
+    shareLabel: 'Share product',
+    shareCopied: 'Product link copied',
     stockSold: '{sold} of {limit} sold',
     soldOut: 'Sold out',
     stockLeft: 'Only {n} left.',
@@ -380,6 +384,8 @@ const I18N = {
   de: {
     alertNoPacketa: 'Die Packeta-Bibliothek wurde noch nicht geladen.',
     sizeLabel: 'Größe',
+    shareLabel: 'Produkt teilen',
+    shareCopied: 'Produktlink kopiert',
     stockSold: '{sold} von {limit} verkauft',
     soldOut: 'Ausverkauft',
     stockLeft: 'Nur noch {n} Stück.',
@@ -944,6 +950,28 @@ document.addEventListener('pointerdown', (e) => {
 });
 
 /* ---------- Shop: výpis produktů ---------- */
+// Sdílení produktu: vlastní stránka s náhledem pro sociální sítě, která přesměruje na produkt
+const PRODUCT_SLUG = { c1: 'creative-chaos' };
+function productShareUrl(prod) {
+  const slug = PRODUCT_SLUG[prod.id] || prod.id;
+  return location.origin + '/' + slug + '/';
+}
+async function shareProduct(prod, box) {
+  const url = productShareUrl(prod);
+  const title = productText(prod.id).title + ' | Tony Brenx';
+  const msg = box && box.querySelector('.pf-share-msg');
+  const say = text => { if (msg) { msg.textContent = text; clearTimeout(msg._t); msg._t = setTimeout(() => { msg.textContent = ''; }, 2500); } };
+  if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+    try { await navigator.share({ title, url }); return; } catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    say(t('shareCopied'));
+  } catch (e) {
+    window.prompt(t('shareLabel'), url);
+  }
+}
+
 // Jediný produkt v Kolekci: velký detail přímo na stránce místo karty a okna
 let featuredImg = 0;
 let featuredSize = null;
@@ -957,7 +985,7 @@ function renderFeatured(shopGrid, prod) {
   const out = stockLeft(prod.id) <= 0;
   shopGrid.classList.add('featured');
   shopGrid.innerHTML = `
-    <div class="product-featured" data-pid="${escapeHtml(prod.id)}">
+    <div class="product-featured" id="${escapeHtml(PRODUCT_SLUG[prod.id] || prod.id)}" data-pid="${escapeHtml(prod.id)}">
       <div class="pf-gallery">
         <button type="button" class="pf-main" data-pf="open" aria-label="${escapeHtml(text.title)}">
           <span class="product-badge">${escapeHtml(isPresaleProduct(prod.id) ? t('presaleBadge') : text.badge)}</span>
@@ -968,7 +996,13 @@ function renderFeatured(shopGrid, prod) {
         </div>
       </div>
       <div class="pf-info">
-        <h3 class="pf-title">${escapeHtml(text.title)}</h3>
+        <div class="pf-head">
+          <h3 class="pf-title">${escapeHtml(text.title)}</h3>
+          <button type="button" class="pf-share" data-pf="share" aria-label="${escapeHtml(t('shareLabel'))}" title="${escapeHtml(t('shareLabel'))}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.3 10.8l7.4-4.4M8.3 13.2l7.4 4.4"/></svg>
+          </button>
+        </div>
+        <div class="pf-share-msg" role="status" aria-live="polite"></div>
         <div class="pf-price">${priceHtml(prod)}</div>
         <p class="pf-desc">${escapeHtml(text.desc)}</p>
         ${stockHtml(prod.id)}
@@ -988,7 +1022,18 @@ function renderShopGrid() {
   shopGrid.innerHTML = '';
   shopGrid.classList.remove('featured');
   const visible = PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id));
-  if (visible.length === 1) { renderFeatured(shopGrid, visible[0]); return; }
+  if (visible.length === 1) {
+    renderFeatured(shopGrid, visible[0]);
+    const target = location.hash.slice(1);
+    if (target && target === (PRODUCT_SLUG[visible[0].id] || '') && !renderShopGrid._jumped) {
+      renderShopGrid._jumped = true;
+      // počkat, až se načte galerie nad produktem, jinak by se pozice posunula
+      const jump = () => { const el = document.getElementById(target); if (el) el.scrollIntoView({ block: 'start' }); };
+      if (document.readyState === 'complete') setTimeout(jump, 150);
+      else window.addEventListener('load', () => setTimeout(jump, 150), { once: true });
+    }
+    return;
+  }
   PRODUCTS.filter(p => SHOP_VISIBLE.includes(p.id)).forEach(prod => {
     const text = productText(prod.id);
     const card = document.createElement('div');
@@ -1040,6 +1085,7 @@ function initShopGrid() {
       if (act === 'thumb') { featuredImg = Number(pfEl.dataset.i) || 0; renderShopGrid(); }
       if (act === 'size') { featuredSize = pfEl.dataset.size; renderShopGrid(); }
       if (act === 'buy') addToCart(prod.id, featuredSize);
+      if (act === 'share') shareProduct(prod, featured);
       if (act === 'open' && lb && typeof lb.showModal === 'function') {
         currentProduct = prod;
         lbImages = PRODUCT_IMAGES_FULL[prod.id] || PRODUCT_IMAGES[prod.id];
