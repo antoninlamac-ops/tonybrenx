@@ -102,6 +102,12 @@ const I18N = {
     presaleShip: 'Trička se tisknou až po skončení předobjednávky. Předpokládané odeslání do {date}.',
     orderOk: 'Objednávka byla úspěšně odeslána!',
     orderOkPay: 'Objednávka byla úspěšně odeslána! Instrukce k platbě dorazí do e-mailu.',
+    doneTitle: 'Díky, objednávka odešla!',
+    doneMail: 'Potvrzení s platebními údaji (číslo účtu a variabilní symbol) posíláme na {email}. Mělo by dorazit do pár minut, případně se podívej i do spamu.',
+    doneDue: 'Zaplať prosím do 48 hodin, jinak se objednávka zruší.',
+    donePresale: 'Předobjednávka: odeslání do {date}.',
+    doneTotal: 'Celkem',
+    doneClose: 'Zpět na web',
     orderErr: 'Došlo k chybě připojení. Napiš prosím na antonin.lamac@gmail.com.',
     contactOk: 'Díky za poptávku! Zpráva byla odeslána, brzy se ti ozvu.',
     contactOkShort: 'Díky za poptávku! Zpráva byla odeslána.',
@@ -245,6 +251,12 @@ const I18N = {
     presaleShip: 'Tees are printed after the pre-order closes. Estimated shipping by {date}.',
     orderOk: 'Your order has been sent!',
     orderOkPay: 'Your order has been sent! Payment instructions will arrive by email.',
+    doneTitle: 'Thanks, your order is in!',
+    doneMail: 'We are sending the confirmation with payment details to {email}. It should arrive within a few minutes; please also check your spam folder.',
+    doneDue: 'Please pay within 48 hours, otherwise the order is cancelled.',
+    donePresale: 'Pre-order: ships by {date}.',
+    doneTotal: 'Total',
+    doneClose: 'Back to the site',
     orderErr: 'A connection error occurred. Please write to antonin.lamac@gmail.com.',
     contactOk: 'Thank you for your enquiry! It has been sent, I will get back to you soon.',
     contactOkShort: 'Thank you for your enquiry! It has been sent.',
@@ -388,6 +400,12 @@ const I18N = {
     presaleShip: 'Die Shirts werden nach Ende der Vorbestellung gedruckt. Voraussichtlicher Versand bis {date}.',
     orderOk: 'Deine Bestellung wurde erfolgreich gesendet!',
     orderOkPay: 'Deine Bestellung wurde erfolgreich gesendet! Die Zahlungsanweisung kommt per E-Mail.',
+    doneTitle: 'Danke, deine Bestellung ist da!',
+    doneMail: 'Die Bestätigung mit den Zahlungsdaten geht an {email}. Sie sollte in wenigen Minuten ankommen, schau bitte auch im Spam-Ordner nach.',
+    doneDue: 'Bitte zahle innerhalb von 48 Stunden, sonst wird die Bestellung storniert.',
+    donePresale: 'Vorbestellung: Versand bis {date}.',
+    doneTotal: 'Gesamt',
+    doneClose: 'Zurück zur Seite',
     orderErr: 'Es gab einen Verbindungsfehler. Bitte schreibe an antonin.lamac@gmail.com.',
     contactOk: 'Danke für deine Anfrage! Sie wurde gesendet, ich melde mich bald bei dir.',
     contactOkShort: 'Danke für deine Anfrage! Sie wurde gesendet.',
@@ -1269,7 +1287,11 @@ function goodsTotal() {
 }
 
 function openCartModal() { if (cartModal) cartModal.classList.add('open'); }
-function closeCartModal() { if (cartModal) cartModal.classList.remove('open'); }
+function closeCartModal() {
+  if (cartModal) cartModal.classList.remove('open');
+  const doneView = document.getElementById('cart-view-done');
+  if (doneView && doneView.style.display !== 'none') backToCartItems();
+}
 
 function updateCartUI() {
   try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (e) { /* tichá chyba */ }
@@ -1348,7 +1370,41 @@ function showCheckoutForm() {
   updateCheckoutTotal();
 }
 
+// Potvrzení po odeslání: formulář se zavře a místo něj se ukáže shrnutí
+function showOrderDone(summary) {
+  const viewItems = document.getElementById('cart-view-items');
+  const viewCheckout = document.getElementById('cart-view-checkout');
+  const modalTitle = document.getElementById('cart-modal-title');
+  if (viewItems) viewItems.style.display = 'none';
+  if (viewCheckout) viewCheckout.style.display = 'none';
+  if (modalTitle) modalTitle.textContent = '';
+  let done = document.getElementById('cart-view-done');
+  if (!done) {
+    done = document.createElement('div');
+    done.id = 'cart-view-done';
+    (viewCheckout || viewItems).insertAdjacentElement('afterend', done);
+  }
+  const rows = summary.lines.map(l =>
+    `<li><span>${escapeHtml(l.title)} (${escapeHtml(l.variantLabel)}) × ${l.qty}</span><span>${formatMoney(l.unit * l.qty)}</span></li>`).join('');
+  const ship = summary.fee > 0 ? `<li><span>${escapeHtml(summary.shipLabel)}</span><span>${formatMoney(summary.fee)}</span></li>` : '';
+  done.innerHTML = `
+    <div class="order-done" role="status" aria-live="polite">
+      <div class="order-done-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h4 class="order-done-title">${escapeHtml(t('doneTitle'))}</h4>
+      <ul class="order-done-lines">${rows}${ship}<li class="order-done-total"><span>${escapeHtml(t('doneTotal'))}</span><span>${formatMoney(summary.total)}</span></li></ul>
+      <p>${escapeHtml(t('doneMail').replace('{email}', summary.email))}</p>
+      <p class="order-done-note">${escapeHtml(t('doneDue'))}${summary.presale ? ' ' + escapeHtml(t('donePresale').replace('{date}', (PRESALE.shipBy && PRESALE.shipBy[PAGE_LANG]) || '')) : ''}</p>
+      <button type="button" class="btn btn-primary order-done-close">${escapeHtml(t('doneClose'))}</button>
+    </div>`;
+  done.style.display = 'block';
+  done.querySelector('.order-done-close').addEventListener('click', () => { closeCartModal(); backToCartItems(); });
+  const content = done.closest('.cart-content');
+  if (content) content.scrollTop = 0;
+}
+
 function backToCartItems() {
+  const doneView = document.getElementById('cart-view-done');
+  if (doneView) doneView.style.display = 'none';
   const viewItems = document.getElementById('cart-view-items');
   const viewCheckout = document.getElementById('cart-view-checkout');
   const modalTitle = document.getElementById('cart-modal-title');
@@ -1530,6 +1586,13 @@ if (orderForm) {
     }
 
     try {
+      const fee = currentShippingCode() === 'zasilkovna' ? SHIPPING_FEE[CUR] : 0;
+      const doneSummary = {
+        lines: cartLines(), fee, total: goodsTotal() + fee,
+        shipLabel: (document.querySelector('#order-shipping option:checked') || {}).textContent || '',
+        email: (document.getElementById('order-email') || {}).value || '',
+        presale: cart.some(i => isPresaleProduct(i.pid)),
+      };
       const result = await postOrder(data);
       if (result && result.status === 'redirect' && result.url) { window.location.href = result.url; return; }
       if (data.get('payment') === 'card') {
@@ -1537,15 +1600,12 @@ if (orderForm) {
         if (result && result.status === 'soldout') { fetchStock(); alert(t('soldOut')); }
         throw new Error('card payment not created');
       }
-      if (orderStatus) {
-        orderStatus.textContent = t('orderOkPay');
-        orderStatus.className = 'form-status success';
-      }
+      if (orderStatus) { orderStatus.textContent = ''; orderStatus.className = 'form-status'; }
+      showOrderDone(doneSummary);
       cart = [];
       selectedPacketaPoint = null;
       orderForm.reset();
       updateCartUI();
-      setTimeout(() => { closeCartModal(); backToCartItems(); }, 3500);
     } catch (err) {
       if (orderStatus) {
         orderStatus.textContent = t('orderErr');
