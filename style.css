@@ -519,3 +519,11 @@ footer{text-align:center;padding:60px 20px 50px;display:flex;flex-direction:colu
 .order-done p{color:#c8c9cf;line-height:1.55;margin:0 0 10px;font-size:.92rem}
 .order-done-note{color:#9a9ba2 !important;font-size:.85rem !important}
 .order-done-close{width:100%;margin-top:6px}
+
+/* Sdílení produktu */
+.pf-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.pf-share{flex:0 0 auto;width:40px;height:40px;margin-top:4px;border-radius:50%;border:1px solid var(--edge);background:rgba(10,10,11,.6);color:#f1f1f2;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s,color .2s}
+.pf-share:hover,.pf-share:focus-visible{border-color:#ff9500;color:#ff9500}
+.pf-share svg{width:18px;height:18px}
+.pf-share-msg{min-height:1.2em;margin:-4px 0 6px;font-size:.82rem;color:#2ecc71}
+.product-featured{scroll-margin-top:90px}
